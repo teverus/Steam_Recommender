@@ -1,2 +1,2 @@
 # Steam_Recommender
-A customer Steam recommendation system based on game tags
+A custom Steam recommendation system based on game tags
