@@ -1,17 +1,17 @@
-from Code.Table import Table
-from Code.constants import SCREEN_WIDTH
+from Code.functions.ui import get_user_choice
+from Code.modules.CheckNewGames import CheckNewGames
+from Code.modules.RecommendGames import RecommendGames
+from Code.tables.WelcomeTable import WelcomeTable
 
 
 class Application:
     def __init__(self):
-        Table(
-            table_title="Steam Recommender",
-            table_title_border_top="=",
-            rows=["Check new games in Steam", "Recommend games based on tags"],
-            rows_border_top="=",
-            rows_border_bottom="=",
-            table_width=SCREEN_WIDTH,
-        )
+        self.options = {"1": CheckNewGames, "2": RecommendGames}
+
+        available_options = WelcomeTable().available_options
+        choice = get_user_choice(available_options)
+
+        self.options[choice]()
 
 
 if __name__ == "__main__":
