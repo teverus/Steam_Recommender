@@ -1,15 +1,17 @@
+import os
+
 from Code.functions.ui import get_user_choice
 from Code.modules.CheckNewGames import CheckNewGames
-from Code.modules.RecommendGames import RecommendGames
+from Code.modules.BrowseGamesByTags import BrowseGamesByTags
 from Code.tables.WelcomeTable import WelcomeTable
 
 
 class Application:
     def __init__(self):
-        self.options = {"1": CheckNewGames, "2": RecommendGames}
+        self.options = {"1": CheckNewGames, "2": BrowseGamesByTags}
 
-        available_options = WelcomeTable().available_options
-        choice = get_user_choice(available_options)
+        os.system("cls")
+        choice = get_user_choice(WelcomeTable().available_options)
 
         self.options[choice]()
 

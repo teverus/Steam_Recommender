@@ -7,7 +7,12 @@ class WelcomeTable(Table):
         super(WelcomeTable, self).__init__(
             table_title="Steam Recommender",
             table_title_border_top="=",
-            rows=["Check new games in Steam", "Recommend games based on tags"],
+            rows=[
+                "Add new games to database (if any)",
+                "Browse games by tags",
+                "Browse games by tags with Russian audio",
+                "Find games similar to a game"
+            ],
             rows_border_top="=",
             rows_border_bottom="=",
             table_width=SCREEN_WIDTH,
