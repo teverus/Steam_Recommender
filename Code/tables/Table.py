@@ -151,7 +151,8 @@ class Table:
         self.width_to_be_covered = sum(self.widths_max.values()) + self.extra
 
     def calculate_columns(self):
-        for element in (self.headers, self.rows):
+        some_list = (self.headers, self.rows) if self.headers != [()] else [self.rows]
+        for element in some_list:
             self.create_columns(element)
 
     def create_columns(self, some_list):
