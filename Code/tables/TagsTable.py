@@ -1,27 +1,17 @@
 import os
-from math import ceil
 
 from Code.constants import SCREEN_WIDTH
+from Code.functions.general import get_rows
 from Code.tables.Table import Table
 
 
 class TagsTable:
-    def __init__(self, tags, current_page, max_rows=30, max_columns=3):
-        milestone = max_columns * (current_page - 1)
-        rows = [
-            list(row)
-            for row in zip(
-                tags[milestone * max_rows: (milestone + 1) * max_rows],
-                tags[(milestone + 1) * max_rows: (milestone + 2) * max_rows],
-                tags[(milestone + 2) * max_rows: (milestone + 3) * max_rows],
-            )
-        ]
-
+    def __init__(self, main):
         os.system("cls")
         tags_table = Table(
             table_title="   Tags",
             table_title_border_top="=",
-            rows=rows,
+            rows=get_rows(main.tags, main.current_page, main.max_rows, main.max_columns),
             rows_border_bottom="=",
             headers=["A", "B", "C"],
             headers_border_top="=",
@@ -29,27 +19,39 @@ class TagsTable:
             table_width=SCREEN_WIDTH,
         )
 
-        columns = [e.strip().lower() for e in tags_table.headers[0].split("|")][1:]
-
-        if current_page == 1:
+        if main.current_page == 1:
             self.options = ["n"]
-            go_to_previous_page = ""
+            self.previous_page = ""
+            self.next_page = ", n -> next page"
+        elif main.current_page == main.max_page:
+            self.options = ["p"]
+            self.previous_page = ", p -> previous page"
+            self.next_page = ""
         else:
             self.options = ["p", "n"]
-            go_to_previous_page = ", p -> previous page"
+            self.previous_page = ", p -> previous page"
+            self.next_page = ", n -> next page"
 
+        self.options = self.get_available_options(tags_table)
+        self.print_arrows(main)
+
+    def get_available_options(self, tags_table):
+        options = []
+
+        columns = [e.strip().lower() for e in tags_table.headers[0].split("|")][1:]
         for column in columns:
             for available_option in tags_table.available_options:
-                self.options.append(f"{available_option}{column}")
+                options.append(f"{available_option}{column}")
 
-        max_columns = 3
-        number_of_pages = ceil(len(tags) / (max_rows * max_columns))
-        arrow_left = "   " if current_page == 1 else "<<<"
-        arrow_right = ">>>"
-        layout = f"   {arrow_left} {current_page}/{number_of_pages} {arrow_right}"
+        return self.options + options
+
+    def print_arrows(self, main):
+        arrow_left = "   " if main.current_page == 1 else "<<<"
+        arrow_right = "   " if main.current_page == main.max_page else ">>>"
+        layout = f"   {arrow_left} {main.current_page}/{main.max_page} {arrow_right}"
         print(f"{layout}".center(SCREEN_WIDTH))
 
         print(f"{'=' * SCREEN_WIDTH}")
 
-        hints = f"  1a -> select a tag, n -> next page{go_to_previous_page}"
+        hints = f"  1a -> select a tag{self.next_page}{self.previous_page}"
         print(hints.center(SCREEN_WIDTH))
