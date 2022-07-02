@@ -18,14 +18,14 @@ def get_tags():
     return tags
 
 
-def get_rows(tags, current_page, max_rows, max_columns):
-    milestone = max_columns * (current_page - 1)
+def get_rows(main):
+    milestone = main.max_columns * (main.current_page - 1)
     rows = [
         list(row)
         for row in zip(
-            tags[milestone * max_rows: (milestone + 1) * max_rows],
-            tags[(milestone + 1) * max_rows: (milestone + 2) * max_rows],
-            tags[(milestone + 2) * max_rows: (milestone + 3) * max_rows],
+            main.tags[milestone * main.max_rows: (milestone + 1) * main.max_rows],
+            main.tags[(milestone + 1) * main.max_rows: (milestone + 2) * main.max_rows],
+            main.tags[(milestone + 2) * main.max_rows: (milestone + 3) * main.max_rows],
         )
     ]
 

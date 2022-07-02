@@ -11,7 +11,7 @@ class TagsTable:
         tags_table = Table(
             table_title="   Tags",
             table_title_border_top="=",
-            rows=get_rows(main.tags, main.current_page, main.max_rows, main.max_columns),
+            rows=get_rows(main),
             rows_border_bottom="=",
             headers=["A", "B", "C"],
             headers_border_top="=",
@@ -19,6 +19,11 @@ class TagsTable:
             table_width=SCREEN_WIDTH,
         )
 
+        self.adjust_options_and_hints(main)
+        self.options = self.get_available_options(tags_table)
+        self.print_arrows(main)
+
+    def adjust_options_and_hints(self, main):
         if main.current_page == 1:
             self.options = ["n"]
             self.previous_page = ""
@@ -31,9 +36,6 @@ class TagsTable:
             self.options = ["p", "n"]
             self.previous_page = ", p -> previous page"
             self.next_page = ", n -> next page"
-
-        self.options = self.get_available_options(tags_table)
-        self.print_arrows(main)
 
     def get_available_options(self, tags_table):
         options = []
