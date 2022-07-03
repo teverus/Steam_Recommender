@@ -12,3 +12,8 @@ FILES = "Files"
 
 STEAM_HOMEPAGE = "https://store.steampowered.com/"
 APP_URL = "https://store.steampowered.com/app/"
+
+
+class TagStatus:
+    FAVORITE = "favorite"
+    HIDDEN = "hidden"

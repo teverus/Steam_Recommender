@@ -101,6 +101,7 @@ class CheckNewGames:
 
                     info = [appid, name, tags, russian_audio]
                     append_row_to_table(info, GAMES_COLUMNS, GAMES)
+                    # TODO если уникальный тег, то добавлять в базу тегов
                     print("")
 
                 else:

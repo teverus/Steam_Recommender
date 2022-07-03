@@ -10,7 +10,11 @@ class WelcomeTable(Table):
             rows=[
                 "Add new games to database (if any)",
                 "Browse games by tags",
-                "Browse games by tags with Russian audio",
+                "Browse games by tags (+ Russian audio)",
+                "Browse games by favorite tags",
+                "Browse games by favorite tags (+ Russian audio)",
+                "Browse games by hidden tags",
+                "Browse games by hidden tags (+ Russian audio)",
                 "Find games similar to a game"
             ],
             rows_border_top="=",

@@ -1,8 +1,10 @@
 from Code.constants import GAMES
 from Code.functions.db import read_a_table
+from string import ascii_lowercase as letters
 
 
 def get_tags():
+    # TODO получать теги из отдельной базы
     games = read_a_table(GAMES)
     known_tags = {}
     for index in range(len(games)):
@@ -30,3 +32,17 @@ def get_rows(main):
     ]
 
     return rows
+
+
+def get_tag_name(main):
+    index = int(main.choice[:-1]) - 1
+    letter = letters.index(main.choice[-1])
+    column_modifier = main.max_rows * letter
+    page_modifier = main.total_on_page * (main.current_page - 1)
+
+    start = 0 + column_modifier + page_modifier
+    finish = main.max_rows + column_modifier + page_modifier
+    part_of_tags = main.tags[start:finish]
+    tag = part_of_tags[index]
+
+    return tag
