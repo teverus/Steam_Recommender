@@ -1,5 +1,3 @@
-"""
-"""
 import os
 from math import ceil
 from string import ascii_lowercase as letters
@@ -18,6 +16,7 @@ class BrowseGamesByTags:
         self.max_rows = 30
         self.max_columns = 3
         self.max_page = ceil(len(self.tags) / (self.max_rows * self.max_columns))
+        self.total_on_page = self.max_rows * self.max_columns
 
         choice = get_user_choice(TagsTable(self).options, " >>> ")
 
@@ -30,9 +29,16 @@ class BrowseGamesByTags:
                 self.current_page -= 1
                 choice = get_user_choice(TagsTable(self).options, " >>> ")
             else:
-                row = int(choice[:-1]) - 1
-                column = letters.index(choice[-1]) * self.max_rows
-                tag = self.tags[row + column]
+                index = int(choice[:-1]) - 1
+                letter = letters.index(choice[-1])
+                column_modifier = self.max_rows * letter
+                page_modifier = self.total_on_page * (self.current_page - 1)
+
+                start = 0 + column_modifier + page_modifier
+                finish = self.max_rows + column_modifier + page_modifier
+                part_of_tags = self.tags[start:finish]
+                tag = part_of_tags[index]
+
                 os.system("cls")
                 options = Table(
                     table_title=tag,
@@ -40,7 +46,7 @@ class BrowseGamesByTags:
                         "Browse games with this tag",
                         "Make this tag favorite",
                         "Make this tag hidden",
-                        "Go back"
+                        "Go back",
                     ],
                     table_width=SCREEN_WIDTH,
                     rows_border_top="=",
