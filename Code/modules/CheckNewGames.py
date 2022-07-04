@@ -17,6 +17,7 @@ from Code.functions.db import (
     read_a_table,
     record_an_error,
 )
+from Code.functions.general import check_unique_tags
 from Code.functions.web import get_game_from_api, get_game_tags, get_game_in_steam
 
 
@@ -100,8 +101,8 @@ class CheckNewGames:
                     russian_audio = "Russian<strong" in game_data["supported_languages"]
 
                     info = [appid, name, tags, russian_audio]
+                    check_unique_tags(tags)
                     append_row_to_table(info, GAMES_COLUMNS, GAMES)
-                    # TODO если уникальный тег, то добавлять в базу тегов
                     print("")
 
                 else:

@@ -1,7 +1,9 @@
 from string import ascii_lowercase as letters
 
-from Code.constants import TAGS
-from Code.functions.db import read_a_table
+from pandas import DataFrame
+
+from Code.constants import TAGS, TAGS_COLUMNS
+from Code.functions.db import read_a_table, append_to_table
 
 
 def get_tags():
@@ -35,3 +37,15 @@ def get_tag_name(main):
     tag = part_of_tags[index]
 
     return tag
+
+
+def check_unique_tags(tags: str):
+    known_tags = read_a_table(TAGS)
+    known_tags = sorted(list(known_tags.Tag))
+
+    possible_tags = tags.split(", ")
+    for tag in possible_tags:
+        if tag not in known_tags:
+            df = DataFrame([], columns=TAGS_COLUMNS)
+            df.loc[0] = [tag, 1]
+            append_to_table(df, TAGS, "Files")
