@@ -8,6 +8,9 @@ GAMES_COLUMNS = ["ID", "Title", "Tags", "RussianAudio"]
 PROBLEMS = "Problems"
 PROBLEMS_COLUMNS = ["ID", "Problem"]
 
+TAGS = "Tags"
+TAGS_COLUMNS = ["Tag", "Number"]
+
 FILES = "Files"
 
 STEAM_HOMEPAGE = "https://store.steampowered.com/"

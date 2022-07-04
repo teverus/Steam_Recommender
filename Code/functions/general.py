@@ -1,23 +1,12 @@
-from Code.constants import GAMES
-from Code.functions.db import read_a_table
 from string import ascii_lowercase as letters
+
+from Code.constants import TAGS
+from Code.functions.db import read_a_table
 
 
 def get_tags():
-    # TODO получать теги из отдельной базы
-    games = read_a_table(GAMES)
-    known_tags = {}
-    for index in range(len(games)):
-        game_tags = games.loc[index].Tags.split(", ")
-        for game_tag in game_tags:
-            if game_tag:
-                try:
-                    known_tags[game_tag] += 1
-                except KeyError:
-                    known_tags[game_tag] = 1
-    tags = sorted(list(known_tags.keys()))
-
-    return tags
+    games = read_a_table(TAGS)
+    return sorted(list(games.Tag))
 
 
 def get_rows(main):

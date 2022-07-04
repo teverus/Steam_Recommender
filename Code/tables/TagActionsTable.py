@@ -1,9 +1,12 @@
+import os
+
 from Code.constants import SCREEN_WIDTH
 from Code.tables.Table import Table
 
 
 class TagActionsTable(Table):
     def __init__(self, tag, av_actions):
+        os.system("cls")
         super(TagActionsTable, self).__init__(
             table_title=tag,
             rows=[e[0] for e in av_actions.values()],
