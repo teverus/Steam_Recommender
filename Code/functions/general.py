@@ -2,7 +2,7 @@ from string import ascii_lowercase as letters
 
 from pandas import DataFrame
 
-from Code.constants import TAGS, TAGS_COLUMNS
+from Code.constants import TAGS, TAGS_COLUMNS, FILES
 from Code.functions.db import read_a_table, append_to_table
 
 
@@ -48,4 +48,4 @@ def check_unique_tags(tags: str):
         if tag not in known_tags:
             df = DataFrame([], columns=TAGS_COLUMNS)
             df.loc[0] = [tag, 1]
-            append_to_table(df, TAGS, "Files")
+            append_to_table(df, TAGS, FILES)

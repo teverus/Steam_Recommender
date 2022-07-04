@@ -9,7 +9,10 @@ PROBLEMS = "Problems"
 PROBLEMS_COLUMNS = ["ID", "Problem"]
 
 TAGS = "Tags"
-TAGS_COLUMNS = ["Tag", "Number"]
+TAG = "Tag"
+FAVORITE = "Favorite"
+HIDDEN = "Hidden"
+TAGS_COLUMNS = [TAG, "Number", FAVORITE, HIDDEN]
 
 FILES = "Files"
 
