@@ -1,9 +1,11 @@
 from Code.Action import Action
-from Code.constants import SCREEN_WIDTH
 from Code.functions.ui import get_user_choice
 from Code.modules.BrowseGamesByTags import BrowseGamesByTags
 from Code.modules.CheckNewGames import CheckNewGames
-from Code.tables.Table import Table
+
+# TODO Создать общий класс Screen
+# TODO Поменять на WelcomeScreen(Screen)
+from Code.tables.CustomTable import CustomTable
 
 
 class ApplicationImproved:
@@ -21,14 +23,7 @@ class ApplicationImproved:
             ),
         }
 
-        table = Table(
-            table_title="STEAM RECOMMENDER",
-            table_title_border_top="=",
-            rows=[action.name for action in actions.values()],
-            rows_border_top="=",
-            rows_border_bottom="=",
-            table_width=SCREEN_WIDTH,
-        )
+        table = CustomTable(title="STEAM RECOMMENDER", actions=actions)
 
         choice = get_user_choice(table.available_options)
 
