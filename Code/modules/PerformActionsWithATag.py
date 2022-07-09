@@ -14,7 +14,6 @@ class PerformActionsWithATag:
         av_actions = {
             # TODO сделать Browse games with this tag
             "1": ["Browse games with this tag", None],
-            # TODO сделать Make this tag favorite
             "2": ["Make this tag favorite", self.make_tag, TagStatus.FAVORITE],
             # TODO сделать Make this tag hidden
             "3": ["Make this tag hidden", self.make_tag, TagStatus.HIDDEN],
