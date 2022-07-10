@@ -185,7 +185,7 @@ class Table:
                 centered = self.headers_centered if is_header else self.rows_centered
                 align = column.center if centered else column.ljust
 
-                row[index_col] = align(target_width, "-")
+                row[index_col] = align(target_width, " ")
                 if is_header and self.headers_upper:
                     row[index_col] = row[index_col].upper()
 
