@@ -1,5 +1,7 @@
 from typing import Union
 
+from Code.constants import HIGHLIGHT, NO_HIGHLIGHT
+
 
 class Table:
     def __init__(
@@ -25,6 +27,7 @@ class Table:
         column_separator: str = "|",
         custom_index: dict = None,
         index_column_width: Union[dict, int] = None,
+        highlight: tuple = None,
     ):
         # === Given values
         # Rows
@@ -51,6 +54,7 @@ class Table:
         self.column_separator = column_separator
         self.custom_index = custom_index
         self.available_options = []
+        self.highlight = highlight
 
         # === Calculated values
         self.walls = 0
@@ -60,6 +64,7 @@ class Table:
         self.width_to_be_covered = 0
         self.widths_target = 0
         self.width_index = self.get_proper_index_column_width(index_column_width)
+        self.highlight_map = self.get_rows_highlight()
 
         self.table = []
 
@@ -71,6 +76,16 @@ class Table:
 
         # === Printing the table
         self.print_the_table()
+
+    def get_rows_highlight(self):
+        highlight = {}
+        for ind_row, row in enumerate(self.rows):
+            for ind_col, column in enumerate(row):
+                coordinates = (ind_row, ind_col)
+                color = HIGHLIGHT if coordinates == self.highlight else ""
+                highlight[ind_row] = {ind_col: {"text": column, "color": color}}
+
+        return highlight
 
     def get_proper_index_column_width(self, index_column_width):
         indices = [len(str(len(self.rows)))]
@@ -170,7 +185,7 @@ class Table:
                 centered = self.headers_centered if is_header else self.rows_centered
                 align = column.center if centered else column.ljust
 
-                row[index_col] = align(target_width, " ")
+                row[index_col] = align(target_width, "-")
                 if is_header and self.headers_upper:
                     row[index_col] = row[index_col].upper()
 
@@ -216,7 +231,17 @@ class Table:
         if self.rows_border_top:
             print(table_top)
 
-        [print(row) for row in self.rows]
+        for ind_row, row in enumerate(self.rows):
+            split_row = [col for col in row[1:-1].split(f" {self.column_separator} ")]
+            line = ""
+            for ind_col, col in enumerate(split_row):
+                current = (ind_row, ind_col)
+                if self.highlight and current == self.highlight:
+                    line += HIGHLIGHT + col + NO_HIGHLIGHT
+                else:
+                    line += col
+                line += f" {self.column_separator} "
+            print(f" {line[:-3]}")
 
         if self.rows_border_bottom:
             print(table_bottom)

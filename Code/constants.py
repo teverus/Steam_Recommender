@@ -1,3 +1,5 @@
+from colorama import Back, Fore
+
 SCREEN_WIDTH = 101
 
 ALL_GAMES = "https://api.steampowered.com/ISteamApps/GetAppList/v2/?format=json"
@@ -18,6 +20,9 @@ FILES = "Files"
 
 STEAM_HOMEPAGE = "https://store.steampowered.com/"
 APP_URL = "https://store.steampowered.com/app/"
+
+HIGHLIGHT = Back.WHITE + Fore.BLACK
+NO_HIGHLIGHT = Back.BLACK + Fore.WHITE
 
 
 class TagStatus:
