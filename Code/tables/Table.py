@@ -65,6 +65,7 @@ class Table:
         self.widths_target = 0
         self.width_index = self.get_proper_index_column_width(index_column_width)
         self.highlight_map = self.get_rows_highlight()
+        self.cage = self.get_cage()
 
         self.table = []
 
@@ -76,6 +77,20 @@ class Table:
 
         # === Printing the table
         self.print_the_table()
+
+    def get_cage(self):
+        number_of_rows = len(self.rows)
+        number_of_columns = len(self.rows[0])
+
+        x_axis = [number for number in range(number_of_rows)]
+        y_axis = [number for number in range(number_of_columns)]
+
+        coordinates = []
+        for x in x_axis:
+            for y in y_axis:
+                coordinates.append([x, y])
+
+        return coordinates
 
     def get_rows_highlight(self):
         highlight = {}
