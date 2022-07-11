@@ -15,7 +15,8 @@ class BrowseGamesByTags:
         self.max_page = ceil(len(self.tags) / (self.max_rows * self.max_columns))
         self.total_on_page = self.max_rows * self.max_columns
 
-        self.choice = get_user_choice(TagsTable(self).options, " >>> ")
+        options = TagsTable(self).options
+        self.choice = get_user_choice(options, " >>> ")
 
         while True:
 

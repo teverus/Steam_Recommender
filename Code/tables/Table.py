@@ -1,5 +1,7 @@
 from typing import Union
 
+import bext
+
 from Code.constants import HIGHLIGHT, NO_HIGHLIGHT
 
 
@@ -27,7 +29,8 @@ class Table:
         column_separator: str = "|",
         custom_index: dict = None,
         index_column_width: Union[dict, int] = None,
-        highlight: tuple = None,
+        highlight: list = None,
+        clear_screen: bool = True,
     ):
         # === Given values
         # Rows
@@ -55,6 +58,7 @@ class Table:
         self.custom_index = custom_index
         self.available_options = []
         self.highlight = highlight
+        self.clear_screen = clear_screen
 
         # === Calculated values
         self.walls = 0
@@ -64,7 +68,6 @@ class Table:
         self.width_to_be_covered = 0
         self.widths_target = 0
         self.width_index = self.get_proper_index_column_width(index_column_width)
-        self.highlight_map = self.get_rows_highlight()
         self.cage = self.get_cage()
 
         self.table = []
@@ -91,16 +94,6 @@ class Table:
                 coordinates.append([x, y])
 
         return coordinates
-
-    def get_rows_highlight(self):
-        highlight = {}
-        for ind_row, row in enumerate(self.rows):
-            for ind_col, column in enumerate(row):
-                coordinates = (ind_row, ind_col)
-                color = HIGHLIGHT if coordinates == self.highlight else ""
-                highlight[ind_row] = {ind_col: {"text": column, "color": color}}
-
-        return highlight
 
     def get_proper_index_column_width(self, index_column_width):
         indices = [len(str(len(self.rows)))]
@@ -228,6 +221,9 @@ class Table:
         table_top = self.get_table_top()
         table_bottom = self.rows_border_bottom * self.table_width
 
+        if self.clear_screen:
+            bext.clear()
+
         if self.table_title:
             if self.table_title_border_top:
                 print(self.table_title_border_top * self.table_width)
@@ -250,7 +246,7 @@ class Table:
             split_row = [col for col in row[1:-1].split(f" {self.column_separator} ")]
             line = ""
             for ind_col, col in enumerate(split_row):
-                current = (ind_row, ind_col)
+                current = [ind_row, ind_col]
                 if self.highlight and current == self.highlight:
                     line += HIGHLIGHT + col + NO_HIGHLIGHT
                 else:

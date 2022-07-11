@@ -27,9 +27,8 @@ class CheckNewGames:
         all_games = set(read_a_table(GAMES).ID).union(set(read_a_table(PROBLEMS).ID))
         new_games = set([e["appid"] for e in get(ALL_GAMES).json()["applist"]["apps"]])
 
-        if all_games != new_games:
-            diff = new_games - all_games
-
+        diff = new_games - all_games
+        if diff:
             time_start = dt.now()
             for index, appid in enumerate(diff):
 
@@ -38,7 +37,7 @@ class CheckNewGames:
                 time_now = str(dt.now() - time_start).split(".")[0]
                 print(
                     f" {index+1}/{len(diff)} | {time_now} | Appid: {str(appid).ljust(7)} | ",
-                    end=""
+                    end="",
                 )
 
                 # Connection Error

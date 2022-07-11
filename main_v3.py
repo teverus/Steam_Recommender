@@ -3,43 +3,52 @@ import colorama
 from pynput import keyboard
 from pynput.keyboard import Key
 
-from Code.constants import SCREEN_WIDTH
-from Code.tables.Table import Table
+from Code.Action import Action
+from Code.modules.BrowseGamesByTags import BrowseGamesByTags
+from Code.modules.CheckNewGames import CheckNewGames
+from Code.tables.WelcomeTableV3 import WelcomeTableV3
 
 colorama.init(autoreset=True)
 
 
 class ApplicationV3:
     def __init__(self):
-        bext.clear()
         bext.hide()
         self.pressed_key = None
-        self.current_position = (0, 0)
+        self.current_position = [0, 0]
+        self.actions = [
+            Action(
+                name="Add new games to database (if any)",
+                function=CheckNewGames,
+                break_after=True,
+            ),
+            Action(
+                name="Browse games by tags",
+                function=BrowseGamesByTags,
+                break_after=True,
+            ),
+        ]
 
-        self.cage = Table(
-            table_title="Steam Recommender",
-            rows=[["Action #1", "Action #1-1"], ["Action #2", "Action #2-1"]],
-            rows_centered=True,
-            table_width=SCREEN_WIDTH,
-            show_index=False,
-            highlight=self.current_position,
-        ).cage
+        self.cage = WelcomeTableV3(self).cage
 
         while True:
-            self.current_position = self.get_user_movement()
+            self.current_position, action = self.get_user_movement()
 
-            bext.clear()
-            Table(
-                table_title="Steam Recommender",
-                rows=[["Action #1", "Action #1-1"], ["Action #2", "Action #2-1"]],
-                rows_centered=True,
-                table_width=SCREEN_WIDTH,
-                show_index=False,
-                highlight=self.current_position,
-            )
+            if action:
+                action = self.actions[self.current_position[0]]
+                action.function()
+
+                if action.break_after:
+                    break
+
+            else:
+                WelcomeTableV3(self)
 
     def get_user_movement(self):
-        key_to_delta = {
+        position = self.current_position
+        action = False
+
+        movement = {
             Key.down: (1, 0),
             Key.up: (-1, 0),
             Key.right: (0, 1),
@@ -47,17 +56,17 @@ class ApplicationV3:
         }
 
         user_input = self.get_user_input()
-        delta = key_to_delta[user_input]
 
-        new_position = [
-            coordinate1 + coordinate2
-            for coordinate1, coordinate2 in zip(self.current_position, delta)
-        ]
+        if user_input == Key.enter:
+            _ = input()
+            action = True
 
-        if new_position in self.cage:
-            return tuple(new_position)
-        else:
-            return self.current_position
+        elif user_input in movement.keys():
+            delta = movement[user_input]
+            new_position = [c1 + c2 for c1, c2 in zip(self.current_position, delta)]
+            position = new_position if new_position in self.cage else position
+
+        return position, action
 
     def get_user_input(self):
         with keyboard.Listener(on_release=self.store_key) as listener:
