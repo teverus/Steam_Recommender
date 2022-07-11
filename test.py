@@ -1,37 +1,20 @@
-import bext
-from colorama import Back, Fore
-from pynput import keyboard
-import colorama
-
-colorama.init(autoreset=True)
+from Code.constants import SCREEN_WIDTH
+from Code.tables.TableV2 import TableV2
 
 
-def action(key):
-    if key == keyboard.Key.down:
-        bext.clear()
-        bext.hide()
-        print("Hello")
-        print(Back.WHITE + Fore.BLACK + "World")
-    elif key == keyboard.Key.up:
-        bext.clear()
-        bext.hide()
-        print(Back.WHITE + Fore.BLACK + "Hello")
-        print("World")
-    return False
+class ApplicationTest:
+    def __init__(self):
+        TableV2(
+            rows=[["Action 1", "badger"], ["Action 42", "pig"]],
+            rows_centered=True,
+            rows_top_border="=",
+            rows_bottom_border="=",
+            table_title="Table title",
+            table_title_top_border="=",
+            table_width=SCREEN_WIDTH,
+            highlight=[0, 0],
+        )
 
 
-bext.clear()
-bext.hide()
-print(Back.WHITE + Fore.BLACK + "Hello")
-print("World")
-
-# Collect events until released
-# with keyboard.Listener(on_release=action) as listener:
-#     listener.join()
-
-listener = keyboard.Listener(on_release=action)
-listener.start()
-aaa = listener
-listener.join()
-
-a = 1
+if __name__ == "__main__":
+    ApplicationTest()

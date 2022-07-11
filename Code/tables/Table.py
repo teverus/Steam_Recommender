@@ -2,7 +2,7 @@ from typing import Union
 
 import bext
 
-from Code.constants import HIGHLIGHT, NO_HIGHLIGHT
+from Code.constants import HIGHLIGHT, END_HIGHLIGHT
 
 
 class Table:
@@ -248,7 +248,7 @@ class Table:
             for ind_col, col in enumerate(split_row):
                 current = [ind_row, ind_col]
                 if self.highlight and current == self.highlight:
-                    line += HIGHLIGHT + col + NO_HIGHLIGHT
+                    line += HIGHLIGHT + col + END_HIGHLIGHT
                 else:
                     line += col
                 line += f" {self.column_separator} "

@@ -1,5 +1,5 @@
-from datetime import datetime as dt
 import re
+from datetime import datetime as dt
 from time import sleep
 
 import requests
@@ -11,6 +11,7 @@ from Code.constants import (
     GAMES,
     APP_URL,
     PROBLEMS,
+    SCREEN_WIDTH,
 )
 from Code.functions.db import (
     append_row_to_table,
@@ -19,11 +20,20 @@ from Code.functions.db import (
 )
 from Code.functions.general import check_unique_tags
 from Code.functions.web import get_game_from_api, get_game_tags, get_game_in_steam
+from Code.tables.TableV2 import TableV2
 
 
 class CheckNewGames:
     def __init__(self):
 
+        TableV2(
+            table_title="Get new games from Steam",
+            table_title_top_border="=",
+            rows=["Looking for new games..."],
+            rows_top_border="=",
+            rows_bottom_border="",
+            table_width=SCREEN_WIDTH,
+        )
         all_games = set(read_a_table(GAMES).ID).union(set(read_a_table(PROBLEMS).ID))
         new_games = set([e["appid"] for e in get(ALL_GAMES).json()["applist"]["apps"]])
 
@@ -36,7 +46,7 @@ class CheckNewGames:
                 sleep(0.25)
                 time_now = str(dt.now() - time_start).split(".")[0]
                 print(
-                    f" {index+1}/{len(diff)} | {time_now} | Appid: {str(appid).ljust(7)} | ",
+                    f" {index + 1}/{len(diff)} | {time_now} | Appid: {str(appid).ljust(7)} | ",
                     end="",
                 )
 

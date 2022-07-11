@@ -22,7 +22,7 @@ STEAM_HOMEPAGE = "https://store.steampowered.com/"
 APP_URL = "https://store.steampowered.com/app/"
 
 HIGHLIGHT = Back.WHITE + Fore.BLACK
-NO_HIGHLIGHT = Back.BLACK + Fore.WHITE
+END_HIGHLIGHT = Back.BLACK + Fore.WHITE
 
 
 class TagStatus:
