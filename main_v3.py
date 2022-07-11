@@ -20,7 +20,7 @@ class ApplicationV3:
             Action(
                 name="Add new games to database (if any)",
                 function=CheckNewGames,
-                break_after=True,
+                # break_after=True,
             ),
             Action(
                 name="Browse games by tags",
@@ -41,8 +41,7 @@ class ApplicationV3:
                 if action.break_after:
                     break
 
-            else:
-                WelcomeTableV3(self)
+            WelcomeTableV3(self)
 
     def get_user_movement(self):
         position = self.current_position
