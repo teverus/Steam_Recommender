@@ -38,9 +38,8 @@ class ApplicationV4:
                 if action.break_after:
                     break
 
-                user_input = self.get_user_input()
-                while user_input != Key.enter:
-                    user_input = self.get_user_input()
+                print('\n Press "Enter" to continue...')
+                self.wait_for_key(Key.enter)
 
             WelcomeTableV4(self)
 
@@ -72,6 +71,11 @@ class ApplicationV4:
     def store_key(self, key):
         self.pressed_key = key
         return False
+
+    def wait_for_key(self, target_key):
+        user_input = self.get_user_input()
+        while user_input != target_key:
+            user_input = self.get_user_input()
 
 
 if __name__ == "__main__":
