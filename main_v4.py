@@ -3,7 +3,7 @@ from pynput import keyboard
 from pynput.keyboard import Key
 
 from Code.Action import Action
-from Code.modules.BrowseGamesByTags import BrowseGamesByTags
+from Code.modules.BrowseGamesByTagsV2 import BrowseGamesByTagsV2
 from Code.modules.CheckNewGames import CheckNewGames
 from Code.tables.WelcomeTableV4 import WelcomeTableV4
 
@@ -14,6 +14,7 @@ class ApplicationV4:
         self.pressed_key = None
         self.current_position = [0, 0]
 
+        # TODO прокидывать actions
         self.actions = [
             Action(
                 name="Add new games to database (if any)",
@@ -21,11 +22,12 @@ class ApplicationV4:
             ),
             Action(
                 name="Browse games by tags",
-                function=BrowseGamesByTags,
+                function=BrowseGamesByTagsV2,
                 break_after=True,
             ),
         ]
 
+        # TODO прокидывать table
         self.cage = WelcomeTableV4(self).cage
 
         while True:

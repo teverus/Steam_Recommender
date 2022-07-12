@@ -6,4 +6,7 @@ class Action:
         self.break_after = break_after
 
     def __call__(self, *args, **kwargs):
-        self.function()
+        if self.arguments:
+            self.function(self.arguments)
+        else:
+            self.function()
