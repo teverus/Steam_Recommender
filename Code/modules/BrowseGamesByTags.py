@@ -24,6 +24,7 @@ class BrowseGamesByTags:
             )
         ]
 
+        # TODO footer
         self.table = TagsTable
 
         Screen(self)

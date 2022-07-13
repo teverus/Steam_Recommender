@@ -12,12 +12,9 @@ class PerformActionsWithATag_Old1:
         action = 1
         argument = 2
         av_actions = {
-            # TODO сделать Browse games with this tag
             "1": ["Browse games with this tag", None],
             "2": ["Make this tag favorite", self.make_tag, TagStatus.FAVORITE],
-            # TODO сделать Make this tag hidden
             "3": ["Make this tag hidden", self.make_tag, TagStatus.HIDDEN],
-            # TODO сделать Go back
             "00": ["Go back", None],
         }
 
@@ -29,8 +26,6 @@ class PerformActionsWithATag_Old1:
         else:
             selection = av_actions[main.choice]
             selection[action](selection[argument])
-
-        # TODO цикл
 
     def make_tag(self, target_status):
         target_column = FAVORITE if target_status == TagStatus.FAVORITE else HIDDEN
