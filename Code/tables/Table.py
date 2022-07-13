@@ -1,6 +1,7 @@
-from typing import Union
-
 import bext
+import os
+
+from pandas import DataFrame
 
 from Code.constants import HIGHLIGHT, END_HIGHLIGHT
 
@@ -9,84 +10,123 @@ class Table:
     def __init__(
         self,
         # Rows
-        rows: list,
-        rows_centered: bool = False,
-        rows_border_top: str = "-",
-        rows_border_bottom: str = "-",
-        # Headers
-        headers: list = (),
-        headers_centered: bool = False,
-        headers_upper: bool = False,
-        headers_border_top: Union[str, bool] = "-",
+        rows,
+        rows_top_border="-",
+        rows_bottom_border="-",
+        rows_centered=False,
         # Table title
-        table_title: str = "",
-        table_title_centered: bool = True,
-        table_title_upper: bool = True,
-        table_title_border_top: str = "-",
+        table_title="",
+        table_title_centered=True,
+        table_title_caps=True,
+        table_title_top_border="-",
         # Table
-        table_width: int = 0,
-        show_index: bool = True,
-        column_separator: str = "|",
-        custom_index: dict = None,
-        index_column_width: Union[dict, int] = None,
-        highlight: list = None,
-        clear_screen: bool = True,
+        table_width=None,
+        highlight=None,
     ):
-        # === Given values
-        # Rows
-        self.rows = self.convert_rows(rows)
-        self.rows_centered = rows_centered
-        self.rows_border_top = rows_border_top
-        self.rows_border_bottom = rows_border_bottom
+        # Table
+        self.table_width = table_width
+        self.highlight = highlight
 
-        # Headers
-        self.headers = [headers]
-        self.headers_centered = headers_centered
-        self.headers_upper = headers_upper
-        self.headers_border_top = headers_border_top
+        # Declared in init
+        self.number_of_cols = None
+        self.number_of_rows = None
+
+        # Calculated values
+        self.df = self.get_df(rows)
+        self.column_widths = self.get_column_widths()
+        self.border_length = self.get_border_length()
+        self.cage = self.get_cage()
 
         # Table title
         self.table_title = table_title
         self.table_title_centered = table_title_centered
-        self.table_title_upper = table_title_upper
-        self.table_title_border_top = table_title_border_top
+        self.table_title_caps = table_title_caps
+        self.table_title_top_border = table_title_top_border
 
-        # Table
-        self.table_width = table_width
-        self.show_index = show_index
-        self.column_separator = column_separator
-        self.custom_index = custom_index
-        self.available_options = []
-        self.highlight = highlight
-        self.clear_screen = clear_screen
+        # Rows
+        self.rows_top_border = rows_top_border
+        self.rows_bottom_border = rows_bottom_border
+        self.rows_centered = rows_centered
 
-        # === Calculated values
-        self.walls = 0
-        self.inner_padding = 0
-        self.extra = 0
-        self.widths_max = {}
-        self.width_to_be_covered = 0
-        self.widths_target = 0
-        self.width_index = self.get_proper_index_column_width(index_column_width)
-        self.cage = self.get_cage()
+        self.print_table()
 
-        self.table = []
+    def print_table(self):
 
-        # === Preparing the table
-        self.force_string_type_on_the_data()
-        self.perform_width_analysis()
-        self.calculate_paddings()
-        self.calculate_columns()
+        os.system("cls")
+        bext.hide()
 
-        # === Printing the table
-        self.print_the_table()
+        # Table title top border
+        if self.table_title and self.table_title_top_border:
+            print(self.table_title_top_border * self.border_length)
+
+        # Table title
+        if self.table_title:
+            centered = self.table_title_centered
+            caps = self.table_title_caps
+            self.table_title = self.table_title.upper() if caps else self.table_title
+            tt = self.table_title.center if centered else self.table_title.ljust
+            print(tt(self.border_length))
+
+        # Rows top border
+        if self.rows_top_border:
+            print(self.rows_top_border * self.border_length)
+
+        # Rows
+        for row in range(self.number_of_rows):
+            a_row = []
+            for column in range(self.number_of_cols):
+                width = self.column_widths[column]
+                data = self.df.iloc[row, column]
+                data = data.center if self.rows_centered else data.ljust
+                data = data(width, " ")
+                highlighted = f"{HIGHLIGHT}{data}{END_HIGHLIGHT}"
+                data = highlighted if [row, column] == self.highlight else data
+                a_row.append(data)
+            print(f" {' | '.join(a_row)} ")
+
+        # Rows bottom border
+        if self.rows_bottom_border:
+            print(self.rows_bottom_border * self.border_length)
+
+    def get_df(self, rows):
+        proper_rows = [r if isinstance(r, list) else [r] for r in rows]
+        self.number_of_rows = len(proper_rows)
+        self.number_of_cols = len(proper_rows[0])
+
+        df = DataFrame([], columns=[number for number in range(self.number_of_cols)])
+        for row_index in range(self.number_of_rows):
+            df.loc[row_index] = proper_rows[row_index]
+
+        return df
+
+    def get_column_widths(self):
+        column_widths = {}
+
+        for col in range(self.number_of_cols):
+
+            if self.table_width:
+                actual_width = self.table_width - (((self.number_of_cols - 1) * 3) + 2)
+                per_column = int(actual_width / self.number_of_cols)
+            else:
+                per_column = max(
+                    [len(self.df.iloc[row, col]) for row in range(self.number_of_rows)]
+                )
+
+            column_widths[col] = per_column
+
+        return column_widths
+
+    def get_border_length(self):
+        if self.table_width:
+            return self.table_width
+        else:
+            return (
+                ((self.number_of_cols - 1) * 3) + 2 + sum(self.column_widths.values())
+            )
 
     def get_cage(self):
-        number_of_rows = len(self.rows)
-        number_of_columns = len(self.rows[0])
-
-        x_axis = [number for number in range(number_of_rows)]
-        y_axis = [number for number in range(number_of_columns)]
+        x_axis = [number for number in range(self.number_of_rows)]
+        y_axis = [number for number in range(self.number_of_cols)]
 
         coordinates = []
         for x in x_axis:
@@ -94,181 +134,3 @@ class Table:
                 coordinates.append([x, y])
 
         return coordinates
-
-    def get_proper_index_column_width(self, index_column_width):
-        indices = [len(str(len(self.rows)))]
-
-        if self.custom_index:
-            indices.append(max([len(str(i)) for i in self.custom_index.values()]))
-
-        if index_column_width:
-            indices.append(index_column_width)
-
-        return max(indices)
-
-    @staticmethod
-    def convert_rows(rows):
-        converted_rows = [e if isinstance(e, list) else [e] for e in rows]
-
-        max_columns_number = max([len(element) for element in converted_rows])
-        for row in converted_rows:
-            diff = max_columns_number - len(row)
-            if diff:
-                for _ in range(diff):
-                    row.append("")
-
-        return converted_rows
-
-    def force_string_type_on_the_data(self):
-        for row in self.rows:
-            for index, line in enumerate(row):
-                row[index] = str(line)
-
-    def perform_width_analysis(self):
-        column_number = len(self.rows[0])
-        column_number = column_number + 1 if self.show_index else column_number
-
-        self.widths_max = {index: 0 for index, _ in enumerate(self.rows[0])}
-        for row in self.headers + self.rows:
-            for index, column in enumerate(row):
-                if self.widths_max[index] < len(column):
-                    self.widths_max[index] = len(column)
-
-        if self.show_index:
-            self.widths_max[-1] = self.width_index
-
-        self.walls = column_number - 1
-        self.inner_padding = column_number * 2
-
-        self.extra = self.walls + self.inner_padding
-        self.width_to_be_covered = sum(self.widths_max.values()) + self.extra
-        if not self.table_width:
-            self.table_width = self.width_to_be_covered
-
-    def calculate_paddings(self):
-        if self.width_to_be_covered > self.table_width:
-            while self.width_to_be_covered != self.table_width:
-                self.adjust_widths(decrease=True)
-
-        elif self.width_to_be_covered < self.table_width:
-            while self.width_to_be_covered != self.table_width:
-                self.adjust_widths(increase=True)
-
-    def adjust_widths(self, increase=False, decrease=False):
-        if increase:
-            value = min([v for k, v in self.widths_max.items() if k != -1])
-        elif decrease:
-            value = max(self.widths_max.values())
-        else:
-            raise Exception("[ERROR] You must choose either minimum or maximum")
-
-        index = max([k for k, v in self.widths_max.items() if k != -1 and v == value])
-
-        if increase:
-            self.widths_max[index] += 1
-        elif decrease:
-            self.widths_max[index] -= 1
-        else:
-            raise Exception("[ERROR] You must choose either minimum or maximum")
-
-        self.width_to_be_covered = sum(self.widths_max.values()) + self.extra
-
-    def calculate_columns(self):
-        some_list = (self.headers, self.rows) if self.headers != [()] else [self.rows]
-        for element in some_list:
-            self.create_columns(element)
-
-    def create_columns(self, some_list):
-        for index_row, row in enumerate(some_list):
-            for index_col, column in enumerate(row):
-                column_width = len(column)
-                target_width = self.widths_max[index_col]
-
-                if column_width > target_width:
-                    tail = column[-3:]
-                    head = column[: (target_width - len(tail) - 1)]
-                    column = f"{head}~{tail}"
-
-                is_header = [row] == self.headers
-                centered = self.headers_centered if is_header else self.rows_centered
-                align = column.center if centered else column.ljust
-
-                row[index_col] = align(target_width, " ")
-                if is_header and self.headers_upper:
-                    row[index_col] = row[index_col].upper()
-
-            if self.custom_index and row[0].strip() in self.custom_index.keys():
-                proper_index = str(self.custom_index[row[0].strip()])
-            else:
-                proper_index = str(index_row + 1)
-            index = f" {proper_index.rjust(self.width_index)} {self.column_separator}"
-            if [row] != self.headers:
-                self.available_options.append(proper_index)
-
-            rows = f" {f' {self.column_separator} '.join(row)} "
-
-            if [row] == self.headers:
-                if row:
-                    index = index.replace("1", "#")
-                    table_head = f"{index}{rows}" if self.show_index else rows
-                    self.headers[index_row] = table_head
-            else:
-                some_list[index_row] = f"{index}{rows}" if self.show_index else rows
-
-    def print_the_table(self):
-        headers = self.headers[0]
-        headers_top = self.headers_border_top * self.table_width if headers else ""
-        table_top = self.get_table_top()
-        table_bottom = self.rows_border_bottom * self.table_width
-
-        if self.clear_screen:
-            bext.clear()
-
-        if self.table_title:
-            if self.table_title_border_top:
-                print(self.table_title_border_top * self.table_width)
-            tt = self.table_title
-            tt = tt.upper() if self.table_title_upper else tt
-            tt = tt.center(self.table_width) if self.table_title_centered else tt
-            print(tt)
-
-        if headers:
-            if self.headers_border_top:
-                print(headers_top)
-            print(headers)
-            head_list = [headers_top, headers] if self.headers_border_top else [headers]
-            [self.table.append(element) for element in head_list]
-
-        if self.rows_border_top:
-            print(table_top)
-
-        for ind_row, row in enumerate(self.rows):
-            split_row = [col for col in row[1:-1].split(f" {self.column_separator} ")]
-            line = ""
-            for ind_col, col in enumerate(split_row):
-                current = [ind_row, ind_col]
-                if self.highlight and current == self.highlight:
-                    line += HIGHLIGHT + col + END_HIGHLIGHT
-                else:
-                    line += col
-                line += f" {self.column_separator} "
-            print(f" {line[:-3]}")
-
-        if self.rows_border_bottom:
-            print(table_bottom)
-
-        [self.table.append(e) for e in [table_top, *self.rows, table_bottom]]
-
-    def get_table_top(self):
-        if self.headers == [()]:
-            return self.rows_border_top * self.table_width
-        else:
-            if self.show_index:
-                all_but_index = [v for k, v in self.widths_max.items() if k != -1]
-                widths = [f"{self.rows_border_top * w}" for w in all_but_index]
-                col = [self.rows_border_top * self.width_index] + widths
-            else:
-                col = [f"{self.rows_border_top * w}" for w in self.widths_max.values()]
-            columns_walls = f"{self.rows_border_top}+{self.rows_border_top}".join(col)
-            border_full = f"{self.rows_border_top}{columns_walls}{self.rows_border_top}"
-            return border_full

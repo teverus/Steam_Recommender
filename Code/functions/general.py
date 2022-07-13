@@ -12,13 +12,13 @@ def get_tags():
 
 
 def get_rows(main):
-    wall = main.max_columns * (main.current_page - 1)
+    w = main.main.max_columns * (main.main.current_page - 1)
     rows = [
         list(row)
         for row in zip(
-            main.tags[wall * main.max_rows : (wall + 1) * main.max_rows],
-            main.tags[(wall + 1) * main.max_rows : (wall + 2) * main.max_rows],
-            main.tags[(wall + 2) * main.max_rows : (wall + 3) * main.max_rows],
+            main.main.tags[w * main.main.max_rows : (w + 1) * main.main.max_rows],
+            main.main.tags[(w + 1) * main.main.max_rows : (w + 2) * main.main.max_rows],
+            main.main.tags[(w + 2) * main.main.max_rows : (w + 3) * main.main.max_rows],
         )
     ]
 

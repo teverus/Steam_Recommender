@@ -14,5 +14,4 @@ class TagActionsTable(Table):
             rows_border_top="=",
             rows_border_bottom="=",
             table_title_border_top="=",
-            custom_index={"Go back": "00"},
         )

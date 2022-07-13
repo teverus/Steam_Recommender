@@ -1,10 +1,10 @@
 from Code.constants import SCREEN_WIDTH
-from Code.tables.TableV2 import TableV2
+from Code.tables.Table import Table
 
 
 class ApplicationTest:
     def __init__(self):
-        TableV2(
+        Table(
             rows=[["Action 1", "badger"], ["Action 42", "pig"]],
             rows_centered=True,
             rows_top_border="=",

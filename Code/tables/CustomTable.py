@@ -3,12 +3,21 @@ from Code.tables.Table import Table
 
 
 class CustomTable(Table):
-    def __init__(self, title, actions):
+    def __init__(
+        self,
+        title,
+        rows,
+        rows_bottom_border="=",
+        rows_centered=True,
+        current_position=None,
+    ):
         super(CustomTable, self).__init__(
             table_title=title,
-            table_title_border_top="=",
-            rows=[action.name for action in actions.values()],
-            rows_border_top="=",
-            rows_border_bottom="=",
+            table_title_top_border="=",
+            rows=rows,
+            rows_top_border="=",
+            rows_bottom_border=rows_bottom_border,
+            rows_centered=rows_centered,
             table_width=SCREEN_WIDTH,
+            highlight=current_position,
         )

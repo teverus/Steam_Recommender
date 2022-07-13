@@ -1,23 +1,10 @@
-from Code.constants import SCREEN_WIDTH
-from Code.tables.Table import Table
+from Code.tables.CustomTable import CustomTable
 
 
-class WelcomeTable(Table):
-    def __init__(self):
+class WelcomeTable(CustomTable):
+    def __init__(self, main):
         super(WelcomeTable, self).__init__(
-            table_title="Steam Recommender",
-            table_title_border_top="=",
-            rows=[
-                "Add new games to database (if any)",
-                "Browse games by tags",
-                "Browse games by tags (+ Russian audio)",
-                "Browse games by favorite tags",
-                "Browse games by favorite tags (+ Russian audio)",
-                "Browse games by hidden tags",
-                "Browse games by hidden tags (+ Russian audio)",
-                "Find games similar to a game"
-            ],
-            rows_border_top="=",
-            rows_border_bottom="=",
-            table_width=SCREEN_WIDTH,
+            title="Steam Recommender",
+            rows=[action.name for action in main.actions],
+            current_position=main.current_position,
         )
