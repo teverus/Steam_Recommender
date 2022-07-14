@@ -14,7 +14,7 @@ pip install -r requirements.txt 1>nul 2>nul
 : ==================================
 : Starting the application
 : ==================================
-py main.py
+py main_v4.py
 
 : ==================================
 : So that we can read logs if needed

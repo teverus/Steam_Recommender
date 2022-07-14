@@ -22,8 +22,11 @@ class Table:
         # Table
         table_width=None,
         highlight=None,
+        # Footer
+        footer=None,
+        footer_centered=True,
     ):
-        # Table
+        # === General settings
         self.table_width = table_width
         self.highlight = highlight
 
@@ -37,17 +40,22 @@ class Table:
         self.border_length = self.get_border_length()
         self.cage = self.get_cage()
 
-        # Table title
+        # === Table title
         self.table_title = table_title
         self.table_title_centered = table_title_centered
         self.table_title_caps = table_title_caps
         self.table_title_top_border = table_title_top_border
 
-        # Rows
+        # === Rows
         self.rows_top_border = rows_top_border
         self.rows_bottom_border = rows_bottom_border
         self.rows_centered = rows_centered
 
+        # === Footer
+        self.footer = footer
+        self.footer_centered = footer_centered
+
+        # === Print the table
         self.print_table()
 
     def print_table(self):
@@ -87,6 +95,11 @@ class Table:
         # Rows bottom border
         if self.rows_bottom_border:
             print(self.rows_bottom_border * self.border_length)
+
+        # Footer
+        if self.footer:
+            footer = self.footer.center if self.footer_centered else self.footer.ljust
+            print(footer(self.border_length))
 
     def get_df(self, rows):
         proper_rows = [r if isinstance(r, list) else [r] for r in rows]

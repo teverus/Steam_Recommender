@@ -11,14 +11,16 @@ def get_tags():
     return sorted(list(games.Tag))
 
 
-def get_rows(main):
-    w = main.main.max_columns * (main.main.current_page - 1)
+def get_rows(self, main):
+    tags = main.main.tags
+
+    w = self.max_columns * (self.current_page - 1)
     rows = [
         list(row)
         for row in zip(
-            main.main.tags[w * main.main.max_rows : (w + 1) * main.main.max_rows],
-            main.main.tags[(w + 1) * main.main.max_rows : (w + 2) * main.main.max_rows],
-            main.main.tags[(w + 2) * main.main.max_rows : (w + 3) * main.main.max_rows],
+            tags[w * self.max_rows : (w + 1) * self.max_rows],
+            tags[(w + 1) * self.max_rows : (w + 2) * self.max_rows],
+            tags[(w + 2) * self.max_rows : (w + 3) * self.max_rows],
         )
     ]
 

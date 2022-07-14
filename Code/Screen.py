@@ -6,19 +6,26 @@ from pynput.keyboard import Key
 class Screen:
     def __init__(self, main):
         bext.hide()
-        self.pressed_key = None
-        self.current_position = [0, 0]
-        self.main = main
 
         self.actions = main.actions
+        self.table = main.table
+        self.main = main
 
-        self.cage = main.table(self).cage
+        self.pressed_key = None
+        self.current_position = [0, 0]
+
+        self.cage = self.table(self).cage
 
         while True:
             self.current_position, action = self.get_user_movement()
 
             if action:
-                action = self.actions[self.current_position[0]]
+                x, y = self.current_position
+                table = self.table(self).df
+                target_action_name = table.iloc[x, y]
+                action = [a for a in self.actions if a.name == target_action_name]
+                assert len(action) == 1, "\n[ERROR] Something is wrong with actions"
+                action = action[0]
                 action()
 
                 if action.break_after:
@@ -27,7 +34,7 @@ class Screen:
                 print('\n Press "Enter" to continue...')
                 self.wait_for_key(Key.enter)
 
-            main.table(self)
+            self.table(self)
 
     def get_user_movement(self):
         position = self.current_position
