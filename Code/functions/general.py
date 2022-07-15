@@ -11,9 +11,7 @@ def get_tags():
     return sorted(list(games.Tag))
 
 
-def get_rows(self, main):
-    tags = main.main.tags
-
+def get_rows(self, tags):
     w = self.max_columns * (self.current_page - 1)
     rows = [
         list(row)

@@ -22,6 +22,7 @@ class Table:
         # Table
         table_width=None,
         highlight=None,
+        pagination=False,
         # Footer
         footer=None,
         footer_centered=True,
@@ -39,6 +40,7 @@ class Table:
         self.column_widths = self.get_column_widths()
         self.border_length = self.get_border_length()
         self.cage = self.get_cage()
+        self.pagination = self.get_pagination(pagination)
 
         # === Table title
         self.table_title = table_title
@@ -147,3 +149,12 @@ class Table:
                 coordinates.append([x, y])
 
         return coordinates
+
+    def get_pagination(self, pagination):
+        if pagination:
+            go_next = [[row, self.number_of_cols] for row in range(self.number_of_rows)]
+            go_prev = [[row, -1] for row in range(self.number_of_rows)]
+
+            return {1: go_next, -1: go_prev}
+        else:
+            return False

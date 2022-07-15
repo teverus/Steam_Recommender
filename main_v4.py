@@ -18,7 +18,9 @@ class ApplicationV4:
                 break_after=True,
             ),
         ]
+
         self.table = WelcomeTable
+
         Screen(self)
 
 

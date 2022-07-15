@@ -9,8 +9,6 @@ from Code.tables.TagsTable import TagsTable
 
 class BrowseGamesByTags:
     def __init__(self):
-        self.tags = get_tags()
-
         self.actions = [
             Action(
                 name=tag,
@@ -18,10 +16,9 @@ class BrowseGamesByTags:
                 arguments=tag,
                 break_after=True,
             )
-            for tag in self.tags
+            for tag in get_tags()
         ]
 
-        # TODO footer
         self.table = TagsTable
 
         Screen(self)

@@ -4,20 +4,22 @@ from pynput.keyboard import Key
 
 
 class Screen:
-    def __init__(self, main):
+    def __init__(self, data):
         bext.hide()
 
-        self.actions = main.actions
-        self.table = main.table
-        self.main = main
+        self.actions = data.actions
+        self.table = data.table
 
         self.pressed_key = None
         self.current_position = [0, 0]
+        self.current_page = 1
 
-        self.cage = self.table(self).cage
+        table = self.table(self)
+        self.cage = table.cage
+        self.pagination = table.pagination
 
         while True:
-            self.current_position, action = self.get_user_movement()
+            self.current_position, self.current_page, action = self.get_user_movement()
 
             if action:
                 x, y = self.current_position
@@ -38,6 +40,7 @@ class Screen:
 
     def get_user_movement(self):
         position = self.current_position
+        current_page = self.current_page
         action = False
 
         mv = {Key.down: (1, 0), Key.up: (-1, 0), Key.right: (0, 1), Key.left: (0, -1)}
@@ -50,10 +53,21 @@ class Screen:
 
         elif user_input in mv.keys():
             delta = mv[user_input]
-            new_position = [c1 + c2 for c1, c2 in zip(self.current_position, delta)]
-            position = new_position if new_position in self.cage else position
+            new_p = [c1 + c2 for c1, c2 in zip(self.current_position, delta)]
+            if self.pagination and any([new_p in v for v in self.pagination.values()]):
+                dir_ = [key for key, value in self.pagination.items() if new_p in value]
+                assert len(dir_) == 1, "It goes in both directions!"
+                # TODO должна сохранятся та же позиция, только в колонке 0
+                # TODO движение назад
+                # TODO нельзя выйти за рамки вперед
+                # TODO нельзя выйти за рамки назад
+                position = [0, 0]
+                current_page += dir_[0]
 
-        return position, action
+            else:
+                position = new_p if new_p in self.cage else position
+
+        return position, current_page, action
 
     def get_user_input(self):
         with keyboard.Listener(on_release=self.store_key) as listener:
