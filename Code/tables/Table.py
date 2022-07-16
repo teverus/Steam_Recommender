@@ -117,6 +117,7 @@ class Table:
     def get_column_widths(self):
         column_widths = {}
 
+        # TODO неправильно определяется ширина третьей колонки
         for col in range(self.number_of_cols):
 
             if self.table_width:

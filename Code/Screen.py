@@ -53,19 +53,20 @@ class Screen:
 
         elif user_input in mv.keys():
             delta = mv[user_input]
-            new_p = [c1 + c2 for c1, c2 in zip(self.current_position, delta)]
-            if self.pagination and any([new_p in v for v in self.pagination.values()]):
-                dir_ = [key for key, value in self.pagination.items() if new_p in value]
-                assert len(dir_) == 1, "It goes in both directions!"
-                # TODO должна сохранятся та же позиция, только в колонке 0
-                # TODO движение назад
+            newpos = [c1 + c2 for c1, c2 in zip(self.current_position, delta)]
+            if self.pagination and any([newpos in v for v in self.pagination.values()]):
+                page_delta = [k for k, v in self.pagination.items() if newpos in v]
+                assert len(page_delta) == 1, "It goes in both directions!"
+                page_delta = page_delta[0]
                 # TODO нельзя выйти за рамки вперед
                 # TODO нельзя выйти за рамки назад
-                position = [0, 0]
-                current_page += dir_[0]
+                # TODO !! если такого нет на странице, то придумать
+                max_col = self.pagination[1][0][-1] - 1
+                position = [newpos[0], 0] if page_delta == 1 else [newpos[0], max_col]
+                current_page += page_delta
 
             else:
-                position = new_p if new_p in self.cage else position
+                position = newpos if newpos in self.cage else position
 
         return position, current_page, action
 

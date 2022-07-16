@@ -1,6 +1,6 @@
 from colorama import Back, Fore
 
-SCREEN_WIDTH = 101
+SCREEN_WIDTH = 105
 
 ALL_GAMES = "https://api.steampowered.com/ISteamApps/GetAppList/v2/?format=json"
 
