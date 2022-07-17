@@ -57,8 +57,8 @@ class Screen:
                 page_delta = [k for k, v in self.pagination.items() if newpos in v]
                 assert len(page_delta) == 1, "It goes in both directions!"
                 page_delta = page_delta[0]
-                # TODO нельзя выйти за рамки вперед
-                # TODO нельзя выйти за рамки назад
+                # TODO !! нельзя выйти за рамки вперед
+                # TODO !!! нельзя выйти за рамки назад
                 max_col = self.pagination[1][0][-1] - 1
                 position = [newpos[0], 0] if page_delta == 1 else [newpos[0], max_col]
                 current_page += page_delta

@@ -7,6 +7,7 @@ from Code.tables.Table import Table
 
 class TagsTable(Table):
     def __init__(self, main):
+        # TODO ! Вынести логику вот это
         tags = get_tags()
 
         self.current_page = main.current_page
@@ -24,7 +25,7 @@ class TagsTable(Table):
         main.current_position = [len(rows) - 1, y] if x > (len(rows) - 1) else [x, y]
 
         super(TagsTable, self).__init__(
-            table_title="Games in Steam by tags",
+            table_title="Games in Steam by tags  ",
             table_title_top_border="=",
             rows=rows,
             rows_top_border="=",
