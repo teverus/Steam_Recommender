@@ -50,7 +50,6 @@ class Screen:
         if user_input == Key.enter:
             _ = input()
             action = True
-
         elif user_input in mv.keys():
             delta = mv[user_input]
             newpos = [c1 + c2 for c1, c2 in zip(self.current_position, delta)]
@@ -60,7 +59,6 @@ class Screen:
                 page_delta = page_delta[0]
                 # TODO нельзя выйти за рамки вперед
                 # TODO нельзя выйти за рамки назад
-                # TODO !! если такого нет на странице, то придумать
                 max_col = self.pagination[1][0][-1] - 1
                 position = [newpos[0], 0] if page_delta == 1 else [newpos[0], max_col]
                 current_page += page_delta

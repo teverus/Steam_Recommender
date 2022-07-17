@@ -18,10 +18,15 @@ class TagsTable(Table):
         arrow_l = "    " if self.current_page == 1 else "<<< "
         arrow_r = "    " if self.current_page == self.max_page else " >>>"
 
+        rows = get_rows(self, tags)
+
+        x, y = main.current_position
+        main.current_position = [len(rows) - 1, y] if x > (len(rows) - 1) else [x, y]
+
         super(TagsTable, self).__init__(
             table_title="Games in Steam by tags",
             table_title_top_border="=",
-            rows=get_rows(self, tags),
+            rows=rows,
             rows_top_border="=",
             rows_bottom_border="=",
             rows_centered=True,
