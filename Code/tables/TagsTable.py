@@ -24,6 +24,13 @@ class TagsTable(Table):
         x, y = main.current_position
         main.current_position = [len(rows) - 1, y] if x > (len(rows) - 1) else [x, y]
 
+        # TODO ! нельзя выйти за рамки вперед
+        # TODO !! нельзя выйти за рамки назад
+        # TODO !!! припереходе на предыдущую страницу появляется хайлайт
+
+        if main.page_delta == 1 and y == self.max_columns:
+            main.current_position = [x, 0]
+
         super(TagsTable, self).__init__(
             table_title="Games in Steam by tags  ",
             table_title_top_border="=",

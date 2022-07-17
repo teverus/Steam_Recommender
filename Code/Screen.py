@@ -13,13 +13,14 @@ class Screen:
         self.pressed_key = None
         self.current_position = [0, 0]
         self.current_page = 1
+        self.page_delta = 0
 
         table = self.table(self)
         self.cage = table.cage
         self.pagination = table.pagination
 
         while True:
-            self.current_position, self.current_page, action = self.get_user_movement()
+            self.current_position, self.page_delta, action = self.get_user_movement()
 
             if action:
                 x, y = self.current_position
@@ -40,7 +41,7 @@ class Screen:
 
     def get_user_movement(self):
         position = self.current_position
-        current_page = self.current_page
+        page_delta = 0
         action = False
 
         mv = {Key.down: (1, 0), Key.up: (-1, 0), Key.right: (0, 1), Key.left: (0, -1)}
@@ -54,19 +55,17 @@ class Screen:
             delta = mv[user_input]
             newpos = [c1 + c2 for c1, c2 in zip(self.current_position, delta)]
             if self.pagination and any([newpos in v for v in self.pagination.values()]):
-                page_delta = [k for k, v in self.pagination.items() if newpos in v]
-                assert len(page_delta) == 1, "It goes in both directions!"
-                page_delta = page_delta[0]
-                # TODO !! нельзя выйти за рамки вперед
-                # TODO !!! нельзя выйти за рамки назад
-                max_col = self.pagination[1][0][-1] - 1
-                position = [newpos[0], 0] if page_delta == 1 else [newpos[0], max_col]
-                current_page += page_delta
+                delta = [k for k, v in self.pagination.items() if newpos in v]
+                assert len(delta) == 1, "Delta goes both directions!"
+                delta = delta[0]
+                position = newpos
+                page_delta = delta
+                self.current_page += page_delta
 
             else:
                 position = newpos if newpos in self.cage else position
 
-        return position, current_page, action
+        return position, page_delta, action
 
     def get_user_input(self):
         with keyboard.Listener(on_release=self.store_key) as listener:
