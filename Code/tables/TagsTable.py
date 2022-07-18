@@ -10,21 +10,30 @@ class TagsTable(Table):
         # TODO ! Вынести логику вот это
         tags = get_tags()
 
-        self.current_page = main.current_page
         self.max_rows = 30
         self.max_columns = 3
         self.max_page = ceil(len(tags) / (self.max_rows * self.max_columns))
         self.total_on_page = self.max_rows * self.max_columns
 
-        arrow_l = "    " if self.current_page == 1 else "<<< "
-        arrow_r = "    " if self.current_page == self.max_page else " >>>"
+        if main.current_page > self.max_page:
+            main.current_page = self.max_page
+            main.current_position[-1] = self.max_columns - 1
 
-        rows = get_rows(self, tags)
+        elif main.current_page < 1:
+            main.current_page = 1
+            main.current_position[-1] = [0]
 
         x, y = main.current_position
 
-        # TODO ! нельзя выйти за рамки вперед
-        # TODO !! нельзя выйти за рамки назад
+        self.current_page = main.current_page
+
+        arrow_l = "    " if main.current_page == 1 else "<<< "
+        arrow_r = "    " if main.current_page == self.max_page else " >>>"
+
+        rows = get_rows(self, tags)
+
+        # TODO ! на последней странице можно провалиться вниз
+        # TODO !! нельзя выйти за рамки вперед
 
         going_forward = main.page_delta == 1 and y == self.max_columns
         going_backward = main.page_delta == -1 and y < 0
@@ -48,6 +57,6 @@ class TagsTable(Table):
             rows_centered=True,
             table_width=SCREEN_WIDTH,
             highlight=main.current_position,
-            footer=f"{arrow_l}{self.current_page}/{self.max_page}{arrow_r}",
+            footer=f"{arrow_l}{main.current_page}/{self.max_page}{arrow_r}",
             pagination=True,
         )
