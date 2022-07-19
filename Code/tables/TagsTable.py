@@ -7,7 +7,7 @@ from Code.tables.Table import Table
 
 class TagsTable(Table):
     def __init__(self, main):
-        # TODO ! Вынести логику вот это
+        # TODO ! Сделать MultiPageTable
         tags = get_tags()
 
         self.max_rows = 30
@@ -32,21 +32,23 @@ class TagsTable(Table):
 
         rows = get_rows(self, tags)
 
-        # TODO ! на последней странице можно провалиться вниз
-
         going_forward = main.page_delta == 1 and y == self.max_columns
         going_backward = main.page_delta == -1 and y < 0
-        is_in_expected_row_number = x <= (len(rows) - 1)
+        is_in_available_rows = x <= (len(rows) - 1)
 
-        if going_forward and is_in_expected_row_number:
+        if going_forward and is_in_available_rows:
             main.current_position = [x, 0]
 
-        elif going_forward and not is_in_expected_row_number:
+        elif going_forward and not is_in_available_rows:
             main.current_position = [len(rows) - 1, 0]
 
         elif going_backward:
             main.current_position = [x, self.max_columns - 1]
 
+        elif not is_in_available_rows:
+            main.current_position = [len(rows) - 1, y]
+
+        # TODO ? дополнительные пробелы от стеночек зависят?
         super(TagsTable, self).__init__(
             table_title="Games in Steam by tags  ",
             table_title_top_border="=",
@@ -56,6 +58,6 @@ class TagsTable(Table):
             rows_centered=True,
             table_width=SCREEN_WIDTH,
             highlight=main.current_position,
-            footer=f"{arrow_l}{main.current_page}/{self.max_page}{arrow_r}",
+            footer=f"{arrow_l}[{main.current_page}/{self.max_page}]{arrow_r}  ",
             pagination=True,
         )
