@@ -21,7 +21,7 @@ class TagsTable(Table):
 
         elif main.current_page < 1:
             main.current_page = 1
-            main.current_position[-1] = [0]
+            main.current_position[-1] = 0
 
         x, y = main.current_position
 
@@ -33,7 +33,6 @@ class TagsTable(Table):
         rows = get_rows(self, tags)
 
         # TODO ! на последней странице можно провалиться вниз
-        # TODO !! нельзя выйти за рамки вперед
 
         going_forward = main.page_delta == 1 and y == self.max_columns
         going_backward = main.page_delta == -1 and y < 0

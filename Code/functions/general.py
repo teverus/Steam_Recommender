@@ -12,13 +12,13 @@ def get_tags():
 
 
 def get_rows(self, tags):
-    w = self.max_columns * (self.current_page - 1)
+    milestone = self.max_columns * (self.current_page - 1)
     rows = [
         list(row)
         for row in zip(
-            tags[w * self.max_rows : (w + 1) * self.max_rows],
-            tags[(w + 1) * self.max_rows : (w + 2) * self.max_rows],
-            tags[(w + 2) * self.max_rows : (w + 3) * self.max_rows],
+            tags[milestone * self.max_rows : (milestone + 1) * self.max_rows],
+            tags[(milestone + 1) * self.max_rows : (milestone + 2) * self.max_rows],
+            tags[(milestone + 2) * self.max_rows : (milestone + 3) * self.max_rows],
         )
     ]
 
