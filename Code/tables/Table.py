@@ -22,7 +22,7 @@ class Table:
         # Table
         table_width=None,
         highlight=None,
-        pagination=False,
+        pagination=None,
         # Footer
         footer=None,
         footer_centered=True,
@@ -117,12 +117,17 @@ class Table:
     def get_column_widths(self):
         column_widths = {}
 
-        # TODO неправильно определяется ширина третьей колонки
         for col in range(self.number_of_cols):
 
             if self.table_width:
                 actual_width = self.table_width - (((self.number_of_cols - 1) * 3) + 2)
-                per_column = int(actual_width / self.number_of_cols)
+                diff = actual_width % self.number_of_cols
+                if diff:
+                    raise Exception(
+                        f"Please, expand table_width by {self.number_of_cols - diff}"
+                    )
+                else:
+                    per_column = int(actual_width / self.number_of_cols)
             else:
                 per_column = max(
                     [len(self.df.iloc[row, col]) for row in range(self.number_of_rows)]

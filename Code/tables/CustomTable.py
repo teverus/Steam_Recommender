@@ -10,6 +10,8 @@ class CustomTable(Table):
         rows_bottom_border="=",
         rows_centered=True,
         current_position=None,
+        footer=None,
+        pagination=None,
     ):
         super(CustomTable, self).__init__(
             table_title=title,
@@ -20,4 +22,6 @@ class CustomTable(Table):
             rows_centered=rows_centered,
             table_width=SCREEN_WIDTH,
             highlight=current_position,
+            footer=footer,
+            pagination=pagination,
         )

@@ -1,11 +1,10 @@
 from math import ceil
 
-from Code.constants import SCREEN_WIDTH
 from Code.functions.general import get_rows, get_tags
-from Code.tables.Table import Table
+from Code.tables.CustomTable import CustomTable
 
 
-class TagsTable(Table):
+class TagsTable(CustomTable):
     def __init__(self, main):
         # TODO ! Сделать MultiPageTable
         tags = get_tags()
@@ -49,15 +48,11 @@ class TagsTable(Table):
             main.current_position = [len(rows) - 1, y]
 
         # TODO ? дополнительные пробелы от стеночек зависят?
+        shift = "  "
         super(TagsTable, self).__init__(
-            table_title="Games in Steam by tags  ",
-            table_title_top_border="=",
+            title=f"Games in Steam by tags{shift}",
             rows=rows,
-            rows_top_border="=",
-            rows_bottom_border="=",
-            rows_centered=True,
-            table_width=SCREEN_WIDTH,
-            highlight=main.current_position,
-            footer=f"{arrow_l}[{main.current_page}/{self.max_page}]{arrow_r}  ",
+            current_position=main.current_position,
+            footer=f"{arrow_l}[{main.current_page}/{self.max_page}]{arrow_r}{shift}",
             pagination=True,
         )
