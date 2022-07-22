@@ -1,7 +1,7 @@
-from Code.tables.CustomTable import CustomTable
+from Code.tables.abstract_tables.SinglePageTable import SinglePageTable
 
 
-class WelcomeTable(CustomTable):
+class WelcomeTable(SinglePageTable):
     def __init__(self, main):
         super(WelcomeTable, self).__init__(
             title="Steam Recommender",

@@ -1,8 +1,8 @@
 from Code.constants import SCREEN_WIDTH
-from Code.tables.Table import Table
+from Code.tables.abstract_tables.BaseTable import BaseTable
 
 
-class CustomTable(Table):
+class SinglePageTable(BaseTable):
     def __init__(
         self,
         title,
@@ -13,7 +13,7 @@ class CustomTable(Table):
         footer=None,
         pagination=None,
     ):
-        super(CustomTable, self).__init__(
+        super(SinglePageTable, self).__init__(
             table_title=title,
             table_title_top_border="=",
             rows=rows,

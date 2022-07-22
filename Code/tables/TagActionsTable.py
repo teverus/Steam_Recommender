@@ -1,9 +1,9 @@
 import os
 
-from Code.tables.CustomTable import CustomTable
+from Code.tables.abstract_tables.SinglePageTable import SinglePageTable
 
 
-class TagActionsTable(CustomTable):
+class TagActionsTable(SinglePageTable):
     def __init__(self, tag, av_actions):
         os.system("cls")
         super(TagActionsTable, self).__init__(

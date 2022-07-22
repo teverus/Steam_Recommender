@@ -19,13 +19,13 @@ from Code.functions.db import (
 )
 from Code.functions.general import check_unique_tags
 from Code.functions.web import get_game_from_api, get_game_tags, get_game_in_steam
-from Code.tables.CustomTable import CustomTable
+from Code.tables.abstract_tables.SinglePageTable import SinglePageTable
 
 
 class CheckNewGames:
     def __init__(self):
 
-        CustomTable(
+        SinglePageTable(
             title="Get new games from Steam",
             rows=["Looking for new games..."],
             rows_bottom_border="",

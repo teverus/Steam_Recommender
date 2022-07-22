@@ -1,6 +1,8 @@
-from Code.tables.CustomTable import CustomTable
+from Code.tables.abstract_tables.SinglePageTable import SinglePageTable
 
 
 class PerformActionsWithATag:
     def __init__(self, tag_name):
-        CustomTable(title=tag_name, rows=["Hello", "World"])
+        SinglePageTable(
+            title=tag_name, rows=["Hello", "World"], current_position=[0, 0]
+        )
