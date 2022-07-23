@@ -1,5 +1,5 @@
 class Action:
-    def __init__(self, name=None, function=None, arguments=None, break_after=None):
+    def __init__(self, name=None, function=None, arguments=None, break_after=True):
         self.name = name
         self.function = function
         self.arguments = arguments

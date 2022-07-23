@@ -5,53 +5,76 @@ from pynput.keyboard import Key
 
 class ScreenV2:
     def __init__(self):
+        # Clear screen
         bext.hide()
+        bext.clear()
 
+        # Declare some variables that will be used later
         self.pressed_key = None
-        self.current_position = [0, 0]
         self.current_page = 1
-        self.page_delta = 0
 
-        table = self.table(self)
-        self.cage = table.cage
-        self.pagination = table.pagination
+        # Print the table
+        self.table.print()
 
+        # Start infinite loop
         while True:
-            self.current_position, self.page_delta, action = self.get_user_movement()
 
+            # Get user input: action or movement
+            self.table.highlight, self.page_delta, action = self.get_user_movement()
+
+            # If an action is required, perform the action
             if action:
-                x, y = self.current_position
-                table = self.table(self).df
-                target_action_name = table.iloc[x, y]
+                x, y = self.table.highlight
+                data_frame = self.table.df
+                target_action_name = data_frame.iloc[x, y]
                 action = [a for a in self.actions if a.name == target_action_name]
-                assert len(action) == 1, "\n[ERROR] Something is wrong with actions"
+                assert len(action) == 1, "\n[ERROR] Found to many actions"
                 action = action[0]
                 action()
 
+                # If the action starts a new screen, end this screen
                 if action.break_after:
                     break
 
                 print('\n Press "Enter" to continue...')
                 self.wait_for_key(Key.enter)
 
-            self.table(self)
+            # Print the table with the new parameters
+            self.table.print()
 
     def get_user_movement(self):
-        position = self.current_position
+        # Declare three major variables that will be returned
+        position = self.table.highlight
         page_delta = 0
         action = False
 
+        # A set of coordinates
         mv = {Key.down: (1, 0), Key.up: (-1, 0), Key.right: (0, 1), Key.left: (0, -1)}
 
+        # Get user input
         user_input = self.get_user_input()
 
+        # If the user pressed "Enter"
         if user_input == Key.enter:
             _ = input()
             action = True
+
+        # If the user pressed one of the arrow keys
         elif user_input in mv.keys():
+
+            # Get the new position based on the user input
             delta = mv[user_input]
-            newpos = [c1 + c2 for c1, c2 in zip(self.current_position, delta)]
-            if self.pagination and any([newpos in v for v in self.pagination.values()]):
+            newpos = [c1 + c2 for c1, c2 in zip(self.table.highlight, delta)]
+
+            # Check if the next/previous page was invoked
+            is_multipage_table = bool(self.table.pagination)
+            try:
+                page_change = any([newpos in v for v in self.table.pagination.values()])
+            except AttributeError:
+                page_change = None
+
+            # Show next/previous page if the user moved to it
+            if is_multipage_table and page_change:
                 delta = [k for k, v in self.pagination.items() if newpos in v]
                 assert len(delta) == 1, "Delta goes both directions!"
                 delta = delta[0]
@@ -59,8 +82,9 @@ class ScreenV2:
                 page_delta = delta
                 self.current_page += page_delta
 
+            # If not, replace the current position with the new position
             else:
-                position = newpos if newpos in self.cage else position
+                position = newpos if newpos in self.table.cage else position
 
         return position, page_delta, action
 

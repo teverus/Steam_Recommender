@@ -2,7 +2,7 @@ from Code.Action import Action
 from Code.ScreenV2 import ScreenV2
 from Code.modules.BrowseGamesByTags import BrowseGamesByTags
 from Code.modules.CheckNewGames import CheckNewGames
-from Code.tables.TableOptions import TableOptions
+from Code.tables.abstract_tables.CustomTable import CustomTable
 
 
 class ApplicationV5(ScreenV2):
@@ -11,16 +11,17 @@ class ApplicationV5(ScreenV2):
             Action(
                 name="Add new games to database (if any)",
                 function=CheckNewGames,
+                break_after=False,
             ),
             Action(
                 name="Browse games by tags",
                 function=BrowseGamesByTags,
-                break_after=True,
             ),
         ]
 
-        self.table_options = TableOptions(
-            title="Steam Recommender", rows=[action.name for action in self.actions]
+        self.table = CustomTable(
+            title="Steam Recommender",
+            rows=[action.name for action in self.actions],
         )
 
         super(ApplicationV5, self).__init__()
