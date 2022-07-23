@@ -1,8 +1,18 @@
-from Code.tables.abstract_tables.SinglePageTable import SinglePageTable
+from Code.Action import Action
+from Code.Screen import Screen
+from Code.tables.TagActionsTable import TagActionsTable
 
 
 class PerformActionsWithATag:
-    def __init__(self, tag_name):
-        SinglePageTable(
-            title=tag_name, rows=["Hello", "World"], current_position=[0, 0]
-        )
+    def __init__(self, **kwargs):
+        self.actions = [
+            Action(name="Show games with this tag", break_after=True),
+            Action(name="Make tag favorite", break_after=True),
+            Action(name="Make tag hidden", break_after=True),
+            Action(name="Go back", break_after=True),
+        ]
+
+        self.table = TagActionsTable
+        self.kwargs = kwargs
+
+        Screen(self)

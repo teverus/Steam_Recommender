@@ -3,16 +3,9 @@ from pynput import keyboard
 from pynput.keyboard import Key
 
 
-class Screen:
-    def __init__(self, data):
+class ScreenV2:
+    def __init__(self):
         bext.hide()
-
-        self.actions = data.actions
-        self.table = data.table
-        try:
-            self.kwargs = data.kwargs
-        except AttributeError:
-            pass
 
         self.pressed_key = None
         self.current_position = [0, 0]

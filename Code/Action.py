@@ -7,6 +7,6 @@ class Action:
 
     def __call__(self, *args, **kwargs):
         if self.arguments:
-            self.function(self.arguments)
+            self.function(**self.arguments)
         else:
             self.function()

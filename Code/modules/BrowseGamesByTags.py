@@ -13,7 +13,7 @@ class BrowseGamesByTags:
             Action(
                 name=tag,
                 function=PerformActionsWithATag,
-                arguments=tag,
+                arguments={"title": tag},
                 break_after=True,
             )
             for tag in get_tags()
