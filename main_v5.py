@@ -1,8 +1,8 @@
 from Code.Action import Action
 from Code.ScreenV2 import ScreenV2
-from Code.modules.BrowseGamesByTags import BrowseGamesByTags
+from Code.modules.BrowseGamesByTagsV2 import BrowseGamesByTagsV2
 from Code.modules.CheckNewGames import CheckNewGames
-from Code.tables.abstract_tables.CustomTable import CustomTable
+from Code.tables.abstract_tables.NewTable import NewTable
 
 
 class ApplicationV5(ScreenV2):
@@ -15,11 +15,11 @@ class ApplicationV5(ScreenV2):
             ),
             Action(
                 name="Browse games by tags",
-                function=BrowseGamesByTags,
+                function=BrowseGamesByTagsV2,
             ),
         ]
 
-        self.table = CustomTable(
+        self.table = NewTable(
             title="Steam Recommender",
             rows=[action.name for action in self.actions],
         )

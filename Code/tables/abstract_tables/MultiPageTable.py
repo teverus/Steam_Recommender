@@ -41,7 +41,6 @@ class MultiPageTable(SinglePageTable):
         elif not is_in_available_rows:
             main.current_position = [len(rows) - 1, y]
 
-        # TODO ? дополнительные пробелы от стеночек зависят?
         shift = "  "
         arrow_l = "    " if main.current_page == 1 else "<<< "
         arrow_r = "    " if main.current_page == self.max_page else " >>>"

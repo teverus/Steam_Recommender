@@ -25,6 +25,7 @@ from Code.tables.abstract_tables.SinglePageTable import SinglePageTable
 class CheckNewGames:
     def __init__(self):
 
+        # TODO Что это такое?
         SinglePageTable(
             title="Get new games from Steam",
             rows=["Looking for new games..."],

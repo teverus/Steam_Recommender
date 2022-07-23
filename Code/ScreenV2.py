@@ -1,3 +1,5 @@
+import os
+
 import bext
 from pynput import keyboard
 from pynput.keyboard import Key
@@ -6,12 +8,11 @@ from pynput.keyboard import Key
 class ScreenV2:
     def __init__(self):
         # Clear screen
+        os.system("cls")
         bext.hide()
-        bext.clear()
 
         # Declare some variables that will be used later
         self.pressed_key = None
-        self.current_page = 1
 
         # Print the table
         self.table.print()
@@ -19,8 +20,8 @@ class ScreenV2:
         # Start infinite loop
         while True:
 
-            # Get user input: action or movement
-            self.table.highlight, self.page_delta, action = self.get_user_movement()
+            # Get user action: action or movement
+            self.table.highlight, action = self.get_user_action()
 
             # If an action is required, perform the action
             if action:
@@ -42,10 +43,9 @@ class ScreenV2:
             # Print the table with the new parameters
             self.table.print()
 
-    def get_user_movement(self):
+    def get_user_action(self):
         # Declare three major variables that will be returned
         position = self.table.highlight
-        page_delta = 0
         action = False
 
         # A set of coordinates
@@ -75,18 +75,41 @@ class ScreenV2:
 
             # Show next/previous page if the user moved to it
             if is_multipage_table and page_change:
-                delta = [k for k, v in self.pagination.items() if newpos in v]
+                delta = [k for k, v in self.table.pagination.items() if newpos in v]
                 assert len(delta) == 1, "Delta goes both directions!"
                 delta = delta[0]
-                position = newpos
-                page_delta = delta
-                self.current_page += page_delta
+
+                # TODO !! Можно переключиться на страницу дальше
+                # TODO !! Можно переключиться на страницу раньше
+                # TODO ! Нельзя выйти за последнюю страницу
+                # TODO ! Если на следующей странице меньше строк, то перевидывает на последнюю
+                go_below = self.table.current_page == 1 and delta == -1
+
+                x, y = position
+                if not go_below and delta == 1:
+                    position = [x, 0]
+                    self.table.current_page += 1
+                # going_forward = delta == 1 and y == max_columns
+                # going_backward = self.page_delta == -1 and y < 0
+                # is_in_available_rows = x <= (len(rows) - 1)
+                #
+                # if going_forward and is_in_available_rows:
+                #     self.current_position = [x, 0]
+                #
+                # elif going_forward and not is_in_available_rows:
+                #     self.current_position = [len(rows) - 1, 0]
+                #
+                # elif going_backward:
+                #     self.current_position = [x, max_columns - 1]
+                #
+                # elif not is_in_available_rows:
+                #     self.current_position = [len(rows) - 1, y]
 
             # If not, replace the current position with the new position
             else:
                 position = newpos if newpos in self.table.cage else position
 
-        return position, page_delta, action
+        return position, action
 
     def get_user_input(self):
         with keyboard.Listener(on_release=self.store_key) as listener:
