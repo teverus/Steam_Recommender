@@ -3,26 +3,32 @@ from Code.tables.abstract_tables.BaseTableV2 import BaseTableV2
 
 
 # noinspection PyDefaultArgument
-class CustomTable(BaseTableV2):
+class NewTable(BaseTableV2):
     def __init__(
         self,
         title,
         rows,
+        rows_top_border="=",
         rows_bottom_border="=",
         rows_centered=True,
         current_position=[0, 0],
-        footer=None,
-        pagination=None,
+        max_rows=None,
+        max_columns=1,
     ):
-        super(CustomTable, self).__init__(
-            table_title=title,
+        super(NewTable, self).__init__(
+            # Table title
+            # TODO перенести в класс
+            table_title=f"{title}{' ' * (max_columns - 1)}",
             table_title_top_border="=",
+            # Rows
             rows=rows,
-            rows_top_border="=",
+            rows_top_border=rows_top_border,
             rows_bottom_border=rows_bottom_border,
             rows_centered=rows_centered,
+            # General table
+            pagination=True,
             table_width=SCREEN_WIDTH,
             highlight=current_position,
-            footer=footer,
-            pagination=pagination,
+            max_rows=max_rows,
+            max_columns=max_columns,
         )
