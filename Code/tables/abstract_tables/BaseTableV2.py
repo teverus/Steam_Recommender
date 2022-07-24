@@ -88,6 +88,7 @@ class BaseTableV2:
 
         # Rows
         self.df = self.get_df()
+        self.highlight = self.adjust_highlight_if_needed()
         for row in range(len(self.df)):
             a_row = []
             for column in range(self.max_columns):
@@ -211,3 +212,11 @@ class BaseTableV2:
 
         else:
             return self.rows_raw
+
+    def adjust_highlight_if_needed(self):
+        x, y = self.highlight
+        max_length = len(self.df) - 1
+
+        highlight = [max_length, y] if x > max_length else [x, y]
+
+        return highlight

@@ -79,8 +79,6 @@ class ScreenV2:
                 assert len(delta) == 1, "Delta goes both directions!"
                 delta = delta[0]
 
-                # TODO ! Нельзя вниз уйти на последней странице
-                # TODO ! Если на следующей странице меньше строк, то перекидывает на последнюю
                 go_below = self.table.current_page == 1 and delta == -1
                 go_over = self.table.current_page == self.table.max_page and delta == 1
                 within_boundaries = not go_below and not go_over
