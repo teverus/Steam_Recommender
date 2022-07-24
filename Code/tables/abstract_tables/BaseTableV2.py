@@ -87,12 +87,12 @@ class BaseTableV2:
             print(self.rows_top_border * self.border_length)
 
         # Rows
-        df = self.get_df()
-        for row in range(len(df)):
+        self.df = self.get_df()
+        for row in range(len(self.df)):
             a_row = []
             for column in range(self.max_columns):
                 width = self.column_widths[column]
-                data = df.iloc[row, column]
+                data = self.df.iloc[row, column]
                 data = data.center if self.rows_centered else data.ljust
                 data = data(width, " ")
                 highlighted = f"{HIGHLIGHT}{data}{END_HIGHLIGHT}"
@@ -105,11 +105,13 @@ class BaseTableV2:
             print(self.rows_bottom_border * self.border_length)
 
         # Footer
-        # TODO нужно получать обновленный футер
         if self.footer:
             footer = self.get_footer()
             footer = footer.center if self.footer_centered else footer.ljust
             print(footer(self.border_length))
+
+        # Adjust the cage
+        self.cage = self.get_cage()
 
     def get_df(self):
         proper_rows = [r if isinstance(r, list) else [r] for r in self.get_rows()]
@@ -151,8 +153,8 @@ class BaseTableV2:
             return ((self.max_columns - 1) * 3) + 2 + sum(self.column_widths.values())
 
     def get_cage(self):
-        x_axis = [number for number in range(self.max_rows)]
-        y_axis = [number for number in range(self.max_columns)]
+        x_axis = [number for number in range(len(self.df))]
+        y_axis = [number for number in range(len(self.df.columns))]
 
         coordinates = []
         for x in x_axis:
