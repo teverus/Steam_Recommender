@@ -111,8 +111,12 @@ class BaseTableV2:
             footer = footer.center if self.footer_centered else footer.ljust
             print(footer(self.border_length))
 
-        # Adjust the cage
+        # Adjust the cage after the table has been recreated
         self.cage = self.get_cage()
+
+    # ==================================================================================
+    # === Helper class methods =========================================================
+    # ==================================================================================
 
     def get_df(self):
         proper_rows = [r if isinstance(r, list) else [r] for r in self.get_rows()]

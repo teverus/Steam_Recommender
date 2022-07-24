@@ -26,8 +26,7 @@ class ScreenV2:
             # If an action is required, perform the action
             if action:
                 x, y = self.table.highlight
-                data_frame = self.table.df
-                target_action_name = data_frame.iloc[x, y]
+                target_action_name = self.table.df.iloc[x, y]
                 action = [a for a in self.actions if a.name == target_action_name]
                 assert len(action) == 1, "\n[ERROR] Found to many actions"
                 action = action[0]
