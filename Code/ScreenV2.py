@@ -92,22 +92,6 @@ class ScreenV2:
                     position = [x, self.table.max_columns - 1]
                     self.table.current_page -= 1
 
-                # going_forward = delta == 1 and y == max_columns
-                # going_backward = self.page_delta == -1 and y < 0
-                # is_in_available_rows = x <= (len(rows) - 1)
-                #
-                # if going_forward and is_in_available_rows:
-                #     self.current_position = [x, 0]
-                #
-                # elif going_forward and not is_in_available_rows:
-                #     self.current_position = [len(rows) - 1, 0]
-                #
-                # elif going_backward:
-                #     self.current_position = [x, max_columns - 1]
-                #
-                # elif not is_in_available_rows:
-                #     self.current_position = [len(rows) - 1, y]
-
             # If not, replace the current position with the new position
             else:
                 position = newpos if newpos in self.table.cage else position
