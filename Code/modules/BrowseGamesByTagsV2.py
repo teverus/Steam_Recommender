@@ -19,7 +19,7 @@ class BrowseGamesByTagsV2(ScreenV2):
         ]
 
         self.table = NewTable(
-            title="Games in Steam by tags",
+            title="Steam games by tags",
             rows=tags,
             max_rows=30,
             max_columns=3,

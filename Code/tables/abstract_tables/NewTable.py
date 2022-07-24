@@ -17,8 +17,7 @@ class NewTable(BaseTableV2):
     ):
         super(NewTable, self).__init__(
             # Table title
-            # TODO перенести в класс
-            table_title=f"{title}{' ' * (max_columns - 1)}",
+            table_title=f"{title}",
             table_title_top_border="=",
             # Rows
             rows=rows,
