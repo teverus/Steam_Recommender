@@ -5,7 +5,6 @@ import bext
 from pandas import DataFrame
 
 from Code.constants import HIGHLIGHT, END_HIGHLIGHT
-from Code.functions.general import get_rows
 
 
 class BaseTableV2:
@@ -46,13 +45,14 @@ class BaseTableV2:
         self.table_title_top_border = table_title_top_border
 
         # === Rows
-        self.rows = get_rows(self, rows) if max_rows else rows
+        self.all_rows = rows
+        self.rows = self.get_rows() if max_rows else rows
         self.rows_top_border = rows_top_border
         self.rows_bottom_border = rows_bottom_border
         self.rows_centered = rows_centered
 
         # === Footer
-        self.max_page = None if max_rows is None else self.get_max_page(rows)
+        self.max_page = None if max_rows is None else self.get_max_page()
         self.footer = self.get_footer(footer)
         self.footer_centered = footer_centered
 
@@ -85,11 +85,12 @@ class BaseTableV2:
             print(self.rows_top_border * self.border_length)
 
         # Rows
+        df = self.get_df()
         for row in range(self.max_rows):
             a_row = []
             for column in range(self.max_columns):
                 width = self.column_widths[column]
-                data = self.df.iloc[row, column]
+                data = df.iloc[row, column]
                 data = data.center if self.rows_centered else data.ljust
                 data = data(width, " ")
                 highlighted = f"{HIGHLIGHT}{data}{END_HIGHLIGHT}"
@@ -107,10 +108,13 @@ class BaseTableV2:
             print(footer(self.border_length))
 
     def get_df(self):
-        proper_rows = [r if isinstance(r, list) else [r] for r in self.rows]
-        df = DataFrame([], columns=[number for number in range(self.max_columns)])
+        proper_rows = [r if isinstance(r, list) else [r] for r in self.get_rows()]
+        max_columns = len(proper_rows[0])
+        max_rows = len(proper_rows)
 
-        for row_index in range(self.max_rows):
+        df = DataFrame([], columns=[number for number in range(max_columns)])
+
+        for row_index in range(max_rows):
             df.loc[row_index] = proper_rows[row_index]
 
         return df
@@ -179,5 +183,22 @@ class BaseTableV2:
         else:
             return None
 
-    def get_max_page(self, rows):
-        return ceil(len(rows) / (self.max_rows * self.max_columns))
+    def get_max_page(self):
+        return ceil(len(self.all_rows) / (self.max_rows * self.max_columns))
+
+    def get_rows(self):
+        start = self.max_columns * (self.current_page - 1)
+        rows = [
+            list(row)
+            for row in zip(
+                self.all_rows[start * self.max_rows : (start + 1) * self.max_rows],
+                self.all_rows[
+                    (start + 1) * self.max_rows : (start + 2) * self.max_rows
+                ],
+                self.all_rows[
+                    (start + 2) * self.max_rows : (start + 3) * self.max_rows
+                ],
+            )
+        ]
+
+        return rows
