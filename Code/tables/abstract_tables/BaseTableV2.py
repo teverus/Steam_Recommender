@@ -88,7 +88,7 @@ class BaseTableV2:
 
         # Rows
         df = self.get_df()
-        for row in range(self.max_rows):
+        for row in range(len(df)):
             a_row = []
             for column in range(self.max_columns):
                 width = self.column_widths[column]
