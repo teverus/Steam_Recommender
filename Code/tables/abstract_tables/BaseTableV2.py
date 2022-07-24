@@ -1,4 +1,5 @@
 import os
+from math import ceil
 
 import bext
 from pandas import DataFrame
@@ -51,7 +52,8 @@ class BaseTableV2:
         self.rows_centered = rows_centered
 
         # === Footer
-        self.footer = self.get_footer()
+        self.max_page = None if max_rows is None else self.get_max_page(rows)
+        self.footer = self.get_footer(footer)
         self.footer_centered = footer_centered
 
         # Calculated values
@@ -165,6 +167,17 @@ class BaseTableV2:
     def print(self):
         self.print_table()
 
-    def get_footer(self):
-        # TODO !!! сделать футер
-        pass
+    def get_footer(self, footer):
+        if footer:
+            return footer
+
+        elif self.max_page:
+            arrow_l = "    " if self.current_page == 1 else "<<< "
+            arrow_r = "    " if self.current_page == self.max_page else " >>>"
+            return f"{arrow_l}[{self.current_page}/{self.max_page}]{arrow_r}"
+
+        else:
+            return None
+
+    def get_max_page(self, rows):
+        return ceil(len(rows) / (self.max_rows * self.max_columns))
