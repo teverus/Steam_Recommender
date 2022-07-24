@@ -54,7 +54,8 @@ class BaseTableV2:
 
         # === Footer
         self.max_page = self.get_max_page()
-        self.footer = self.get_footer(footer)
+        self.footer_raw = footer
+        self.footer = self.get_footer()
         self.footer_centered = footer_centered
 
         # Calculated values
@@ -106,7 +107,8 @@ class BaseTableV2:
         # Footer
         # TODO нужно получать обновленный футер
         if self.footer:
-            footer = self.footer.center if self.footer_centered else self.footer.ljust
+            footer = self.get_footer()
+            footer = footer.center if self.footer_centered else footer.ljust
             print(footer(self.border_length))
 
     def get_df(self):
@@ -134,13 +136,11 @@ class BaseTableV2:
                         f"Please, expand table_width by {self.max_columns - diff}"
                     )
                 else:
-                    per_column = int(actual_width / self.max_columns)
+                    per_col = int(actual_width / self.max_columns)
             else:
-                per_column = max(
-                    [len(self.df.iloc[row, col]) for row in range(self.max_rows)]
-                )
+                per_col = max([len(self.df.iloc[r, col]) for r in range(self.max_rows)])
 
-            column_widths[col] = per_column
+            column_widths[col] = per_col
 
         return column_widths
 
@@ -173,9 +173,9 @@ class BaseTableV2:
     def print(self):
         self.print_table()
 
-    def get_footer(self, footer):
-        if footer:
-            return footer
+    def get_footer(self):
+        if self.footer_raw:
+            return self.footer_raw
 
         elif self.max_page:
             arrow_l = "    " if self.current_page == 1 else "<<< "
