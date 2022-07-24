@@ -45,14 +45,15 @@ class BaseTableV2:
         self.table_title_top_border = table_title_top_border
 
         # === Rows
-        self.all_rows = rows
-        self.rows = self.get_rows() if max_rows else rows
+        self.rows_raw = rows
+        self.max_rows_raw = max_rows
+        self.rows = self.get_rows()
         self.rows_top_border = rows_top_border
         self.rows_bottom_border = rows_bottom_border
         self.rows_centered = rows_centered
 
         # === Footer
-        self.max_page = None if max_rows is None else self.get_max_page()
+        self.max_page = self.get_max_page()
         self.footer = self.get_footer(footer)
         self.footer_centered = footer_centered
 
@@ -103,6 +104,7 @@ class BaseTableV2:
             print(self.rows_bottom_border * self.border_length)
 
         # Footer
+        # TODO нужно получать обновленный футер
         if self.footer:
             footer = self.footer.center if self.footer_centered else self.footer.ljust
             print(footer(self.border_length))
@@ -184,21 +186,26 @@ class BaseTableV2:
             return None
 
     def get_max_page(self):
-        return ceil(len(self.all_rows) / (self.max_rows * self.max_columns))
+        #  None if max_rows is None else self.get_max_page()
+        if self.max_rows_raw is None:
+            return None
+
+        else:
+            return ceil(len(self.rows_raw) / (self.max_rows * self.max_columns))
 
     def get_rows(self):
-        start = self.max_columns * (self.current_page - 1)
-        rows = [
-            list(row)
-            for row in zip(
-                self.all_rows[start * self.max_rows : (start + 1) * self.max_rows],
-                self.all_rows[
-                    (start + 1) * self.max_rows : (start + 2) * self.max_rows
-                ],
-                self.all_rows[
-                    (start + 2) * self.max_rows : (start + 3) * self.max_rows
-                ],
-            )
-        ]
+        if self.max_rows_raw:
+            st = self.max_columns * (self.current_page - 1)
+            rows = [
+                list(row)
+                for row in zip(
+                    self.rows_raw[st * self.max_rows : (st + 1) * self.max_rows],
+                    self.rows_raw[(st + 1) * self.max_rows : (st + 2) * self.max_rows],
+                    self.rows_raw[(st + 2) * self.max_rows : (st + 3) * self.max_rows],
+                )
+            ]
 
-        return rows
+            return rows
+
+        else:
+            return self.rows_raw
