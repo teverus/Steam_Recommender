@@ -11,7 +11,7 @@ class NewTable(BaseTableV2):
         rows_top_border="=",
         rows_bottom_border="=",
         rows_centered=True,
-        current_position=[0, 0],
+        highlight=[0, 0],
         max_rows=None,
         max_columns=1,
     ):
@@ -27,7 +27,7 @@ class NewTable(BaseTableV2):
             # General table
             pagination=True,
             table_width=SCREEN_WIDTH,
-            highlight=current_position,
+            highlight=highlight,
             max_rows=max_rows,
             max_columns=max_columns,
         )

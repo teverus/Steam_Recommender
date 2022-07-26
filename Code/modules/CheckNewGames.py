@@ -20,19 +20,19 @@ from Code.functions.db import (
 )
 from Code.functions.general import check_unique_tags, wait_for_key
 from Code.functions.web import get_game_from_api, get_game_tags, get_game_in_steam
-from Code.tables.abstract_tables.SinglePageTable import SinglePageTable
+from Code.tables.abstract_tables.NewTable import NewTable
 
 
 class CheckNewGames:
     def __init__(self):
 
-        # TODO Что это такое?
-        SinglePageTable(
+        NewTable(
             title="Get new games from Steam",
             rows=["Looking for new games..."],
             rows_bottom_border="",
             rows_centered=False,
-        )
+            highlight=None,
+        ).print_table()
 
         all_games = set(read_a_table(GAMES).ID).union(set(read_a_table(PROBLEMS).ID))
         new_games = set([e["appid"] for e in get(ALL_GAMES).json()["applist"]["apps"]])
@@ -121,5 +121,5 @@ class CheckNewGames:
         else:
             print(" No new games")
 
-        print(' Press "Enter" to continue...')
+        print('\n Press "Enter" to continue...')
         wait_for_key(Key.ENTER)

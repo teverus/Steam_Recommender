@@ -221,9 +221,10 @@ class BaseTableV2:
             return self.rows_raw
 
     def adjust_highlight_if_needed(self):
-        x, y = self.highlight
-        max_length = len(self.df) - 1
+        if self.highlight:
+            x, y = self.highlight
+            max_length = len(self.df) - 1
 
-        highlight = [max_length, y] if x > max_length else [x, y]
+            highlight = [max_length, y] if x > max_length else [x, y]
 
-        return highlight
+            return highlight
