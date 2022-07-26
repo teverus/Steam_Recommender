@@ -1,87 +1,92 @@
+import msvcrt
+import os
+
 import bext
-from pynput import keyboard
-from pynput.keyboard import Key
+
+from Code.constants import Key
+from Code.functions.general import raise_an_error
 
 
 class Screen:
-    def __init__(self, data):
+    def __init__(self):
+        # Clear screen and hide the cursor
+        os.system("cls")
         bext.hide()
 
-        self.actions = data.actions
-        self.table = data.table
-        try:
-            self.kwargs = data.kwargs
-        except AttributeError:
-            pass
+        # Print the table
+        self.table.print()
 
-        self.pressed_key = None
-        self.current_position = [0, 0]
-        self.current_page = 1
-        self.page_delta = 0
-
-        table = self.table(self)
-        self.cage = table.cage
-        self.pagination = table.pagination
-
+        # Start the infinite loop
         while True:
-            self.current_position, self.page_delta, action = self.get_user_movement()
 
+            # Get user action: action or movement
+            self.table.highlight, action = self.get_user_action()
+
+            # If an action is required, perform the action
             if action:
-                x, y = self.current_position
-                table = self.table(self).df
-                target_action_name = table.iloc[x, y]
-                action = [a for a in self.actions if a.name == target_action_name]
-                assert len(action) == 1, "\n[ERROR] Something is wrong with actions"
-                action = action[0]
+                x, y = self.table.highlight
+                target_action_name = self.table.df.iloc[x, y]
+                act = [a for a in self.actions if a.name == target_action_name]
+                action = act[0] if len(act) == 1 else raise_an_error("Too many actions")
                 action()
 
+                # If the action starts a new screen, end this screen
                 if action.break_after:
                     break
 
-                print('\n Press "Enter" to continue...')
-                self.wait_for_key(Key.enter)
+            # Print the table with the new parameters
+            self.table.print()
 
-            self.table(self)
-
-    def get_user_movement(self):
-        position = self.current_position
-        page_delta = 0
+    def get_user_action(self):
+        # Declare three major variables that will be returned
+        position = self.table.highlight
         action = False
 
-        mv = {Key.down: (1, 0), Key.up: (-1, 0), Key.right: (0, 1), Key.left: (0, -1)}
+        # A set of coordinates
+        mv = {Key.DOWN: (1, 0), Key.UP: (-1, 0), Key.RIGHT: (0, 1), Key.LEFT: (0, -1)}
 
-        user_input = self.get_user_input()
+        # Get user input
+        user_input = msvcrt.getch()
 
-        if user_input == Key.enter:
-            _ = input()
+        # If the user pressed "Enter"
+        if user_input == Key.ENTER:
             action = True
+
+        # If the user pressed one of the arrow keys
         elif user_input in mv.keys():
+
+            # Get the new position based on the user input
             delta = mv[user_input]
-            newpos = [c1 + c2 for c1, c2 in zip(self.current_position, delta)]
-            if self.pagination and any([newpos in v for v in self.pagination.values()]):
-                delta = [k for k, v in self.pagination.items() if newpos in v]
+            newpos = [c1 + c2 for c1, c2 in zip(self.table.highlight, delta)]
+
+            # Check if the next/previous page was invoked
+            is_multipage_table = bool(self.table.pagination)
+            try:
+                page_change = any([newpos in v for v in self.table.pagination.values()])
+            except AttributeError:
+                page_change = None
+
+            # Show next/previous page if the user moved to it
+            if is_multipage_table and page_change:
+                delta = [k for k, v in self.table.pagination.items() if newpos in v]
                 assert len(delta) == 1, "Delta goes both directions!"
                 delta = delta[0]
-                position = newpos
-                page_delta = delta
-                self.current_page += page_delta
 
+                go_below = self.table.current_page == 1 and delta == -1
+                go_over = self.table.current_page == self.table.max_page and delta == 1
+                within_boundaries = not go_below and not go_over
+
+                x, y = position
+                if within_boundaries and delta == 1:
+                    position = [x, 0]
+                    self.table.current_page += 1
+
+                elif within_boundaries and delta == -1:
+                    position = [x, self.table.max_columns - 1]
+                    self.table.current_page -= 1
+
+            # If not, replace the current position with the new position
             else:
-                position = newpos if newpos in self.cage else position
+                position = newpos if newpos in self.table.cage else position
 
-        return position, page_delta, action
-
-    def get_user_input(self):
-        with keyboard.Listener(on_release=self.store_key) as listener:
-            listener.join()
-
-        return self.pressed_key
-
-    def store_key(self, key):
-        self.pressed_key = key
-        return False
-
-    def wait_for_key(self, target_key):
-        user_input = self.get_user_input()
-        while user_input != target_key:
-            user_input = self.get_user_input()
+        return position, action

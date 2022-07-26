@@ -1,11 +1,11 @@
 from Code.Action import Action
-from Code.ScreenV2 import ScreenV2
+from Code.Screen import Screen
 from Code.functions.general import get_tags
 from Code.modules.PerformActionsWithATag import PerformActionsWithATag
-from Code.tables.abstract_tables.NewTable import NewTable
+from Code.Table import Table
 
 
-class BrowseGamesByTags(ScreenV2):
+class BrowseGamesByTags(Screen):
     def __init__(self):
         tags = get_tags()
 
@@ -19,7 +19,7 @@ class BrowseGamesByTags(ScreenV2):
             for tag in tags
         ]
 
-        self.table = NewTable(
+        self.table = Table(
             title="Steam games by tags",
             rows=tags,
             max_rows=30,

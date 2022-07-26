@@ -1,5 +1,5 @@
 @echo off
-mode con: cols=107 lines=43
+mode con: cols=107 lines=37
 title=Welcome to Finnish Learner
 
 : ==================================
@@ -14,7 +14,7 @@ pip install -r requirements.txt 1>nul 2>nul
 : ==================================
 : Starting the application
 : ==================================
-py main_v4.py
+py main.py
 
 : ==================================
 : So that we can read logs if needed

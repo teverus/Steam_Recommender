@@ -1,10 +1,10 @@
 from Code.Action import Action
-from Code.ScreenV2 import ScreenV2
+from Code.Screen import Screen
 from Code.functions.general import do_nothing
-from Code.tables.abstract_tables.NewTable import NewTable
+from Code.Table import Table
 
 
-class PerformActionsWithATag(ScreenV2):
+class PerformActionsWithATag(Screen):
     def __init__(self, **kwargs):
         self.actions = [
             Action(name="Show games with this tag"),
@@ -13,7 +13,7 @@ class PerformActionsWithATag(ScreenV2):
             Action(name="Go back", function=do_nothing),
         ]
 
-        self.table = NewTable(
+        self.table = Table(
             title=kwargs["title"], rows=[action.name for action in self.actions]
         )
 

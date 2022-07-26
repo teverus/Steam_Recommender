@@ -1,9 +1,9 @@
 from Code.constants import SCREEN_WIDTH
-from Code.tables.abstract_tables.BaseTableV2 import BaseTableV2
+from Code.BaseTable import BaseTable
 
 
 # noinspection PyDefaultArgument
-class NewTable(BaseTableV2):
+class Table(BaseTable):
     def __init__(
         self,
         title,
@@ -15,7 +15,7 @@ class NewTable(BaseTableV2):
         max_rows=None,
         max_columns=1,
     ):
-        super(NewTable, self).__init__(
+        super(Table, self).__init__(
             # Table title
             table_title=f"{title}",
             table_title_top_border="=",

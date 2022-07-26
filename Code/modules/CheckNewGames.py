@@ -20,13 +20,13 @@ from Code.functions.db import (
 )
 from Code.functions.general import check_unique_tags, wait_for_key
 from Code.functions.web import get_game_from_api, get_game_tags, get_game_in_steam
-from Code.tables.abstract_tables.NewTable import NewTable
+from Code.Table import Table
 
 
 class CheckNewGames:
     def __init__(self):
 
-        NewTable(
+        Table(
             title="Get new games from Steam",
             rows=["Looking for new games..."],
             rows_bottom_border="",

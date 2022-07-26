@@ -1,11 +1,11 @@
 from Code.Action import Action
-from Code.ScreenV2 import ScreenV2
+from Code.Screen import Screen
 from Code.modules.BrowseGamesByTags import BrowseGamesByTags
 from Code.modules.CheckNewGames import CheckNewGames
-from Code.tables.abstract_tables.NewTable import NewTable
+from Code.Table import Table
 
 
-class ApplicationV5(ScreenV2):
+class ApplicationV5(Screen):
     def __init__(self):
         self.actions = [
             Action(
@@ -19,7 +19,7 @@ class ApplicationV5(ScreenV2):
             ),
         ]
 
-        self.table = NewTable(
+        self.table = Table(
             title="Steam Recommender",
             rows=[action.name for action in self.actions],
         )

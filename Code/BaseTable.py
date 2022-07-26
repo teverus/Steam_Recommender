@@ -7,7 +7,7 @@ from pandas import DataFrame
 from Code.constants import HIGHLIGHT, END_HIGHLIGHT
 
 
-class BaseTableV2:
+class BaseTable:
     def __init__(
         self,
         # Rows
