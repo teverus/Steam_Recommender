@@ -35,3 +35,11 @@ def check_unique_tags(tags: str):
             df = DataFrame([], columns=TAGS_COLUMNS)
             df.loc[0] = [tag, 1]
             append_to_table(df, TAGS, FILES)
+
+
+def do_nothing():
+    pass
+
+
+def raise_an_error(message):
+    raise Exception(f"\n [ERROR] {message}")

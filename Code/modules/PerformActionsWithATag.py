@@ -1,18 +1,22 @@
 from Code.Action import Action
-from Code.Screen import Screen
-from Code.tables.TagActionsTable import TagActionsTable
+from Code.ScreenV2 import ScreenV2
+from Code.functions.general import do_nothing
+from Code.tables.abstract_tables.NewTable import NewTable
 
 
-class PerformActionsWithATag:
+class PerformActionsWithATag(ScreenV2):
     def __init__(self, **kwargs):
         self.actions = [
-            Action(name="Show games with this tag", break_after=True),
-            Action(name="Make tag favorite", break_after=True),
-            Action(name="Make tag hidden", break_after=True),
-            Action(name="Go back", break_after=True),
+            Action(name="Show games with this tag"),
+            Action(name="Make tag favorite"),
+            Action(name="Make tag hidden"),
+            Action(name="Go back", function=do_nothing),
         ]
 
-        self.table = TagActionsTable
+        self.table = NewTable(
+            title=kwargs["title"], rows=[action.name for action in self.actions]
+        )
+
         self.kwargs = kwargs
 
-        Screen(self)
+        super(PerformActionsWithATag, self).__init__()

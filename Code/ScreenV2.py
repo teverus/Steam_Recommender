@@ -4,6 +4,8 @@ import bext
 from pynput import keyboard
 from pynput.keyboard import Key
 
+from Code.functions.general import raise_an_error
+
 
 class ScreenV2:
     def __init__(self):
@@ -27,17 +29,17 @@ class ScreenV2:
             if action:
                 x, y = self.table.highlight
                 target_action_name = self.table.df.iloc[x, y]
-                action = [a for a in self.actions if a.name == target_action_name]
-                assert len(action) == 1, "\n[ERROR] Found to many actions"
-                action = action[0]
+                act = [a for a in self.actions if a.name == target_action_name]
+                action = act[0] if len(act) == 1 else raise_an_error("Too many actions")
                 action()
 
                 # If the action starts a new screen, end this screen
                 if action.break_after:
                     break
 
-                print('\n Press "Enter" to continue...')
-                self.wait_for_key(Key.enter)
+                # TODO вот тут надо продумать для Поиска новых игр
+                # print('\n Press "Enter" to continue...')
+                # self.wait_for_key(Key.enter)
 
             # Print the table with the new parameters
             self.table.print()
