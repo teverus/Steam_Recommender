@@ -39,13 +39,13 @@ class CheckNewGames:
         diff = new_games - all_games
         if diff:
             time_start = dt.now()
-            for index, appid in enumerate(diff):
+            for ind, appid in enumerate(diff):
 
                 # Current state indication
                 sleep(0.25)
-                time_now = str(dt.now() - time_start).split(".")[0]
+                tn = str(dt.now() - time_start).split(".")[0]
                 print(
-                    f" {index + 1}/{len(diff)} | {time_now} | Appid: {str(appid).ljust(7)} | ",
+                    f" {ind + 1}/{len(diff)} | {tn} | Appid: {str(appid).ljust(7)} | ",
                     end="",
                 )
 

@@ -1,6 +1,6 @@
 from Code.Action import Action
 from Code.ScreenV2 import ScreenV2
-from Code.modules.BrowseGamesByTagsV2 import BrowseGamesByTagsV2
+from Code.modules.BrowseGamesByTags import BrowseGamesByTags
 from Code.modules.CheckNewGames import CheckNewGames
 from Code.tables.abstract_tables.NewTable import NewTable
 
@@ -15,7 +15,7 @@ class ApplicationV5(ScreenV2):
             ),
             Action(
                 name="Browse games by tags",
-                function=BrowseGamesByTagsV2,
+                function=BrowseGamesByTags,
             ),
         ]
 
