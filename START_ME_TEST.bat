@@ -1,5 +1,5 @@
 @echo off
-mode con: cols=107 lines=43
+mode con: cols=107 lines=37
 title=Welcome to Finnish Learner
 
 : ==================================

@@ -30,6 +30,7 @@ class BaseTableV2:
         # Footer
         footer=None,
         footer_centered=True,
+        footer_bottom_border="=",
     ):
         # === General settings
         self.table_width = table_width
@@ -56,6 +57,7 @@ class BaseTableV2:
         self.max_page = self.get_max_page()
         self.footer_raw = footer
         self.footer = self.get_footer()
+        self.footer_bottom_border = footer_bottom_border
         self.footer_centered = footer_centered
 
         # Calculated values
@@ -110,6 +112,7 @@ class BaseTableV2:
             footer = self.get_footer()
             footer = footer.center if self.footer_centered else footer.ljust
             print(footer(self.border_length))
+            print(self.footer_bottom_border * self.border_length)
 
         # Adjust the cage after the table has been recreated
         self.cage = self.get_cage()
