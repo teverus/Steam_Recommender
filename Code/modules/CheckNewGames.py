@@ -11,13 +11,14 @@ from Code.constants import (
     GAMES,
     APP_URL,
     PROBLEMS,
+    Key,
 )
 from Code.functions.db import (
     append_row_to_table,
     read_a_table,
     record_an_error,
 )
-from Code.functions.general import check_unique_tags
+from Code.functions.general import check_unique_tags, wait_for_key
 from Code.functions.web import get_game_from_api, get_game_tags, get_game_in_steam
 from Code.tables.abstract_tables.SinglePageTable import SinglePageTable
 
@@ -119,3 +120,6 @@ class CheckNewGames:
 
         else:
             print(" No new games")
+
+        print(' Press "Enter" to continue...')
+        wait_for_key(Key.ENTER)

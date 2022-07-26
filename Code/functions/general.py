@@ -1,8 +1,9 @@
+import msvcrt
 from string import ascii_lowercase as letters
 
 from pandas import DataFrame
 
-from Code.constants import TAGS, TAGS_COLUMNS, FILES
+from Code.constants import TAGS, TAGS_COLUMNS, FILES, Key
 from Code.functions.db import read_a_table, append_to_table
 
 
@@ -43,3 +44,9 @@ def do_nothing():
 
 def raise_an_error(message):
     raise Exception(f"\n [ERROR] {message}")
+
+
+def wait_for_key(target_key: Key):
+    key = msvcrt.getch()
+    while key != target_key:
+        key = msvcrt.getch()

@@ -1,25 +1,22 @@
+import msvcrt
 import os
 
 import bext
-from pynput import keyboard
-from pynput.keyboard import Key
 
+from Code.constants import Key
 from Code.functions.general import raise_an_error
 
 
 class ScreenV2:
     def __init__(self):
-        # Clear screen
+        # Clear screen and hide the cursor
         os.system("cls")
         bext.hide()
-
-        # Declare some variables that will be used later
-        self.pressed_key = None
 
         # Print the table
         self.table.print()
 
-        # Start infinite loop
+        # Start the infinite loop
         while True:
 
             # Get user action: action or movement
@@ -37,10 +34,6 @@ class ScreenV2:
                 if action.break_after:
                     break
 
-                # TODO вот тут надо продумать для Поиска новых игр
-                # print('\n Press "Enter" to continue...')
-                # self.wait_for_key(Key.enter)
-
             # Print the table with the new parameters
             self.table.print()
 
@@ -50,14 +43,13 @@ class ScreenV2:
         action = False
 
         # A set of coordinates
-        mv = {Key.down: (1, 0), Key.up: (-1, 0), Key.right: (0, 1), Key.left: (0, -1)}
+        mv = {Key.DOWN: (1, 0), Key.UP: (-1, 0), Key.RIGHT: (0, 1), Key.LEFT: (0, -1)}
 
         # Get user input
-        user_input = self.get_user_input()
+        user_input = msvcrt.getch()
 
         # If the user pressed "Enter"
-        if user_input == Key.enter:
-            _ = input()
+        if user_input == Key.ENTER:
             action = True
 
         # If the user pressed one of the arrow keys
@@ -98,18 +90,3 @@ class ScreenV2:
                 position = newpos if newpos in self.table.cage else position
 
         return position, action
-
-    def get_user_input(self):
-        with keyboard.Listener(on_release=self.store_key) as listener:
-            listener.join()
-
-        return self.pressed_key
-
-    def store_key(self, key):
-        self.pressed_key = key
-        return False
-
-    def wait_for_key(self, target_key):
-        user_input = self.get_user_input()
-        while user_input != target_key:
-            user_input = self.get_user_input()

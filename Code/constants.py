@@ -28,3 +28,11 @@ END_HIGHLIGHT = Back.BLACK + Fore.WHITE
 class TagStatus:
     FAVORITE = "favorite"
     HIDDEN = "hidden"
+
+
+class Key:
+    DOWN = b"P"
+    UP = b"H"
+    RIGHT = b"M"
+    LEFT = b"K"
+    ENTER = b"\r"
