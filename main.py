@@ -9,18 +9,20 @@ class ApplicationV5(Screen):
     def __init__(self):
         self.actions = [
             Action(
-                name="Add games                                    ",
+                name="Add games                                  ",
                 function=CheckNewGames,
             ),
             Action(
-                name="Show tags | common + favorite                ",
+                name="Show tags | without status |               ",
                 function=BrowseGamesByTags,
             ),
-            Action(name="Show tags | favorite                         "),
-            Action(name="Show tags | hidden                           "),
-            Action(name="Show tags | common + favorite [Russian voice]"),
-            Action(name="Show tags | favorite          [Russian voice]"),
-            Action(name="Show tags | hidden            [Russian voice]"),
+            Action(
+                name="          | without status | Russian voice ",
+            ),
+            Action(name="          | favorite       |               "),
+            Action(name="          | favorite       | Russian voice "),
+            Action(name="          | hidden         |               "),
+            Action(name="          | hidden         | Russian voice "),
         ]
 
         self.table = Table(

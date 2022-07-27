@@ -15,7 +15,7 @@ class PerformActionsWithATag(Screen):
                 function=self.make_favorite,
                 arguments={"name": kwargs["title"]},
             ),
-            Action(name="Make this tag | hidden       "),
+            Action(name="              | hidden       "),
             Action(
                 name="Go back                      ", function=do_nothing, go_back=True
             ),
