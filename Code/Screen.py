@@ -31,7 +31,7 @@ class Screen:
                 action()
 
                 # If the action starts a new screen, end this screen
-                if action.break_after:
+                if action.go_back:
                     break
 
             # Print the table with the new parameters

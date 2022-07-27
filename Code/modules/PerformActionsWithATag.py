@@ -14,10 +14,9 @@ class PerformActionsWithATag(Screen):
                 name="Make tag favorite",
                 function=self.make_favorite,
                 arguments={"name": kwargs["title"]},
-                break_after=False,
             ),
             Action(name="Make tag hidden"),
-            Action(name="Go back", function=do_nothing),
+            Action(name="Go back", function=do_nothing, go_back=True),
         ]
 
         self.table = Table(

@@ -14,7 +14,6 @@ class BrowseGamesByTags(Screen):
                 name=tag,
                 function=PerformActionsWithATag,
                 arguments={"title": tag},
-                break_after=False,
             )
             for tag in tags
         ]

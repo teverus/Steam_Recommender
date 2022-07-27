@@ -9,16 +9,18 @@ class ApplicationV5(Screen):
     def __init__(self):
         self.actions = [
             Action(
-                name="Add new games to database (if any)",
+                name="Add games                                    ",
                 function=CheckNewGames,
-                break_after=False,
             ),
-            Action(name="Show common and favorite tags", function=BrowseGamesByTags),
-            Action(name="Show favorite tags"),
-            Action(name="Show hidden tags"),
-            Action(name="[Russian voice] Show common and favorite tags"),
-            Action(name="[Russian voice] Show favorite tags"),
-            Action(name="[Russian voice] Show hidden tags"),
+            Action(
+                name="Show tags | common + favorite                ",
+                function=BrowseGamesByTags,
+            ),
+            Action(name="Show tags | favorite                         "),
+            Action(name="Show tags | hidden                           "),
+            Action(name="Show tags | common + favorite [Russian voice]"),
+            Action(name="Show tags | favorite          [Russian voice]"),
+            Action(name="Show tags | hidden            [Russian voice]"),
         ]
 
         self.table = Table(
