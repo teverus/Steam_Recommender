@@ -9,16 +9,20 @@ from Code.functions.general import do_nothing, wait_for_key, show_message
 class PerformActionsWithATag(Screen):
     def __init__(self, **kwargs):
         self.actions = [
-            Action(name="Show games                   "),
             Action(
-                name="Make this tag | favorite     ",
+                name="Show games              ",
+            ),
+            Action(
+                name="Make this tag | favorite",
                 function=self.make_favorite,
                 arguments={"name": kwargs["title"]},
             ),
-            Action(name="              | hidden       "),
             Action(
-                name="Go back                      ", function=do_nothing, go_back=True
+                name="              | hidden  ",
+                function=self.make_hidden,
+                arguments={"name": kwargs["title"]},
             ),
+            Action(name="Go back                 ", function=do_nothing, go_back=True),
         ]
 
         self.table = Table(
@@ -34,5 +38,13 @@ class PerformActionsWithATag(Screen):
         update_a_table("Tag", name, "Favorite", 1, TAGS, FILES)
 
         show_message('The tag is now favorite. Press "Enter" to continue...')
+
+        wait_for_key(Key.ENTER)
+
+    @staticmethod
+    def make_hidden(name):
+        update_a_table("Tag", name, "Hidden", 1, TAGS, FILES)
+
+        show_message('The tag is now hidden. Press "Enter" to continue...')
 
         wait_for_key(Key.ENTER)
