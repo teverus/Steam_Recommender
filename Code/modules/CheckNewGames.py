@@ -5,6 +5,9 @@ from time import sleep
 import requests
 from requests import get
 
+from Code.Action import Action
+from Code.Screen import Screen
+from Code.Table import Table
 from Code.constants import (
     ALL_GAMES,
     GAMES_COLUMNS,
@@ -20,20 +23,32 @@ from Code.functions.db import (
 )
 from Code.functions.general import check_unique_tags, wait_for_key
 from Code.functions.web import get_game_from_api, get_game_tags, get_game_in_steam
-from Code.Table import Table
 
 
-class CheckNewGames:
+class CheckNewGames(Screen):
     def __init__(self):
 
-        Table(
+        self.actions = [
+            Action(
+                name="Looking for new games...",
+                function=self.check_new_games,
+                execute_instantly=True,
+                go_back=True,
+            )
+        ]
+
+        self.table = Table(
             title="Get new games from Steam",
-            rows=["Looking for new games..."],
+            rows=[action.name for action in self.actions],
             rows_bottom_border="",
             rows_centered=False,
             highlight=None,
-        ).print_table()
+        )
 
+        super(CheckNewGames, self).__init__()
+
+    @staticmethod
+    def check_new_games():
         all_games = set(read_a_table(GAMES).ID).union(set(read_a_table(PROBLEMS).ID))
         new_games = set([e["appid"] for e in get(ALL_GAMES).json()["applist"]["apps"]])
 

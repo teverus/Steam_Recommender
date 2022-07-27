@@ -19,15 +19,21 @@ class Screen:
         # Start the infinite loop
         while True:
 
-            # Get user action: action or movement
-            self.table.highlight, action = self.get_user_action()
+            immediate_action = [a for a in self.actions if a.execute_instantly]
+
+            if immediate_action:
+                self.table.highlight, action = self.table.highlight, immediate_action[0]
+
+            else:
+                self.table.highlight, action = self.get_user_action()
 
             # If an action is required, perform the action
             if action:
-                x, y = self.table.highlight
-                target_action_name = self.table.df.iloc[x, y]
-                act = [a for a in self.actions if a.name == target_action_name]
-                action = act[0] if len(act) == 1 else raise_an_error("Too many actions")
+                if not immediate_action:
+                    x, y = self.table.highlight
+                    target_action_name = self.table.df.iloc[x, y]
+                    act = [a for a in self.actions if a.name == target_action_name]
+                    action = act[0] if len(act) == 1 else raise_an_error("Actions!!!!")
                 action()
 
                 # If the action starts a new screen, end this screen

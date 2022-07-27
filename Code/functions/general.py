@@ -45,7 +45,7 @@ def wait_for_key(target_key: Key):
         key = msvcrt.getch()
 
 
-def show_message(message, border="-", centered=True):
+def show_message(message, border=" ", centered=True):
     print(HIGHLIGHT)
     print(f"{border* SCREEN_WIDTH}")
     text = message.center if centered else message.ljust
