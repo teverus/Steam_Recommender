@@ -14,6 +14,7 @@ class PerformActionsWithATag(Screen):
                 name="Make tag favorite",
                 function=self.make_favorite,
                 arguments={"name": kwargs["title"]},
+                break_after=False,
             ),
             Action(name="Make tag hidden"),
             Action(name="Go back", function=do_nothing),
@@ -30,5 +31,6 @@ class PerformActionsWithATag(Screen):
     @staticmethod
     def make_favorite(name):
         update_a_table("Tag", name, "Favorite", 1, TAGS, FILES)
+        # TODO красивое сообщение
         print('\n The tag is now favorite. Press "Enter" to continue...')
         wait_for_key(Key.ENTER)
