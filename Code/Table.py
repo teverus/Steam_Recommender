@@ -17,7 +17,7 @@ class Table(BaseTable):
     ):
         super(Table, self).__init__(
             # Table title
-            table_title=f"{title}",
+            table_title=title,
             table_title_top_border="=",
             # Rows
             rows=rows,
