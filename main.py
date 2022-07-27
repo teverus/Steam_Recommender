@@ -13,10 +13,12 @@ class ApplicationV5(Screen):
                 function=CheckNewGames,
                 break_after=False,
             ),
-            Action(
-                name="Browse games by tags",
-                function=BrowseGamesByTags,
-            ),
+            Action(name="Show common and favorite tags", function=BrowseGamesByTags),
+            Action(name="Show favorite tags"),
+            Action(name="Show hidden tags"),
+            Action(name="[Russian voice] Show common and favorite tags"),
+            Action(name="[Russian voice] Show favorite tags"),
+            Action(name="[Russian voice] Show hidden tags"),
         ]
 
         self.table = Table(
