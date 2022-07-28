@@ -9,7 +9,7 @@ class ApplicationV5(Screen):
     def __init__(self):
         self.actions = [
             Action(
-                name="Add games                                  ",
+                name="Check new games                            ",
                 function=CheckNewGames,
             ),
             Action(

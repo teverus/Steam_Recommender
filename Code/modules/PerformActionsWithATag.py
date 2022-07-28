@@ -14,13 +14,13 @@ class PerformActionsWithATag(Screen):
             ),
             Action(
                 name="Make this tag | favorite",
-                function=self.make_favorite,
-                arguments={"name": kwargs["title"]},
+                function=self.change_status,
+                arguments={"status": "Favorite", "name": kwargs["title"]},
             ),
             Action(
                 name="              | hidden  ",
-                function=self.make_hidden,
-                arguments={"name": kwargs["title"]},
+                function=self.change_status,
+                arguments={"status": "Hidden", "name": kwargs["title"]},
             ),
             Action(name="Go back                 ", function=do_nothing, go_back=True),
         ]
@@ -34,17 +34,10 @@ class PerformActionsWithATag(Screen):
         super(PerformActionsWithATag, self).__init__()
 
     @staticmethod
-    def make_favorite(name):
-        update_a_table("Tag", name, "Favorite", 1, TAGS, FILES)
+    def change_status(status, name):
 
-        show_message('The tag is now favorite. Press "Enter" to continue...')
+        update_a_table("Tag", name, status, 1, TAGS, FILES)
 
-        wait_for_key(Key.ENTER)
-
-    @staticmethod
-    def make_hidden(name):
-        update_a_table("Tag", name, "Hidden", 1, TAGS, FILES)
-
-        show_message('The tag is now hidden. Press "Enter" to continue...')
+        show_message(f'The tag is now {status.lower()}. Press "Enter" to continue...')
 
         wait_for_key(Key.ENTER)
