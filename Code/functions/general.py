@@ -1,4 +1,5 @@
 import msvcrt
+import re
 
 from pandas import DataFrame
 
@@ -23,8 +24,19 @@ def get_tags():
 
 def get_games(tag):
     games = read_a_table(GAMES)
+    games = sorted(games.loc[games.Tags.str.contains(tag)].Title)
 
-    return sorted(games.loc[games.Tags.str.contains(tag)].Title)
+    refined_games = []
+    for game in games:
+        name = str(game.encode("utf-8"))
+        chars = re.findall(r"\\x\w{2}", name)
+        if chars:
+            for char in chars:
+                name = name.replace(char, "?")
+            game = name[2:-1]
+        refined_games.append(game)
+
+    return refined_games
 
 
 def check_unique_tags(tags: str):
