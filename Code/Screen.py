@@ -29,21 +29,21 @@ class Screen:
 
             # If an action is required, perform the action
             if action:
-                target_action_name = True
                 if not immediate_action:
                     x, y = self.table.highlight
                     target_action_name = self.table.df.iloc[x, y]
                     if target_action_name:
                         act = [a for a in self.actions if a.name == target_action_name]
                         action = act[0] if len(act) == 1 else raise_an_error("Actions!")
+                    else:
+                        continue
 
-                if target_action_name:
-                    # Perform the action
-                    action()
+                # Perform the action
+                action()
 
-                    # If the action starts a new screen, end this screen
-                    if action.go_back:
-                        break
+                # If the action ends this screen, do it
+                if action.go_back:
+                    break
 
             # Print the table with the new parameters
             self.table.print()
