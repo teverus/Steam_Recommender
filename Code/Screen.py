@@ -19,6 +19,7 @@ class Screen:
         # Start the infinite loop
         while True:
 
+            # Check if there is an immediate action
             immediate_action = [a for a in self.actions if a.execute_instantly]
 
             if immediate_action:
@@ -29,6 +30,8 @@ class Screen:
 
             # If an action is required, perform the action
             if action:
+
+                # Choose the right action
                 if not immediate_action:
                     x, y = self.table.highlight
                     target_action_name = self.table.df.iloc[x, y]
