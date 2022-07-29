@@ -1,8 +1,8 @@
 from Code.Action import Action
 from Code.Screen import Screen
-from Code.functions.general import get_tags
-from Code.modules.PerformActionsWithATag import PerformActionsWithATag
 from Code.Table import Table
+from Code.functions.general import get_tags
+from Code.screens.PerformActionsWithATag import PerformActionsWithATag
 
 
 class BrowseGamesByTags(Screen):

@@ -10,13 +10,21 @@ from Code.constants import (
     SCREEN_WIDTH,
     HIGHLIGHT,
     END_HIGHLIGHT,
+    GAMES,
 )
 from Code.functions.db import read_a_table, append_to_table
 
 
 def get_tags():
-    games = read_a_table(TAGS)
-    return sorted(list(games.Tag))
+    tags = read_a_table(TAGS)
+
+    return sorted(list(tags.Tag))
+
+
+def get_games(tag):
+    games = read_a_table(GAMES)
+
+    return sorted(games.loc[games.Tags.str.contains(tag)].Title)
 
 
 def check_unique_tags(tags: str):
@@ -47,7 +55,7 @@ def wait_for_key(target_key: Key):
 
 def show_message(message, border=" ", centered=True):
     print(HIGHLIGHT)
-    print(f"{border* SCREEN_WIDTH}")
+    print(f"{border * SCREEN_WIDTH}")
     text = message.center if centered else message.ljust
     print(text(SCREEN_WIDTH))
     print(f"{border * SCREEN_WIDTH}")

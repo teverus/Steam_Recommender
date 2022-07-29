@@ -4,6 +4,7 @@ from Code.Table import Table
 from Code.constants import TAGS, FILES, Key
 from Code.functions.db import update_a_table
 from Code.functions.general import do_nothing, wait_for_key, show_message
+from Code.screens.GamesWithTag import GamesWithTag
 
 
 class PerformActionsWithATag(Screen):
@@ -11,6 +12,8 @@ class PerformActionsWithATag(Screen):
         self.actions = [
             Action(
                 name="Show games              ",
+                function=GamesWithTag,
+                arguments={"tag": kwargs["title"]},
             ),
             Action(
                 name="Make this tag | favorite",
@@ -22,7 +25,11 @@ class PerformActionsWithATag(Screen):
                 function=self.change_status,
                 arguments={"status": "Hidden", "name": kwargs["title"]},
             ),
-            Action(name="Go back                 ", function=do_nothing, go_back=True),
+            Action(
+                name="Go back                 ",
+                function=do_nothing,
+                go_back=True,
+            ),
         ]
 
         self.table = Table(

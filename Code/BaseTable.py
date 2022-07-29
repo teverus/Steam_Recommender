@@ -205,15 +205,21 @@ class BaseTable:
 
     def get_rows(self):
         if self.max_rows_raw:
-            st = self.max_columns * (self.current_page - 1)
-            rows = [
-                list(row)
-                for row in zip(
-                    self.rows_raw[st * self.max_rows : (st + 1) * self.max_rows],
-                    self.rows_raw[(st + 1) * self.max_rows : (st + 2) * self.max_rows],
-                    self.rows_raw[(st + 2) * self.max_rows : (st + 3) * self.max_rows],
-                )
-            ]
+            size = self.max_rows * self.max_columns
+            previous_page = self.current_page - 1
+            pack = self.rows_raw[size * previous_page : size * self.current_page]
+
+            rows = []
+
+            for col in range(self.max_columns):
+                for row in range(self.max_rows):
+                    if col == 0:
+                        rows.append([pack[row]])
+                    else:
+                        try:
+                            rows[row].append(pack[row + (self.max_rows * col)])
+                        except IndexError:
+                            rows[row].append("")
 
             return rows
 
