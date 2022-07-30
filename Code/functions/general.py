@@ -33,7 +33,18 @@ def get_games(tag):
         if chars:
             for char in chars:
                 name = name.replace(char, "?")
+
+            if len(chars) % 3 == 0:
+                target = int(len(chars) / 3)
+                name = name.replace(f"{'?' * len(chars)}", f"{'?' * target}")
+            elif len(chars) % 2 == 0:
+                target = int(len(chars) / 2)
+                name = name.replace(f"{'?' * len(chars)}", f"{'?' * target}")
+            else:
+                name = name.replace("??", "?")
+
             game = name[2:-1]
+
         refined_games.append(game)
 
     return refined_games
