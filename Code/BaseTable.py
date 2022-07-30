@@ -98,7 +98,9 @@ class BaseTable:
                 data = self.df.iloc[row, column]
                 data = data.center if self.rows_centered else data.ljust
                 data = data(width, " ")
-                data = data[: -abs(len(data) - width)] if len(data) > width else data
+                if len(data) > width:
+                    data = data[: -abs((len(data) - width) + 3)]
+                    data = f"{data}..."
                 highlighted = f"{HIGHLIGHT}{data}{END_HIGHLIGHT}"
                 data = highlighted if [row, column] == self.highlight else data
                 a_row.append(data)

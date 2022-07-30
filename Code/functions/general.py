@@ -34,6 +34,7 @@ def get_games(tag):
             for char in chars:
                 name = name.replace(char, "?")
 
+            # TODO сделать красиво
             if len(chars) % 3 == 0:
                 target = int(len(chars) / 3)
                 name = name.replace(f"{'?' * len(chars)}", f"{'?' * target}")
