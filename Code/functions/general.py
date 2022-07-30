@@ -34,15 +34,15 @@ def get_games(tag):
             for char in chars:
                 name = name.replace(char, "?")
 
-            # TODO сделать красиво
-            if len(chars) % 3 == 0:
-                target = int(len(chars) / 3)
-                name = name.replace(f"{'?' * len(chars)}", f"{'?' * target}")
-            elif len(chars) % 2 == 0:
-                target = int(len(chars) / 2)
-                name = name.replace(f"{'?' * len(chars)}", f"{'?' * target}")
-            else:
-                name = name.replace("??", "?")
+            length = len(chars)
+            div = 0
+            for number in range(2, 100):
+                if length % number == 0:
+                    div = number
+                    break
+
+            target = int(length / div)
+            name = name.replace(f"{'?' * length}", f"{'?' * target}")
 
             game = name[2:-1]
 
