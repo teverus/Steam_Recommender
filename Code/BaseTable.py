@@ -31,6 +31,7 @@ class BaseTable:
         footer=None,
         footer_centered=True,
         footer_bottom_border="=",
+        footer_actions=None,
     ):
         # === General settings
         self.table_width = table_width
@@ -56,6 +57,7 @@ class BaseTable:
         # === Footer
         self.max_page = self.get_max_page()
         self.footer_raw = footer
+        self.footer_actions = footer_actions
         self.footer = self.get_footer()
         self.footer_bottom_border = footer_bottom_border
         self.footer_centered = footer_centered
@@ -113,8 +115,11 @@ class BaseTable:
         # Footer
         if self.footer:
             footer = self.get_footer()
-            footer = footer.center if self.footer_centered else footer.ljust
-            print(footer(self.border_length))
+
+            for line in footer:
+                line = line.center if self.footer_centered else line.ljust
+                print(line(self.border_length))
+
             print(self.footer_bottom_border * self.border_length)
 
         # Adjust the cage after the table has been recreated
@@ -186,17 +191,26 @@ class BaseTable:
     def print(self):
         self.print_table()
 
-    def get_footer(self):
-        if self.footer_raw:
-            return self.footer_raw
-
-        elif self.max_page:
+    def get_footer_pages(self):
+        if self.max_page:
             arrow_l = "    " if self.current_page == 1 else "<<< "
             arrow_r = "    " if self.current_page == self.max_page else " >>>"
+
             return f"{arrow_l}[{self.current_page}/{self.max_page}]{arrow_r}"
 
-        else:
-            return None
+        return None
+
+    def get_footer(self):
+        actions = [i.name for i in self.footer_actions] if self.footer_actions else None
+        pages = self.get_footer_pages()
+
+        if any([actions, pages]):
+            actions = actions if actions is not None else []
+            pages = [pages] if pages is not None else []
+
+            return actions + pages
+
+        return None
 
     def get_max_page(self):
         #  None if max_rows is None else self.get_max_page()

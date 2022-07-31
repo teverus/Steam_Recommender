@@ -14,6 +14,7 @@ class Table(BaseTable):
         highlight=[0, 0],
         max_rows=None,
         max_columns=1,
+        footer_actions=None,
     ):
         super(Table, self).__init__(
             # Table title
@@ -30,4 +31,5 @@ class Table(BaseTable):
             highlight=highlight,
             max_rows=max_rows,
             max_columns=max_columns,
+            footer_actions=footer_actions,
         )

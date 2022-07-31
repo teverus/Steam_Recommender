@@ -23,6 +23,7 @@ class BrowseGamesByTags(Screen):
             rows=tags,
             max_rows=30,
             max_columns=3,
+            footer_actions=[Action(name="Go back")],
         )
 
         super(BrowseGamesByTags, self).__init__()
