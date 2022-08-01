@@ -26,7 +26,8 @@ class Screen:
                 self.table.highlight, action = self.table.highlight, immediate_action[0]
 
             else:
-                self.table.highlight, action = self.get_user_action()
+                highlight, h_footer, action = self.get_user_action()
+                self.table.highlight, self.table.highlight_footer = highlight, h_footer
 
             # If an action is required, perform the action
             if action:
@@ -53,7 +54,8 @@ class Screen:
 
     def get_user_action(self):
         # Declare three major variables that will be returned
-        position = self.table.highlight
+        highlight = self.table.highlight
+        highlight_footer = self.table.highlight_footer
         action = False
 
         # A set of coordinates
@@ -73,12 +75,22 @@ class Screen:
             delta = mv[user_input]
             newpos = [c1 + c2 for c1, c2 in zip(self.table.highlight, delta)]
 
+            # TODO !! причесать
+            # TODO ! если движемся ниже
+            # TODO ! если хотим вернуть в тот же столбец
+
             # Check if the next/previous page was invoked
             is_multipage_table = bool(self.table.pagination)
             try:
                 page_change = any([newpos in v for v in self.table.pagination.values()])
             except AttributeError:
                 page_change = None
+
+            # Check if footer actions are involve
+            if self.table.footer_actions:
+                t_len = len(self.table.df) - 1
+                f_len = len(self.table.footer_actions)
+                possible_variants = [t_len + num for num in range(1, f_len + 1)]
 
             # Show next/previous page if the user moved to it
             if is_multipage_table and page_change:
@@ -90,17 +102,21 @@ class Screen:
                 go_over = self.table.current_page == self.table.max_page and delta == 1
                 within_boundaries = not go_below and not go_over
 
-                x, y = position
+                x, y = highlight
                 if within_boundaries and delta == 1:
-                    position = [x, 0]
+                    highlight = [x, 0]
                     self.table.current_page += 1
 
                 elif within_boundaries and delta == -1:
-                    position = [x, self.table.max_columns - 1]
+                    highlight = [x, self.table.max_columns - 1]
                     self.table.current_page -= 1
+
+            elif self.table.footer_actions and newpos[0] in possible_variants:
+                highlight = None
+                highlight_footer = 0
 
             # If not, replace the current position with the new position
             else:
-                position = newpos if newpos in self.table.cage else position
+                highlight = newpos if newpos in self.table.cage else highlight
 
-        return position, action
+        return highlight, highlight_footer, action
