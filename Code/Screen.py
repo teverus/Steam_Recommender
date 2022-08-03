@@ -53,7 +53,7 @@ class Screen:
             self.table.print()
 
     def get_user_action(self):
-        # Declare three major variables that will be returned
+        # Declare major variables that will be returned
         highlight = self.table.highlight
         highlight_footer = self.table.highlight_footer
         action = False
@@ -72,51 +72,78 @@ class Screen:
         elif user_input in mv.keys():
 
             # Get the new position based on the user input
-            delta = mv[user_input]
-            newpos = [c1 + c2 for c1, c2 in zip(self.table.highlight, delta)]
+            new_pos = self.get_new_position(mv, user_input)
 
-            # TODO !! причесать
             # TODO ! если движемся ниже
             # TODO ! если хотим вернуть в тот же столбец
 
             # Check if the next/previous page was invoked
-            is_multipage_table = bool(self.table.pagination)
-            try:
-                page_change = any([newpos in v for v in self.table.pagination.values()])
-            except AttributeError:
-                page_change = None
+            page_change = self.get_page_change(new_pos)
 
-            # Check if footer actions are involve
-            if self.table.footer_actions:
-                t_len = len(self.table.df) - 1
-                f_len = len(self.table.footer_actions)
-                possible_variants = [t_len + num for num in range(1, f_len + 1)]
+            # Check if footer actions are involved
+            footer_positions = self.get_footer_positions()
 
             # Show next/previous page if the user moved to it
-            if is_multipage_table and page_change:
-                delta = [k for k, v in self.table.pagination.items() if newpos in v]
-                assert len(delta) == 1, "Delta goes both directions!"
-                delta = delta[0]
+            if page_change:
+                highlight = self.change_page(highlight, new_pos)
 
-                go_below = self.table.current_page == 1 and delta == -1
-                go_over = self.table.current_page == self.table.max_page and delta == 1
-                within_boundaries = not go_below and not go_over
-
-                x, y = highlight
-                if within_boundaries and delta == 1:
-                    highlight = [x, 0]
-                    self.table.current_page += 1
-
-                elif within_boundaries and delta == -1:
-                    highlight = [x, self.table.max_columns - 1]
-                    self.table.current_page -= 1
-
-            elif self.table.footer_actions and newpos[0] in possible_variants:
+            # Highlight footer actions if needed
+            elif self.table.footer_actions and new_pos[0] in footer_positions:
                 highlight = None
+                # TODO !!! Вот тут должно быть двойное обозначение позиции!
+                # TODO !! Вынести в отдельный метод
                 highlight_footer = 0
 
-            # If not, replace the current position with the new position
+            # Replace the current position with the new position
             else:
-                highlight = newpos if newpos in self.table.cage else highlight
+                highlight = new_pos if new_pos in self.table.cage else highlight
 
         return highlight, highlight_footer, action
+
+    def get_page_change(self, newpos):
+        try:
+            page_change = any([newpos in v for v in self.table.pagination.values()])
+        except AttributeError:
+            page_change = None
+
+        return page_change
+
+    def get_footer_positions(self):
+        footer_positions = None
+
+        if self.table.footer_actions:
+            t_len = len(self.table.df) - 1
+            f_len = len(self.table.footer_actions)
+            footer_positions = [t_len + num for num in range(1, f_len + 1)]
+
+        return footer_positions
+
+    def change_page(self, highlight, newpos):
+        delta = [k for k, v in self.table.pagination.items() if newpos in v]
+        assert len(delta) == 1, "Delta goes both directions!"
+        delta = delta[0]
+
+        go_below = self.table.current_page == 1 and delta == -1
+        go_over = self.table.current_page == self.table.max_page and delta == 1
+        within_boundaries = not go_below and not go_over
+
+        x, y = highlight
+        if within_boundaries and delta == 1:
+            highlight = [x, 0]
+            self.table.current_page += 1
+
+        elif within_boundaries and delta == -1:
+            highlight = [x, self.table.max_columns - 1]
+            self.table.current_page -= 1
+
+        return highlight
+
+    def get_new_position(self, mv, user_input):
+        delta = mv[user_input]
+
+        if self.table.highlight:
+            new_position = [c1 + c2 for c1, c2 in zip(self.table.highlight, delta)]
+        else:
+            new_position = self.table.highlight_footer + delta[0]
+
+        return new_position

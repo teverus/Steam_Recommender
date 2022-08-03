@@ -23,6 +23,7 @@ class BaseTable:
         # Table
         table_width=None,
         highlight=None,
+        last_known_highlight=None,
         highlight_footer=None,
         pagination=None,
         current_page=1,
@@ -37,6 +38,7 @@ class BaseTable:
         # === General settings
         self.table_width = table_width
         self.highlight = highlight
+        self.last_known_highlight = last_known_highlight
         self.highlight_footer = highlight_footer
         self.max_rows = max_rows if max_rows else len(rows)
         self.max_columns = max_columns
@@ -120,10 +122,10 @@ class BaseTable:
 
             for index, line in enumerate(footer):
                 line = line.center if self.footer_centered else line.ljust
-                line = line(self.border_length)
+                line = line(self.border_length - 2)
                 highlighted = f"{HIGHLIGHT}{line}{END_HIGHLIGHT}"
                 line = highlighted if index == self.highlight_footer else line
-                print(line)
+                print(f" {line} ")
 
             print(self.footer_bottom_border * self.border_length)
 
