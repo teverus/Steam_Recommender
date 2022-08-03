@@ -26,7 +26,6 @@ class Table(BaseTable):
             rows_bottom_border=rows_bottom_border,
             rows_centered=rows_centered,
             # General table
-            pagination=True,
             table_width=SCREEN_WIDTH,
             highlight=highlight,
             max_rows=max_rows,

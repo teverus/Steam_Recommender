@@ -25,7 +25,6 @@ class BaseTable:
         highlight=None,
         last_known_highlight=None,
         highlight_footer=None,
-        pagination=None,
         current_page=1,
         max_rows=None,
         max_columns=1,
@@ -71,7 +70,7 @@ class BaseTable:
         self.column_widths = self.get_column_widths()
         self.border_length = self.get_border_length()
         self.cage = self.get_cage()
-        self.pagination = self.get_pagination(pagination)
+        self.pagination = self.get_pagination()
 
     def print_table(self):
 
@@ -186,14 +185,11 @@ class BaseTable:
 
         return coordinates
 
-    def get_pagination(self, pagination):
-        if pagination:
-            go_next = [[row, self.max_columns] for row in range(self.max_rows)]
-            go_prev = [[row, -1] for row in range(self.max_rows)]
+    def get_pagination(self):
+        go_next = [[row, self.max_columns] for row in range(self.max_rows)]
+        go_prev = [[row, -1] for row in range(self.max_rows)]
 
-            return {1: go_next, -1: go_prev}
-        else:
-            return False
+        return {1: go_next, -1: go_prev}
 
     def print(self):
         self.print_table()
