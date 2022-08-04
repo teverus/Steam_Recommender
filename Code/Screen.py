@@ -88,14 +88,14 @@ class Screen:
                 highlight = self.change_page(highlight, new_pos)
 
             # Highlight footer actions if needed
-            elif self.table.footer_actions and new_pos[0] in footer_positions:
+            elif footer_positions and new_pos[0] in footer_positions:
+                self.table.last_known_highlight = self.table.highlight
                 highlight = None
-                # TODO !!! Вот тут должно быть двойное обозначение позиции!
-                # TODO !! Вынести в отдельный метод
-                highlight_footer = 0
+                highlight_footer = new_pos
 
             # Replace the current position with the new position
             else:
+                # TODO !!! Вот тут если уже не highlight
                 highlight = new_pos if new_pos in self.table.cage else highlight
 
         return highlight, highlight_footer, action
@@ -109,7 +109,7 @@ class Screen:
         return page_change
 
     def get_footer_positions(self):
-        footer_positions = None
+        footer_positions = False
 
         if self.table.footer_actions:
             t_len = len(self.table.df) - 1
@@ -141,9 +141,8 @@ class Screen:
     def get_new_position(self, mv, user_input):
         delta = mv[user_input]
 
-        if self.table.highlight:
-            new_position = [c1 + c2 for c1, c2 in zip(self.table.highlight, delta)]
-        else:
-            new_position = self.table.highlight_footer + delta[0]
+        highlight_footer = self.table.highlight_footer
+        highlight = self.table.highlight if self.table.highlight else highlight_footer
+        new_position = [c1 + c2 for c1, c2 in zip(highlight, delta)]
 
         return new_position

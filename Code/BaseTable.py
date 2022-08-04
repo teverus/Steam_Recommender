@@ -122,8 +122,10 @@ class BaseTable:
             for index, line in enumerate(footer):
                 line = line.center if self.footer_centered else line.ljust
                 line = line(self.border_length - 2)
-                highlighted = f"{HIGHLIGHT}{line}{END_HIGHLIGHT}"
-                line = highlighted if index == self.highlight_footer else line
+                if self.highlight_footer:
+                    highlighted = f"{HIGHLIGHT}{line}{END_HIGHLIGHT}"
+                    is_highlighted = index == self.highlight_footer[0] - len(self.df)
+                    line = highlighted if is_highlighted else line
                 print(f" {line} ")
 
             print(self.footer_bottom_border * self.border_length)
