@@ -74,7 +74,6 @@ class Screen:
             # Get the new position based on the user input
             new_pos = self.get_new_position(mv, user_input)
 
-            # TODO ! если движемся ниже
             # TODO ! если хотим вернуть в тот же столбец
 
             # Check if the next/previous page was invoked
@@ -93,9 +92,12 @@ class Screen:
                 highlight = None
                 highlight_footer = new_pos
 
+            elif self.table.highlight_footer and new_pos[0] not in footer_positions:
+                pass
+
             # Replace the current position with the new position
             else:
-                # TODO !!! Вот тут если уже не highlight
+
                 highlight = new_pos if new_pos in self.table.cage else highlight
 
         return highlight, highlight_footer, action
