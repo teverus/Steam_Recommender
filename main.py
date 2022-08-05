@@ -16,21 +16,11 @@ class ApplicationV5(Screen):
                 name="Show tags       | without status                 ",
                 function=BrowseGamesByTags,
             ),
-            Action(
-                name="                | without status [Russian voice] ",
-            ),
-            Action(
-                name="                | favorite                       ",
-            ),
-            Action(
-                name="                | favorite       [Russian voice] ",
-            ),
-            Action(
-                name="                | hidden                         ",
-            ),
-            Action(
-                name="                | hidden         [Russian voice] ",
-            ),
+            Action(name="                | without status [Russian voice] "),
+            Action(name="                | favorite                       "),
+            Action(name="                | favorite       [Russian voice] "),
+            Action(name="                | hidden                         "),
+            Action(name="                | hidden         [Russian voice] "),
         ]
 
         self.table = Table(
