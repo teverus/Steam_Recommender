@@ -86,7 +86,6 @@ class Screen:
 
             # [2] Highlight footer if the user reaches the footer
             elif footer_positions and new_pos[0] in footer_positions:
-                self.table.last_known_highlight = self.table.highlight
                 highlight = None
                 highlight_footer = new_pos
 

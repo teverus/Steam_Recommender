@@ -23,7 +23,6 @@ class BaseTable:
         # Table
         table_width=None,
         highlight=None,
-        last_known_highlight=None,
         highlight_footer=None,
         current_page=1,
         max_rows=None,
@@ -37,7 +36,6 @@ class BaseTable:
         # === General settings
         self.table_width = table_width
         self.highlight = highlight
-        self.last_known_highlight = last_known_highlight
         self.highlight_footer = highlight_footer
         self.max_rows = max_rows if max_rows else len(rows)
         self.max_columns = max_columns
