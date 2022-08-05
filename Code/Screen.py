@@ -72,9 +72,7 @@ class Screen:
         elif user_input in mv.keys():
 
             # Get the new position based on the user input
-            new_pos = self.get_new_position(mv, user_input)
-
-            # TODO ! если хотим вернуть в тот же столбец
+            new_pos = self.get_new_position(mv[user_input])
 
             # Check if the next/previous page was invoked
             page_change = self.get_page_change(new_pos)
@@ -82,23 +80,24 @@ class Screen:
             # Check if footer actions are involved
             footer_positions = self.get_footer_positions()
 
-            # Show next/previous page if the user moved to it
+            # [1] Show next/previous page if the user moved to it
             if page_change:
                 highlight = self.change_page(highlight, new_pos)
 
-            # Highlight footer actions if needed
+            # [2] Highlight footer if the user reaches the footer
             elif footer_positions and new_pos[0] in footer_positions:
                 self.table.last_known_highlight = self.table.highlight
                 highlight = None
                 highlight_footer = new_pos
 
-            elif self.table.highlight_footer and new_pos[0] not in footer_positions:
+            # [3] Do not move if the use tries to go below footer actions
+            elif self.table.highlight_footer and new_pos[0] > max(footer_positions):
                 pass
 
-            # Replace the current position with the new position
-            else:
-
-                highlight = new_pos if new_pos in self.table.cage else highlight
+            # [4] Replace the current position with the new position if everything is OK
+            elif new_pos in self.table.cage:
+                highlight = new_pos
+                highlight_footer = None if highlight_footer else highlight_footer
 
         return highlight, highlight_footer, action
 
@@ -140,11 +139,17 @@ class Screen:
 
         return highlight
 
-    def get_new_position(self, mv, user_input):
-        delta = mv[user_input]
-
+    def get_new_position(self, delta):
+        move_within_footer = not self.table.highlight and self.table.highlight_footer
         highlight_footer = self.table.highlight_footer
-        highlight = self.table.highlight if self.table.highlight else highlight_footer
-        new_position = [c1 + c2 for c1, c2 in zip(highlight, delta)]
+
+        if move_within_footer and delta[1] != 0:
+            new_position = self.table.highlight_footer
+
+        elif move_within_footer and delta[0] != 0:
+            new_position = [c1 + c2 for c1, c2 in zip(highlight_footer, delta)]
+
+        else:
+            new_position = [c1 + c2 for c1, c2 in zip(self.table.highlight, delta)]
 
         return new_position
