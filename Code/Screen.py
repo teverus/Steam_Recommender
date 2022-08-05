@@ -34,6 +34,7 @@ class Screen:
 
                 # Choose the right action
                 if not immediate_action:
+                    # TODO !!! Вот тут надо отвязаться от self.table.highlight и self.table.df
                     x, y = self.table.highlight
                     target_action_name = self.table.df.iloc[x, y]
                     if target_action_name:
