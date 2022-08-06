@@ -7,7 +7,7 @@ from Code.screens.PerformActionsWithATag import PerformActionsWithATag
 
 class BrowseGamesByTags(Screen):
     def __init__(self):
-        tags = get_tags()
+        tags = get_tags(favorite=False, hidden=False)
 
         self.actions = [
             Action(name=tag, function=PerformActionsWithATag, arguments={"title": tag})

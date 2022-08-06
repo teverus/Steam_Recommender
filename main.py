@@ -17,6 +17,7 @@ class ApplicationV5(Screen):
                 function=BrowseGamesByTags,
             ),
             Action(name="                | without status [Russian voice] "),
+            # TODO !!! Доставать любимые теги
             Action(name="                | favorite                       "),
             Action(name="                | favorite       [Russian voice] "),
             Action(name="                | hidden                         "),
