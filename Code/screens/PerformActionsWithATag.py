@@ -4,7 +4,7 @@ from Code.Table import Table
 from Code.constants import TAGS, FILES, Key
 from Code.functions.db import update_a_table
 from Code.functions.general import do_nothing, wait_for_key, show_message
-from Code.screens.GamesWithTag import GamesWithTag
+from Code.screens.ShowGamesWithTag import ShowGamesWithTag
 
 
 class PerformActionsWithATag(Screen):
@@ -12,7 +12,7 @@ class PerformActionsWithATag(Screen):
         self.actions = [
             Action(
                 name="Show games              ",
-                function=GamesWithTag,
+                function=ShowGamesWithTag,
                 arguments={"tag": kwargs["title"]},
             ),
             Action(
