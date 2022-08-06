@@ -33,15 +33,19 @@ class Screen:
             if action:
 
                 # Choose the right action
-                if not immediate_action:
-                    # TODO !!! Вот тут надо отвязаться от self.table.highlight и self.table.df
+                if not immediate_action and self.table.highlight:
                     x, y = self.table.highlight
-                    target_action_name = self.table.df.iloc[x, y]
-                    if target_action_name:
-                        act = [a for a in self.actions if a.name == target_action_name]
+                    action_name = self.table.df.iloc[x, y]
+                    if action_name:
+                        act = [a for a in self.actions if a.name == action_name]
                         action = act[0] if len(act) == 1 else raise_an_error("Actions!")
                     else:
                         continue
+                elif not immediate_action and not self.table.highlight:
+                    x, _ = self.table.highlight_footer
+                    table_length = len(self.table.df)
+                    target_index = x - table_length
+                    action = self.table.footer_actions[target_index]
 
                 # Perform the action
                 action()
