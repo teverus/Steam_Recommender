@@ -234,7 +234,10 @@ class BaseTable:
             for col in range(self.max_columns):
                 for row in range(self.max_rows):
                     if col == 0:
-                        rows.append([pack[row]])
+                        try:
+                            rows.append([pack[row]])
+                        except IndexError:
+                            rows.append([""])
                     else:
                         try:
                             rows[row].append(pack[row + (self.max_rows * col)])

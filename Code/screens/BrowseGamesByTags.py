@@ -6,16 +6,18 @@ from Code.screens.PerformActionsWithATag import PerformActionsWithATag
 
 
 class BrowseGamesByTags(Screen):
-    def __init__(self):
-        tags = get_tags(favorite=False, hidden=False)
+    def __init__(self, favorite=False, hidden=False, status_name=""):
+        tags = get_tags(favorite=favorite, hidden=hidden)
 
         self.actions = [
             Action(name=tag, function=PerformActionsWithATag, arguments={"title": tag})
             for tag in tags
         ]
 
+        name = f"{status_name} " if status_name else status_name
         self.table = Table(
-            title="Steam games by tags",
+            # TODO Обновлять значение после того, как поменял статус тегу
+            title=f"Steam games by {name}tags / {len(tags)}",
             rows=tags,
             max_rows=30,
             max_columns=3,
