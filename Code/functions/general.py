@@ -18,7 +18,6 @@ from Code.functions.db import read_a_table, append_to_table
 
 def get_tags(favorite, hidden):
     tags = read_a_table(TAGS)
-
     fav_filter = "1" if favorite else ""
     hid_filter = "1" if hidden else ""
     tags = tags.loc[(tags.Favorite == fav_filter) & (tags.Hidden == hid_filter)]
@@ -63,7 +62,7 @@ def check_unique_tags(tags: str):
     for tag in possible_tags:
         if tag not in known_tags:
             df = DataFrame([], columns=TAGS_COLUMNS)
-            df.loc[0] = [tag, 1, "", ""]
+            df.loc[0] = [tag, 1, "", "", ""]
             append_to_table(df, TAGS, FILES)
 
 
