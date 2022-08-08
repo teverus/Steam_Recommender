@@ -19,7 +19,6 @@ class ShowGamesWithTag(Screen):
         #     footer_actions=[Action(name="Go back", function=do_nothing, go_back=True)],
         # )
 
-        # TODO !!! Неправильно считает максимальное количество страниц
         # TODO !! Надо ширину столбцов регулировать
         self.table = Table(
             title=f"{tag} / {len(games)}",

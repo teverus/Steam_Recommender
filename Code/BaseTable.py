@@ -218,9 +218,11 @@ class BaseTable:
         return None
 
     def get_max_page(self):
-        #  None if max_rows is None else self.get_max_page()
         if self.max_rows_raw is None:
             return None
+
+        elif self.max_rows_raw is not None and self.preserve_columns:
+            return ceil(len(self.rows_raw) / self.max_rows)
 
         else:
             return ceil(len(self.rows_raw) / (self.max_rows * self.max_columns))
