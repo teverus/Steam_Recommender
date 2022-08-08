@@ -11,11 +11,22 @@ class ShowGamesWithTag(Screen):
 
         self.actions = [Action(name=game) for game in games]
 
+        # self.table = Table(
+        #     title=f"{tag} / {len(games)}",
+        #     rows=games,
+        #     max_rows=30,
+        #     max_columns=2,
+        #     footer_actions=[Action(name="Go back", function=do_nothing, go_back=True)],
+        # )
+
+        # TODO !!! Неправильно считает максимальное количество страниц
+        # TODO !! Надо ширину столбцов регулировать
         self.table = Table(
             title=f"{tag} / {len(games)}",
-            rows=games,
+            rows=[[game, "Make favorite", "Make hidden"] for game in games],
             max_rows=30,
-            max_columns=2,
+            max_columns=3,
+            preserve_columns=True,
             footer_actions=[Action(name="Go back", function=do_nothing, go_back=True)],
         )
 

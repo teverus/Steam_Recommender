@@ -27,6 +27,7 @@ class BaseTable:
         current_page=1,
         max_rows=None,
         max_columns=1,
+        preserve_columns=False,
         # Footer
         footer=None,
         footer_centered=True,
@@ -39,6 +40,7 @@ class BaseTable:
         self.highlight_footer = highlight_footer
         self.max_rows = max_rows if max_rows else len(rows)
         self.max_columns = max_columns
+        self.preserve_columns = preserve_columns
         self.current_page = current_page
 
         # === Table title
@@ -224,7 +226,7 @@ class BaseTable:
             return ceil(len(self.rows_raw) / (self.max_rows * self.max_columns))
 
     def get_rows(self):
-        if self.max_rows_raw:
+        if self.max_rows_raw and not self.preserve_columns:
             size = self.max_rows * self.max_columns
             previous_page = self.current_page - 1
             pack = self.rows_raw[size * previous_page : size * self.current_page]
@@ -245,6 +247,13 @@ class BaseTable:
                             rows[row].append("")
 
             return rows
+
+        elif self.max_rows_raw and self.preserve_columns:
+            size = self.max_rows
+            previous_page = self.current_page - 1
+            pack = self.rows_raw[size * previous_page : size * self.current_page]
+
+            return pack
 
         else:
             return self.rows_raw
