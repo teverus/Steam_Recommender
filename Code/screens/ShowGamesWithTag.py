@@ -12,7 +12,7 @@ class ShowGamesWithTag(Screen):
         self.actions = [Action(name=game) for game in games]
 
         self.table = Table(
-            title=tag,
+            title=f"{tag} / {len(games)}",
             rows=games,
             max_rows=30,
             max_columns=2,
