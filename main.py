@@ -17,19 +17,39 @@ class ApplicationV5(Screen):
                 name="Show tags       | without status                 ",
                 function=BrowseGamesByTags,
             ),
-            Action(name="                | without status [Russian voice] "),
+            Action(
+                name="                | without status [Russian voice] ",
+                function=BrowseGamesByTags,
+                arguments={"russian_audio": True},
+            ),
             Action(
                 name="                | favorite                       ",
                 function=BrowseGamesByTags,
                 arguments={TagStatus.FAVORITE: True, "status_name": TagStatus.FAVORITE},
             ),
-            Action(name="                | favorite       [Russian voice] "),
+            Action(
+                name="                | favorite       [Russian voice] ",
+                function=BrowseGamesByTags,
+                arguments={
+                    TagStatus.FAVORITE: True,
+                    "status_name": TagStatus.FAVORITE,
+                    "russian_audio": True,
+                },
+            ),
             Action(
                 name="                | hidden                         ",
                 function=BrowseGamesByTags,
                 arguments={TagStatus.HIDDEN: True, "status_name": TagStatus.HIDDEN},
             ),
-            Action(name="                | hidden         [Russian voice] "),
+            Action(
+                name="                | hidden         [Russian voice] ",
+                function=BrowseGamesByTags,
+                arguments={
+                    TagStatus.HIDDEN: True,
+                    "status_name": TagStatus.HIDDEN,
+                    "russian_audio": True,
+                },
+            ),
         ]
 
         self.table = Table(

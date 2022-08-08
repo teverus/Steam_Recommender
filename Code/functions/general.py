@@ -16,11 +16,16 @@ from Code.constants import (
 from Code.functions.db import read_a_table, append_to_table
 
 
-def get_tags(favorite, hidden):
+def get_tags(favorite, hidden, russian_audio):
     tags = read_a_table(TAGS)
+
     fav_filter = "1" if favorite else ""
     hid_filter = "1" if hidden else ""
+
     tags = tags.loc[(tags.Favorite == fav_filter) & (tags.Hidden == hid_filter)]
+
+    if russian_audio:
+        tags = tags.loc[tags.RussianAudio == "1"]
 
     return sorted(tags.Tag)
 
