@@ -36,6 +36,12 @@ def get_games(tag):
 
     refined_games = []
     for game in games:
+        for special_char in ["®", "™"]:
+            game = game.replace(special_char, "")
+
+        for strange_char, proper_char in [("’", "'")]:
+            game = game.replace(strange_char, proper_char)
+
         name = str(game.encode("utf-8"))
         chars = re.findall(r"\\x\w{2}", name)
         if chars:
