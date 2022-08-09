@@ -26,8 +26,7 @@ class BaseTable:
         highlight_footer=None,
         current_page=1,
         max_rows=None,
-        max_columns=1,
-        preserve_columns=False,
+        max_columns=None,
         # Footer
         footer=None,
         footer_centered=True,
@@ -39,8 +38,7 @@ class BaseTable:
         self.highlight = highlight
         self.highlight_footer = highlight_footer
         self.max_rows = max_rows if max_rows else len(rows)
-        self.max_columns = max_columns
-        self.preserve_columns = preserve_columns
+        self.max_columns = max_columns if max_columns else self.get_max_columns(rows)
         self.current_page = current_page
 
         # === Table title
@@ -99,6 +97,7 @@ class BaseTable:
         for row in range(len(self.df)):
             a_row = []
             for column in range(self.max_columns):
+                # TODO !!! Определять ширину колонку
                 width = self.column_widths[column]
                 data = self.df.iloc[row, column]
                 data = data.center if self.rows_centered else data.ljust
@@ -221,14 +220,14 @@ class BaseTable:
         if self.max_rows_raw is None:
             return None
 
-        elif self.max_rows_raw is not None and self.preserve_columns:
+        elif self.max_rows_raw is not None and isinstance(self.rows[0], list):
             return ceil(len(self.rows_raw) / self.max_rows)
 
         else:
             return ceil(len(self.rows_raw) / (self.max_rows * self.max_columns))
 
     def get_rows(self):
-        if self.max_rows_raw and not self.preserve_columns:
+        if self.max_rows_raw:
             size = self.max_rows * self.max_columns
             previous_page = self.current_page - 1
             pack = self.rows_raw[size * previous_page : size * self.current_page]
@@ -250,12 +249,11 @@ class BaseTable:
 
             return rows
 
-        elif self.max_rows_raw and self.preserve_columns:
-            size = self.max_rows
-            previous_page = self.current_page - 1
-            pack = self.rows_raw[size * previous_page : size * self.current_page]
-
-            return pack
+        # elif self.max_rows_raw:
+        #     size = self.max_rows
+        #     previous_page = self.current_page - 1
+        #
+        #     return self.rows_raw[size * previous_page : size * self.current_page]
 
         else:
             return self.rows_raw
@@ -268,3 +266,7 @@ class BaseTable:
             highlight = [max_length, y] if x > max_length else [x, y]
 
             return highlight
+
+    @staticmethod
+    def get_max_columns(rows):
+        return max([len(row) if isinstance(row, list) else len([row]) for row in rows])
