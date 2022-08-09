@@ -13,7 +13,8 @@ class ShowGamesWithTag(Screen):
 
         self.table = Table(
             title=f"{tag} / {len(games)}",
-            rows=[[game, "Make favorite", "Make hidden"] for game in games[:10]],
+            rows=[[game, "Make favorite", "Make hidden"] for game in games],
+            max_rows=30,
             footer_actions=[Action(name="Go back", function=do_nothing, go_back=True)],
         )
 
