@@ -36,3 +36,8 @@ class Key:
     RIGHT = b"M"
     LEFT = b"K"
     ENTER = b"\r"
+
+
+class ColumnWidth:
+    FULL = "Full"
+    FIT = "Fit"

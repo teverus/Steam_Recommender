@@ -4,7 +4,7 @@ from math import ceil
 import bext
 from pandas import DataFrame
 
-from Code.constants import HIGHLIGHT, END_HIGHLIGHT
+from Code.constants import HIGHLIGHT, END_HIGHLIGHT, ColumnWidth
 
 
 class BaseTable:
@@ -20,13 +20,14 @@ class BaseTable:
         table_title_centered=True,
         table_title_caps=True,
         table_title_top_border="-",
-        # Table
+        # General table
         table_width=None,
         highlight=None,
         highlight_footer=None,
         current_page=1,
         max_rows=None,
         max_columns=None,
+        column_widths=None,
         # Footer
         footer=None,
         footer_centered=True,
@@ -66,7 +67,7 @@ class BaseTable:
 
         # Calculated values
         self.df = self.get_df()
-        self.column_widths = self.get_column_widths()
+        self.column_widths = self.get_column_widths(column_widths)
         self.border_length = self.get_border_length()
         self.cage = self.get_cage()
         self.pagination = self.get_pagination()
@@ -149,24 +150,47 @@ class BaseTable:
 
         return df
 
-    def get_column_widths(self):
+    def get_column_widths(self, target_widths):
+        actual_width = self.table_width - (((self.max_columns - 1) * 3) + 2)
         column_widths = {}
 
-        for col in range(self.max_columns):
+        if target_widths:
+            ful_cols = {k: v for k, v in target_widths.items() if v == ColumnWidth.FULL}
+            fit_cols = {k: v for k, v in target_widths.items() if v == ColumnWidth.FIT}
+            expected_widths = {**fit_cols, **ful_cols}
 
-            if self.table_width:
-                actual_width = self.table_width - (((self.max_columns - 1) * 3) + 2)
-                diff = actual_width % self.max_columns
-                if diff:
-                    raise Exception(
-                        f"Please, expand table_width by {self.max_columns - diff}"
-                    )
+            for col_index, width_type in expected_widths.items():
+                if self.table_width:
+                    if width_type == ColumnWidth.FIT:
+                        target_length = max([len(r[col_index]) for r in self.rows])
+
+                    else:
+                        already_used = sum([v for v in column_widths.values()])
+                        remaining = actual_width - already_used
+                        number_of_full_cols = len(ful_cols)
+                        if remaining % number_of_full_cols == 0:
+                            target_length = int(remaining / number_of_full_cols)
+                        else:
+                            target_length = None
+                            raise Exception("You need to figure something out!")
+
+                    column_widths[col_index] = target_length
                 else:
-                    per_col = int(actual_width / self.max_columns)
-            else:
-                per_col = max([len(self.df.iloc[r, col]) for r in range(self.max_rows)])
+                    raise Exception("Sorry, not implemented yet. Use table_width!")
 
-            column_widths[col] = per_col
+        else:
+            for col in range(self.max_columns):
+
+                if self.table_width:
+                    diff = actual_width % self.max_columns
+                    if diff:
+                        raise Exception(f"Make table_width + {self.max_columns - diff}")
+                    else:
+                        per = int(actual_width / self.max_columns)
+                else:
+                    per = max([len(self.df.iloc[r, col]) for r in range(self.max_rows)])
+
+                column_widths[col] = per
 
         return column_widths
 
@@ -201,7 +225,7 @@ class BaseTable:
             arrow_l = "    " if self.current_page == 1 else "<<< "
             arrow_r = "    " if self.current_page == self.max_page else " >>>"
 
-            return f"{arrow_l}[{self.current_page}/{self.max_page}]{arrow_r}"
+            return f"{arrow_l}[{self.current_page:02}/{self.max_page:02}]{arrow_r}"
 
         return None
 
