@@ -1,8 +1,10 @@
 from Code.Action import Action
 from Code.Screen import Screen
 from Code.Table import Table
-from Code.constants import ColumnWidth
+from Code.constants import ColumnWidth, APP_URL
 from Code.functions.general import get_games, do_nothing
+
+import webbrowser
 
 
 class ShowGamesWithTag(Screen):
@@ -12,11 +14,15 @@ class ShowGamesWithTag(Screen):
 
         self.actions = [
             [
-                Action(name=game),
+                Action(
+                    name=title,
+                    function=self.open_game_in_steam,
+                    arguments={"appid": appid},
+                ),
                 Action(name="Make favorite"),
                 Action(name="Make hidden"),
             ]
-            for game in games
+            for title, appid in games.items()
         ]
 
         self.table = Table(
@@ -30,3 +36,8 @@ class ShowGamesWithTag(Screen):
         self.kwargs = kwargs
 
         super(ShowGamesWithTag, self).__init__()
+
+    @staticmethod
+    def open_game_in_steam(appid):
+        webbrowser.open(f"{APP_URL}{appid}/")
+        a = 1

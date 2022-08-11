@@ -32,37 +32,44 @@ def get_tags(favorite, hidden, russian_audio):
 
 def get_games(tag):
     games = read_a_table(GAMES)
-    games = sorted(games.loc[games.Tags.str.contains(tag)].Title)
 
-    refined_games = []
-    for game in games:
-        for special_char in ["®", "™"]:
-            game = game.replace(special_char, "")
+    games_with_tag = games.loc[games.Tags.str.contains(tag)]
+    games_with_tag = games_with_tag.sort_values(by="Title")
+    titles = list(games_with_tag.Title)
+    appids = list(games_with_tag.ID)
+    games_with_tag = {k: v for k, v in zip(titles, appids)}
 
-        for strange_char, proper_char in [("’", "'")]:
-            game = game.replace(strange_char, proper_char)
+    dictionary = {replace_invalid_chars(k): v for k, v in games_with_tag.items()}
 
-        name = str(game.encode("utf-8"))
-        chars = re.findall(r"\\x\w{2}", name)
-        if chars:
-            for char in chars:
-                name = name.replace(char, "?")
+    return dictionary
 
-            length = len(chars)
-            div = 0
-            for number in range(2, 100):
-                if length % number == 0:
-                    div = number
-                    break
 
-            target = int(length / div)
-            name = name.replace(f"{'?' * length}", f"{'?' * target}")
+def replace_invalid_chars(title):
+    for special_char in ["®", "™"]:
+        title = title.replace(special_char, "")
 
-            game = name[2:-1]
+    for strange_char, proper_char in [("’", "'")]:
+        title = title.replace(strange_char, proper_char)
 
-        refined_games.append(game)
+    name = str(title.encode("utf-8"))
+    chars = re.findall(r"\\x\w{2}", name)
+    if chars:
+        for char in chars:
+            name = name.replace(char, "?")
 
-    return refined_games
+        length = len(chars)
+        div = 0
+        for number in range(2, 100):
+            if length % number == 0:
+                div = number
+                break
+
+        target = int(length / div)
+        name = name.replace(f"{'?' * length}", f"{'?' * target}")
+
+        title = name[2:-1]
+
+    return title
 
 
 def check_unique_tags(tags: str):

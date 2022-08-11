@@ -47,6 +47,7 @@ class Screen:
                     x, y = self.table.highlight
                     action_name = self.table.df.iloc[x, y]
                     if action_name:
+                        # TODO !!! Если а - это список!
                         act = [a for a in self.actions if a.name == action_name]
                         action = act[0] if len(act) == 1 else raise_an_error("Actions!")
                     else:
