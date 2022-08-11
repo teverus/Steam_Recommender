@@ -99,7 +99,6 @@ class BaseTable:
         for row in range(len(self.df)):
             a_row = []
             for column in range(self.max_columns):
-                # TODO !! Определять ширину колонку
                 width = self.column_widths[column]
                 data = self.df.iloc[row, column]
                 data = data.center if self.rows_centered else data.ljust

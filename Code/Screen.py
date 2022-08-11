@@ -20,9 +20,19 @@ class Screen:
         while True:
 
             # Check if there is an immediate action
-            immediate_action = [a for a in self.actions if a.execute_instantly]
+            if isinstance(self.actions[0], list):
+                sub_actions = []
+                [
+                    [sub_actions.append(sub_action) for sub_action in action]
+                    for action in self.actions
+                ]
+                immediate_action = [sa for sa in sub_actions if sa.execute_instantly]
+
+            else:
+                immediate_action = [a for a in self.actions if a.execute_instantly]
 
             if immediate_action:
+                assert len(immediate_action) == 1, "Too many immediate actions"
                 self.table.highlight, action = self.table.highlight, immediate_action[0]
 
             else:
