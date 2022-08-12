@@ -19,52 +19,46 @@ class Screen:
         # Start the infinite loop
         while True:
 
-            # Check if there is an immediate action
-            if isinstance(self.actions[0], list):
-                sub_actions = []
-                [[sub_actions.append(sa) for sa in action] for action in self.actions]
-                immediate_action = [sa for sa in sub_actions if sa.execute_instantly]
+            # [1] Check if there is an immediate action
+            immediate_action, sub_actions = self.get_immediate_action()
 
-            else:
-                immediate_action = [a for a in self.actions if a.execute_instantly]
-
+            # [2-1] Execute the immediate action if there is one
             if immediate_action:
-                assert len(immediate_action) == 1, "Too many immediate actions"
+                assert len(immediate_action) == 1, "\n\nToo many immediate actions!!!"
                 self.table.highlight, action = self.table.highlight, immediate_action[0]
 
+            # [2-2] Wait for user action
             else:
                 highlight, h_footer, action = self.get_user_action()
                 self.table.highlight, self.table.highlight_footer = highlight, h_footer
 
-            # If an action is required, perform the action
+            # [3] If an action is required, perform the action
             if action:
 
-                # Choose the right action
+                # [3-1-1] Choose an action from the table
                 if not immediate_action and self.table.highlight:
                     x, y = self.table.highlight
                     action_name = self.table.df.iloc[x, y]
                     if action_name:
-                        if isinstance(self.actions[0], list):
-                            act = [sa for sa in sub_actions if sa.name == action_name]
-                        else:
-                            act = [a for a in self.actions if a.name == action_name]
-                        action = act[0] if len(act) == 1 else raise_an_error("Actions!")
+                        action = self.get_action(sub_actions, action_name)
                     else:
                         continue
+
+                # [3-1-2] Choose an action from the footer
                 elif not immediate_action and not self.table.highlight:
                     x, _ = self.table.highlight_footer
                     table_length = len(self.table.df)
                     target_index = x - table_length
                     action = self.table.footer_actions[target_index]
 
-                # Perform the action
+                # [3-2] Perform the action
                 action()
 
-                # If the action ends this screen, do it
+                # [3-3] If the action ends this screen, do it
                 if action.go_back:
                     break
 
-            # Print the table with the new parameters
+            # [4] Print the table with the new parameters
             self.table.print()
 
     def get_user_action(self):
@@ -167,3 +161,21 @@ class Screen:
             new_position = [c1 + c2 for c1, c2 in zip(self.table.highlight, delta)]
 
         return new_position
+
+    def get_immediate_action(self):
+        target_list = self.actions
+        sub_actions = []
+
+        if isinstance(self.actions[0], list):
+            [[sub_actions.append(sa) for sa in action] for action in self.actions]
+            target_list = sub_actions
+
+        return [a for a in target_list if a.execute_instantly], sub_actions
+
+    def get_action(self, sub_actions, action_name):
+        if isinstance(self.actions[0], list):
+            act = [sa for sa in sub_actions if sa.name == action_name]
+        else:
+            act = [a for a in self.actions if a.name == action_name]
+
+        return act[0] if len(act) == 1 else raise_an_error("\n\nToo many actions!")

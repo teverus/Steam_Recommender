@@ -19,7 +19,9 @@ class ShowGamesWithTag(Screen):
                     function=self.open_game_in_steam,
                     arguments={"appid": appid},
                 ),
+                # TODO !!! Сделать Make favorite
                 Action(name="Make favorite"),
+                # TODO !!! Сделать Make hidden
                 Action(name="Make hidden"),
             ]
             for title, appid in games.items()
