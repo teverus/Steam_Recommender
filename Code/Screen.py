@@ -22,10 +22,7 @@ class Screen:
             # Check if there is an immediate action
             if isinstance(self.actions[0], list):
                 sub_actions = []
-                [
-                    [sub_actions.append(sub_action) for sub_action in action]
-                    for action in self.actions
-                ]
+                [[sub_actions.append(sa) for sa in action] for action in self.actions]
                 immediate_action = [sa for sa in sub_actions if sa.execute_instantly]
 
             else:
@@ -47,8 +44,10 @@ class Screen:
                     x, y = self.table.highlight
                     action_name = self.table.df.iloc[x, y]
                     if action_name:
-                        # TODO !!! Если а - это список!
-                        act = [a for a in self.actions if a.name == action_name]
+                        if isinstance(self.actions[0], list):
+                            act = [sa for sa in sub_actions if sa.name == action_name]
+                        else:
+                            act = [a for a in self.actions if a.name == action_name]
                         action = act[0] if len(act) == 1 else raise_an_error("Actions!")
                     else:
                         continue
