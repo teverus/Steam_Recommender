@@ -26,7 +26,7 @@ class Screen:
             if immediate_action:
                 action = immediate_action
 
-            # [2-2] Wait for user action
+            # [2-2] or Wait for user input
             else:
                 highlight, h_footer, action = self.get_user_action()
                 self.table.highlight, self.table.highlight_footer = highlight, h_footer
@@ -36,6 +36,7 @@ class Screen:
 
                 # [3-1-1] Choose an action from the table if there is one
                 if not immediate_action and self.table.highlight:
+                    # TODO ! инкапсулировать это в get_table_action
                     x, y = self.table.highlight
                     action_name = self.table.df.iloc[x, y]
                     if action_name:
