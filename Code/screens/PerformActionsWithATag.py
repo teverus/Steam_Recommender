@@ -1,7 +1,7 @@
 from Code.Action import Action
 from Code.Screen import Screen
 from Code.Table import Table
-from Code.constants import TAGS, FILES, Key
+from Code.constants import TAGS, FILES, Key, FAVORITE, HIDDEN
 from Code.functions.db import update_a_table
 from Code.functions.general import do_nothing, wait_for_key, show_message
 from Code.screens.ShowGamesWithTag import ShowGamesWithTag
@@ -30,12 +30,12 @@ class PerformActionsWithATag(Screen):
             Action(
                 name="Make this tag | favorite",
                 function=self.change_status,
-                arguments={"status": "Favorite", "name": kwargs["title"]},
+                arguments={"status": FAVORITE, "name": kwargs["title"]},
             ),
             Action(
                 name="              | hidden  ",
                 function=self.change_status,
-                arguments={"status": "Hidden", "name": kwargs["title"]},
+                arguments={"status": HIDDEN, "name": kwargs["title"]},
             ),
         ]
 

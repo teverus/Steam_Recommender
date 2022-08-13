@@ -1,10 +1,11 @@
+import webbrowser
+
 from Code.Action import Action
 from Code.Screen import Screen
 from Code.Table import Table
-from Code.constants import ColumnWidth, APP_URL
-from Code.functions.general import get_games, do_nothing
-
-import webbrowser
+from Code.constants import ColumnWidth, APP_URL, Key, FILES, HIDDEN, ID, GAMES
+from Code.functions.db import update_a_table
+from Code.functions.general import get_games, do_nothing, show_message, wait_for_key
 
 
 class ShowGamesWithTag(Screen):
@@ -19,10 +20,14 @@ class ShowGamesWithTag(Screen):
                     function=self.open_game_in_steam,
                     arguments={"appid": appid},
                 ),
-                # TODO !!! Сделать Make favorite
+                # TODO !! Сделать Make favorite
                 Action(name="Make favorite"),
-                # TODO !!! Сделать Make hidden
-                Action(name="Make hidden"),
+                # TODO !! Сделать Make hidden
+                Action(
+                    name="Make hidden",
+                    function=self.change_status,
+                    arguments={"status": HIDDEN, "appid": appid},
+                ),
             ]
             for title, appid in games.items()
         ]
@@ -42,4 +47,12 @@ class ShowGamesWithTag(Screen):
     @staticmethod
     def open_game_in_steam(appid):
         webbrowser.open(f"{APP_URL}{appid}/")
-        a = 1
+
+    @staticmethod
+    def change_status(status, appid):
+        # TODO !! вынести
+        update_a_table(ID, appid, status, 1, GAMES, FILES)
+
+        show_message(f'The game is now {status.lower()}. Press "Enter" to continue...')
+
+        wait_for_key(Key.ENTER)

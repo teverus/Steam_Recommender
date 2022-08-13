@@ -3,6 +3,7 @@ import os
 
 import bext
 
+from Code.Action import Action
 from Code.constants import Key
 from Code.functions.general import raise_an_error
 
@@ -38,11 +39,47 @@ class Screen:
                 if not immediate_action and self.table.highlight:
                     # TODO ! инкапсулировать это в get_table_action
                     x, y = self.table.highlight
-                    action_name = self.table.df.iloc[x, y]
-                    if action_name:
-                        action = self.get_table_action(action_name)
-                    else:
+
+                    # === transform self.actions =======================================
+                    index = 0
+                    pack = self.table.max_rows * self.table.max_columns
+                    this_page = self.table.current_page - 1
+                    next_page = this_page + 1
+                    available_actions = self.actions[
+                        this_page * pack : next_page * pack
+                    ]
+                    actions = []
+                    for col in range(self.table.max_columns):
+                        for _ in range(self.table.max_rows):
+                            try:
+                                specific_action = available_actions[index]
+                            except IndexError:
+                                break
+                            if self.table.max_columns == 1:
+                                actions.append(specific_action)
+                            else:
+                                try:
+                                    actions[col].append(specific_action)
+                                except IndexError:
+                                    actions.append([])
+                                    actions[col].append(specific_action)
+                            index += 1
+                    try:
+                        action = actions[y][x]
+                    except TypeError:
+                        action = actions[x]
+                    except IndexError:
+                        action = None
+                    # ==================================================================
+
+                    if not isinstance(action, Action):
                         continue
+
+                    # action_name = self.table.df.iloc[x, y]
+                    # if action_name:
+                    #     action = self.get_table_action(action_name)
+                    # else:
+                    #     continue
 
                 # [3-1-2] Choose an action from the footer
                 elif not immediate_action and not self.table.highlight:
@@ -182,7 +219,7 @@ class Screen:
         else:
             act = [a for a in self.actions if a.name == action_name]
 
-        return act[0] if len(act) == 1 else raise_an_error("\n\nToo many actions!")
+        return act[0] if len(act) == 1 else raise_an_error("Too many actions!")
 
     def get_footer_action(self):
         x, _ = self.table.highlight_footer
