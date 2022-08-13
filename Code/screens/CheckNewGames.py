@@ -124,7 +124,7 @@ class CheckNewGames(Screen):
                     tags = get_game_tags(appid)
                     russian_audio = "Russian<strong" in game_data["supported_languages"]
 
-                    info = [appid, name, tags, russian_audio]
+                    info = [appid, name, tags, russian_audio, 0, 0]
                     check_unique_tags(tags)
                     append_row_to_table(info, GAMES_COLUMNS, GAMES)
                     print("")

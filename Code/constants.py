@@ -4,16 +4,18 @@ SCREEN_WIDTH = 107
 
 ALL_GAMES = "https://api.steampowered.com/ISteamApps/GetAppList/v2/?format=json"
 
-GAMES = "Games"
-GAMES_COLUMNS = ["ID", "Title", "Tags", "RussianAudio"]
-
-PROBLEMS = "Problems"
-PROBLEMS_COLUMNS = ["ID", "Problem"]
-
-TAGS = "Tags"
-TAG = "Tag"
 FAVORITE = "Favorite"
 HIDDEN = "Hidden"
+TAGS = "Tags"
+ID = "ID"
+
+GAMES = "Games"
+GAMES_COLUMNS = [ID, "Title", TAGS, "RussianAudio", FAVORITE, HIDDEN]
+
+PROBLEMS = "Problems"
+PROBLEMS_COLUMNS = [ID, "Problem"]
+
+TAG = "Tag"
 TAGS_COLUMNS = [TAG, "Number", FAVORITE, HIDDEN]
 
 FILES = "Files"

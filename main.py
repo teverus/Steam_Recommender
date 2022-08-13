@@ -18,14 +18,19 @@ class ApplicationV5(Screen):
                 function=BrowseGamesByTags,
             ),
             Action(
-                name="                | without status [Russian voice] ",
-                function=BrowseGamesByTags,
-                arguments={"russian_audio": True},
-            ),
-            Action(
                 name="                | favorite                       ",
                 function=BrowseGamesByTags,
                 arguments={TagStatus.FAVORITE: True, "status_name": TagStatus.FAVORITE},
+            ),
+            Action(
+                name="                | hidden                         ",
+                function=BrowseGamesByTags,
+                arguments={TagStatus.HIDDEN: True, "status_name": TagStatus.HIDDEN},
+            ),
+            Action(
+                name="                | without status [Russian voice] ",
+                function=BrowseGamesByTags,
+                arguments={"russian_audio": True},
             ),
             Action(
                 name="                | favorite       [Russian voice] ",
@@ -35,11 +40,6 @@ class ApplicationV5(Screen):
                     "status_name": TagStatus.FAVORITE,
                     "russian_audio": True,
                 },
-            ),
-            Action(
-                name="                | hidden                         ",
-                function=BrowseGamesByTags,
-                arguments={TagStatus.HIDDEN: True, "status_name": TagStatus.HIDDEN},
             ),
             Action(
                 name="                | hidden         [Russian voice] ",

@@ -11,7 +11,19 @@ class PerformActionsWithATag(Screen):
     def __init__(self, **kwargs):
         self.actions = [
             Action(
-                name="Show games              ",
+                name="Show games    |         ",
+                function=ShowGamesWithTag,
+                arguments={"tag": kwargs["title"]},
+            ),
+            # TODO !! favorite
+            Action(
+                name="Show games    | favorite",
+                function=ShowGamesWithTag,
+                arguments={"tag": kwargs["title"]},
+            ),
+            # TODO !! hidden
+            Action(
+                name="              | hidden  ",
                 function=ShowGamesWithTag,
                 arguments={"tag": kwargs["title"]},
             ),
@@ -25,15 +37,12 @@ class PerformActionsWithATag(Screen):
                 function=self.change_status,
                 arguments={"status": "Hidden", "name": kwargs["title"]},
             ),
-            Action(
-                name="Go back                 ",
-                function=do_nothing,
-                go_back=True,
-            ),
         ]
 
         self.table = Table(
-            title=kwargs["title"], rows=[action.name for action in self.actions]
+            title=kwargs["title"],
+            rows=[action.name for action in self.actions],
+            footer_actions=[Action(name="Go back", function=do_nothing, go_back=True)],
         )
 
         self.kwargs = kwargs
