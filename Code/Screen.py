@@ -185,7 +185,7 @@ class Screen:
             index = 0
             actions = []
             for col in range(self.table.max_columns):
-                for _ in range(max_rows):
+                for row in range(max_rows):
                     try:
                         specific_action = available_actions[index]
                     except IndexError:
@@ -194,10 +194,10 @@ class Screen:
                         actions.append(specific_action)
                     else:
                         try:
-                            actions[col].append(specific_action)
+                            actions[row].append(specific_action)
                         except IndexError:
                             actions.append([])
-                            actions[col].append(specific_action)
+                            actions[row].append(specific_action)
                     index += 1
         else:
             actions = self.actions[this_page * max_rows : next_page * max_rows]
@@ -205,7 +205,7 @@ class Screen:
         # Get the right action
         x, y = self.table.highlight
         try:
-            action = actions[x][y] if predefined_cols else actions[y][x]
+            action = actions[x][y]
         except TypeError:
             action = actions[x]
         except IndexError:
