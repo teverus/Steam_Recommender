@@ -3,7 +3,7 @@ import webbrowser
 from Code.Action import Action
 from Code.Screen import Screen
 from Code.Table import Table
-from Code.constants import ColumnWidth, APP_URL, Key, FILES, HIDDEN, ID, GAMES
+from Code.constants import ColumnWidth, APP_URL, Key, FILES, HIDDEN, ID, GAMES, FAVORITE
 from Code.functions.db import update_a_table
 from Code.functions.general import get_games, do_nothing, show_message, wait_for_key
 
@@ -13,6 +13,8 @@ class ShowGamesWithTag(Screen):
         tag = kwargs["tag"]
         games = get_games(tag)
 
+        # TODO !!! Убирать игру из списка после того, как ей статус приделали
+        # TODO ! Убрать несовместимый статус игры
         self.actions = [
             [
                 Action(
@@ -20,9 +22,11 @@ class ShowGamesWithTag(Screen):
                     function=self.open_game_in_steam,
                     arguments={"appid": appid},
                 ),
-                # TODO !! Сделать Make favorite
-                Action(name="Make favorite"),
-                # TODO !! Сделать Make hidden
+                Action(
+                    name="Make favorite",
+                    function=self.change_status,
+                    arguments={"status": FAVORITE, "appid": appid},
+                ),
                 Action(
                     name="Make hidden",
                     function=self.change_status,
