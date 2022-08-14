@@ -5,7 +5,6 @@ import bext
 
 from Code.Action import Action
 from Code.constants import Key
-from Code.functions.general import raise_an_error
 
 
 class Screen:
@@ -37,49 +36,10 @@ class Screen:
 
                 # [3-1-1] Choose an action from the table if there is one
                 if not immediate_action and self.table.highlight:
-                    # TODO ! инкапсулировать это в get_table_action
-                    x, y = self.table.highlight
-
-                    # === transform self.actions =======================================
-                    index = 0
-                    pack = self.table.max_rows * self.table.max_columns
-                    this_page = self.table.current_page - 1
-                    next_page = this_page + 1
-                    available_actions = self.actions[
-                        this_page * pack : next_page * pack
-                    ]
-                    actions = []
-                    for col in range(self.table.max_columns):
-                        for _ in range(self.table.max_rows):
-                            try:
-                                specific_action = available_actions[index]
-                            except IndexError:
-                                break
-                            if self.table.max_columns == 1:
-                                actions.append(specific_action)
-                            else:
-                                try:
-                                    actions[col].append(specific_action)
-                                except IndexError:
-                                    actions.append([])
-                                    actions[col].append(specific_action)
-                            index += 1
-                    try:
-                        action = actions[y][x]
-                    except TypeError:
-                        action = actions[x]
-                    except IndexError:
-                        action = None
-                    # ==================================================================
+                    action = self.get_table_action()
 
                     if not isinstance(action, Action):
                         continue
-
-                    # action_name = self.table.df.iloc[x, y]
-                    # if action_name:
-                    #     action = self.get_table_action(action_name)
-                    # else:
-                    #     continue
 
                 # [3-1-2] Choose an action from the footer
                 elif not immediate_action and not self.table.highlight:
@@ -109,6 +69,7 @@ class Screen:
 
         # If the user pressed "Enter"
         if user_input == Key.ENTER:
+
             action = True
 
         # If the user pressed one of the arrow keys
@@ -211,15 +172,46 @@ class Screen:
 
             return immediate_action[0]
 
-    def get_table_action(self, action_name):
-        if isinstance(self.actions[0], list):
-            act = []
-            for action in self.actions:
-                [act.append(sa) for sa in action if sa.name == action_name]
-        else:
-            act = [a for a in self.actions if a.name == action_name]
+    def get_table_action(self):
+        this_page = self.table.current_page - 1
+        next_page = this_page + 1
+        max_rows = self.table.max_rows
+        predefined_cols = isinstance(self.actions[0], list)
 
-        return act[0] if len(act) == 1 else raise_an_error("Too many actions!")
+        if not predefined_cols:
+            pack = self.table.max_rows * self.table.max_columns
+            available_actions = self.actions[this_page * pack : next_page * pack]
+
+            index = 0
+            actions = []
+            for col in range(self.table.max_columns):
+                for _ in range(max_rows):
+                    try:
+                        specific_action = available_actions[index]
+                    except IndexError:
+                        break
+                    if self.table.max_columns == 1:
+                        actions.append(specific_action)
+                    else:
+                        try:
+                            actions[col].append(specific_action)
+                        except IndexError:
+                            actions.append([])
+                            actions[col].append(specific_action)
+                    index += 1
+        else:
+            actions = self.actions[this_page * max_rows : next_page * max_rows]
+
+        # Get the right action
+        x, y = self.table.highlight
+        try:
+            action = actions[x][y] if predefined_cols else actions[y][x]
+        except TypeError:
+            action = actions[x]
+        except IndexError:
+            action = None
+
+        return action
 
     def get_footer_action(self):
         x, _ = self.table.highlight_footer
