@@ -3,9 +3,8 @@ import webbrowser
 from Code.Action import Action
 from Code.Screen import Screen
 from Code.Table import Table
-from Code.constants import ColumnWidth, APP_URL, Key, FILES, HIDDEN, ID, GAMES, FAVORITE
-from Code.functions.db import update_a_table
-from Code.functions.general import get_games, do_nothing, show_message, wait_for_key
+from Code.constants import ColumnWidth, APP_URL, HIDDEN, ID, GAMES, FAVORITE
+from Code.functions.general import get_games, do_nothing, change_status
 
 
 class ShowGamesWithTag(Screen):
@@ -54,9 +53,4 @@ class ShowGamesWithTag(Screen):
 
     @staticmethod
     def change_status(status, appid):
-        # TODO !! вынести
-        update_a_table(ID, appid, status, 1, GAMES, FILES)
-
-        show_message(f'The game is now {status.lower()}. Press "Enter" to continue...')
-
-        wait_for_key(Key.ENTER)
+        change_status(ID, appid, status, GAMES, "game")

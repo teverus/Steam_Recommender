@@ -13,7 +13,7 @@ from Code.constants import (
     END_HIGHLIGHT,
     GAMES,
 )
-from Code.functions.db import read_a_table, append_to_table
+from Code.functions.db import read_a_table, append_to_table, update_a_table
 
 
 def get_tags(favorite, hidden, russian_audio):
@@ -106,3 +106,11 @@ def show_message(message, border=" ", centered=True, upper=True):
     text = message.center if centered else message.ljust
     print(text(SCREEN_WIDTH))
     print(f"{border * SCREEN_WIDTH}{END_HIGHLIGHT}")
+
+
+def change_status(x_column, x_value, status, table_name, entity_type):
+    update_a_table(x_column, x_value, status, 1, table_name, FILES)
+
+    show_message(f'The {entity_type} is now {status}. Press "Enter" to continue...')
+
+    wait_for_key(Key.ENTER)

@@ -1,9 +1,8 @@
 from Code.Action import Action
 from Code.Screen import Screen
 from Code.Table import Table
-from Code.constants import TAGS, FILES, Key, FAVORITE, HIDDEN
-from Code.functions.db import update_a_table
-from Code.functions.general import do_nothing, wait_for_key, show_message
+from Code.constants import TAGS, FAVORITE, HIDDEN, TAG
+from Code.functions.general import do_nothing, change_status
 from Code.screens.ShowGamesWithTag import ShowGamesWithTag
 
 
@@ -51,9 +50,4 @@ class PerformActionsWithATag(Screen):
 
     @staticmethod
     def change_status(status, name):
-
-        update_a_table("Tag", name, status, 1, TAGS, FILES)
-
-        show_message(f'The tag is now {status.lower()}. Press "Enter" to continue...')
-
-        wait_for_key(Key.ENTER)
+        change_status(TAG, name, status, TAGS, "tag")
