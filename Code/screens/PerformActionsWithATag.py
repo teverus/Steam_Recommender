@@ -28,13 +28,25 @@ class PerformActionsWithATag(Screen):
             ),
             Action(
                 name="Make this tag | favorite",
-                function=self.change_status,
-                arguments={"status": FAVORITE, "name": kwargs["title"]},
+                function=change_status,
+                arguments={
+                    "x_column": TAG,
+                    "x_value": kwargs["title"],
+                    "status": FAVORITE,
+                    "table_name": TAGS,
+                    "entity_type": "tag",
+                },
             ),
             Action(
                 name="              | hidden  ",
-                function=self.change_status,
-                arguments={"status": HIDDEN, "name": kwargs["title"]},
+                function=change_status,
+                arguments={
+                    "x_column": TAG,
+                    "x_value": kwargs["title"],
+                    "status": HIDDEN,
+                    "table_name": TAGS,
+                    "entity_type": "tag",
+                },
             ),
         ]
 
@@ -47,7 +59,3 @@ class PerformActionsWithATag(Screen):
         self.kwargs = kwargs
 
         super(PerformActionsWithATag, self).__init__()
-
-    @staticmethod
-    def change_status(status, name):
-        change_status(TAG, name, status, TAGS, "tag")
