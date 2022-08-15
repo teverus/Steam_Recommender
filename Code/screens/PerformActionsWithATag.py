@@ -10,24 +10,22 @@ class PerformActionsWithATag(Screen):
     def __init__(self, **kwargs):
         self.actions = [
             Action(
-                name="Show games    |         ",
-                function=ShowGamesWithTag,
-                arguments={"tag": kwargs["title"]},
-            ),
-            # TODO !! favorite
-            Action(
-                name="Show games    | favorite",
-                function=ShowGamesWithTag,
-                arguments={"tag": kwargs["title"]},
-            ),
-            # TODO !! hidden
-            Action(
-                name="              | hidden  ",
+                name="Show games without status           ",
                 function=ShowGamesWithTag,
                 arguments={"tag": kwargs["title"]},
             ),
             Action(
-                name="Make this tag | favorite",
+                name="Show games with status    | favorite",
+                function=ShowGamesWithTag,
+                arguments={"tag": kwargs["title"], FAVORITE: True},
+            ),
+            Action(
+                name="                          | hidden  ",
+                function=ShowGamesWithTag,
+                arguments={"tag": kwargs["title"], HIDDEN: True},
+            ),
+            Action(
+                name="Make this tag             | favorite",
                 function=change_status,
                 arguments={
                     "x_column": TAG,
@@ -38,7 +36,7 @@ class PerformActionsWithATag(Screen):
                 },
             ),
             Action(
-                name="              | hidden  ",
+                name="                          | hidden  ",
                 function=change_status,
                 arguments={
                     "x_column": TAG,

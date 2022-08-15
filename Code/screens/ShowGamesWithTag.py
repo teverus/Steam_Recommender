@@ -14,7 +14,8 @@ class ShowGamesWithTag(Screen):
         tag = kwargs["tag"]
         games = get_games(tag, favorite, hidden)
 
-        # TODO !! Убирать игру из списка после того, как ей статус приделали
+        # TODO !!! Убирать игру из списка после того, как ей статус приделали
+        # TODO !! Не показывать статус несовместимый с текущим
         self.actions = [
             [
                 Action(
@@ -48,8 +49,10 @@ class ShowGamesWithTag(Screen):
             for title, appid in games.items()
         ]
 
+        favorite_title = "favorite | " if favorite else ""
+        hidden_title = "hidden | " if hidden else ""
         self.table = Table(
-            title=f"{tag} | {len(games)} game(s)",
+            title=f"{tag} | {favorite_title}{hidden_title}{len(games)} game(s)",
             rows=[[action.name for action in actions] for actions in self.actions],
             max_rows=30,
             column_widths={0: ColumnWidth.FULL, 1: ColumnWidth.FIT, 2: ColumnWidth.FIT},
