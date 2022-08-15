@@ -30,10 +30,17 @@ def get_tags(favorite, hidden, russian_audio):
     return sorted(tags.Tag)
 
 
-def get_games(tag):
+def get_games(tag, favorite, hidden):
     games = read_a_table(GAMES)
 
-    games_with_tag = games.loc[games.Tags.str.contains(tag)]
+    fav_filter = "1" if favorite else "0"
+    hid_filter = "1" if hidden else "0"
+
+    games_with_tag = games.loc[
+        (games.Tags.str.contains(tag))
+        & (games.Favorite == fav_filter)
+        & (games.Hidden == hid_filter)
+    ]
     games_with_tag = games_with_tag.sort_values(by="Title")
     titles = list(games_with_tag.Title)
     appids = list(games_with_tag.ID)

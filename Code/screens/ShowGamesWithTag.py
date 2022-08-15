@@ -9,11 +9,12 @@ from Code.functions.general import get_games, do_nothing, change_status
 
 class ShowGamesWithTag(Screen):
     def __init__(self, **kwargs):
+        favorite = False if FAVORITE not in kwargs.keys() else kwargs[FAVORITE]
+        hidden = False if HIDDEN not in kwargs.keys() else kwargs[HIDDEN]
         tag = kwargs["tag"]
-        games = get_games(tag)
+        games = get_games(tag, favorite, hidden)
 
-        # TODO !!! Убирать игру из списка после того, как ей статус приделали
-        # TODO ! Убрать несовместимый статус игры
+        # TODO !! Убирать игру из списка после того, как ей статус приделали
         self.actions = [
             [
                 Action(
