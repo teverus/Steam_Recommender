@@ -25,25 +25,13 @@ class ShowGamesWithTag(Screen):
                 ),
                 Action(
                     name="Make favorite",
-                    function=change_status,
-                    arguments={
-                        "x_column": ID,
-                        "x_value": appid,
-                        "status": FAVORITE,
-                        "table_name": GAMES,
-                        "entity_type": "game",
-                    },
+                    function=self.change_game_status,
+                    arguments={"appid": appid, "new_status": FAVORITE},
                 ),
                 Action(
                     name="Make hidden",
-                    function=change_status,
-                    arguments={
-                        "x_column": ID,
-                        "x_value": appid,
-                        "status": HIDDEN,
-                        "table_name": GAMES,
-                        "entity_type": "game",
-                    },
+                    function=self.change_game_status,
+                    arguments={"appid": appid, "new_status": HIDDEN},
                 ),
             ]
             for title, appid in games.items()
@@ -66,3 +54,9 @@ class ShowGamesWithTag(Screen):
     @staticmethod
     def open_game_in_steam(appid):
         webbrowser.open(f"{APP_URL}{appid}/")
+
+    def change_game_status(self, appid, new_status):
+        change_status(ID, appid, new_status, GAMES, "game")
+
+        del self.actions[0]
+        del self.table.rows_raw[0]
