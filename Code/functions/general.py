@@ -97,7 +97,7 @@ def do_nothing():
 
 
 def raise_an_error(message):
-    raise Exception(f"\n [ERROR] {message}")
+    raise Exception(f"\n\n[ERROR] {message}")
 
 
 def wait_for_key(target_key: Key):

@@ -5,6 +5,7 @@ import bext
 from pandas import DataFrame
 
 from Code.constants import HIGHLIGHT, END_HIGHLIGHT, ColumnWidth
+from Code.functions.general import raise_an_error
 
 
 class BaseTable:
@@ -171,11 +172,11 @@ class BaseTable:
                             target_length = int(remaining / number_of_full_cols)
                         else:
                             target_length = None
-                            raise Exception("You need to figure something out!")
+                            raise_an_error("You need to figure something out!")
 
                     column_widths[col_index] = target_length
                 else:
-                    raise Exception("Sorry, not implemented yet. Use table_width!")
+                    raise_an_error("Sorry, not implemented yet. Use table_width!")
 
         else:
             for col in range(self.max_columns):
@@ -183,7 +184,7 @@ class BaseTable:
                 if self.table_width:
                     diff = actual_width % self.max_columns
                     if diff:
-                        raise Exception(f"Make table_width + {self.max_columns - diff}")
+                        raise_an_error(f"Make table_width + {self.max_columns - diff}")
                     else:
                         per = int(actual_width / self.max_columns)
                 else:

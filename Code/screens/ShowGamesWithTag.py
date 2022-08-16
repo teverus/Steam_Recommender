@@ -4,7 +4,7 @@ from Code.Action import Action
 from Code.Screen import Screen
 from Code.Table import Table
 from Code.constants import ColumnWidth, APP_URL, HIDDEN, ID, GAMES, FAVORITE
-from Code.functions.general import get_games, do_nothing, change_status
+from Code.functions.general import get_games, do_nothing, change_status, raise_an_error
 
 
 class ShowGamesWithTag(Screen):
@@ -14,7 +14,6 @@ class ShowGamesWithTag(Screen):
         tag = kwargs["tag"]
         games = get_games(tag, favorite, hidden)
 
-        # TODO !!! Убирать игру из списка после того, как ей статус приделали
         # TODO !! Не показывать статус несовместимый с текущим
         self.actions = [
             [
@@ -58,5 +57,9 @@ class ShowGamesWithTag(Screen):
     def change_game_status(self, appid, new_status):
         change_status(ID, appid, new_status, GAMES, "game")
 
-        del self.actions[0]
-        del self.table.rows_raw[0]
+        actions = enumerate(self.actions)
+        index = [i for i, action in actions if action[0].arguments["appid"] == appid]
+        index = index[0] if len(index) == 1 else raise_an_error("Too many indices!")
+
+        del self.actions[index]
+        del self.table.rows_raw[index]
