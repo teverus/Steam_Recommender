@@ -10,30 +10,30 @@ class ApplicationV5(Screen):
     def __init__(self):
         self.actions = [
             Action(
-                name="Check new games                                  ",
+                name="Check new games                             ",
                 function=CheckNewGames,
             ),
             Action(
-                name="Show tags       | without status                 ",
+                name="Show tags ┌────────────────> without status ",
                 function=BrowseGamesByTags,
             ),
             Action(
-                name="                | favorite                       ",
+                name="          ├────────────────> favorite       ",
                 function=BrowseGamesByTags,
                 arguments={TagStatus.FAVORITE: True, "status_name": TagStatus.FAVORITE},
             ),
             Action(
-                name="                | hidden                         ",
+                name="          └────────────────> hidden         ",
                 function=BrowseGamesByTags,
                 arguments={TagStatus.HIDDEN: True, "status_name": TagStatus.HIDDEN},
             ),
             Action(
-                name="                | without status [Russian voice] ",
+                name="          ┌[Russian voice]─> without status ",
                 function=BrowseGamesByTags,
                 arguments={"russian_audio": True},
             ),
             Action(
-                name="                | favorite       [Russian voice] ",
+                name="          ├[Russian voice]─> favorite       ",
                 function=BrowseGamesByTags,
                 arguments={
                     TagStatus.FAVORITE: True,
@@ -42,7 +42,7 @@ class ApplicationV5(Screen):
                 },
             ),
             Action(
-                name="                | hidden         [Russian voice] ",
+                name="          └[Russian voice]─> hidden         ",
                 function=BrowseGamesByTags,
                 arguments={
                     TagStatus.HIDDEN: True,

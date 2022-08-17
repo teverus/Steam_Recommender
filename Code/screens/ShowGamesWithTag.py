@@ -14,7 +14,6 @@ class ShowGamesWithTag(Screen):
         tag = kwargs["tag"]
         games = get_games(tag, favorite, hidden)
 
-        # TODO !! Не показывать статус несовместимый с текущим
         self.actions = [
             [
                 Action(
@@ -23,14 +22,24 @@ class ShowGamesWithTag(Screen):
                     arguments={"appid": appid},
                 ),
                 Action(
-                    name="Make favorite",
+                    name="Unmake favorite" if favorite else "Make favorite",
                     function=self.change_game_status,
-                    arguments={"appid": appid, "new_status": FAVORITE},
+                    arguments={
+                        "appid": appid,
+                        "new_status": FAVORITE,
+                        "favorite": favorite,
+                        "hidden": hidden,
+                    },
                 ),
                 Action(
-                    name="Make hidden",
+                    name="Unmake hidden" if hidden else "Make hidden",
                     function=self.change_game_status,
-                    arguments={"appid": appid, "new_status": HIDDEN},
+                    arguments={
+                        "appid": appid,
+                        "new_status": HIDDEN,
+                        "favorite": favorite,
+                        "hidden": hidden,
+                    },
                 ),
             ]
             for title, appid in games.items()
@@ -54,7 +63,10 @@ class ShowGamesWithTag(Screen):
     def open_game_in_steam(appid):
         webbrowser.open(f"{APP_URL}{appid}/")
 
-    def change_game_status(self, appid, new_status):
+    def change_game_status(self, appid, new_status, favorite, hidden):
+        # TODO !! Unmake favorite
+        # TODO !!! Unmake hidden
+        # TODO !!!!
         change_status(ID, appid, new_status, GAMES, "game")
 
         actions = enumerate(self.actions)
