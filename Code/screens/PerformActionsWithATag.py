@@ -15,17 +15,17 @@ class PerformActionsWithATag(Screen):
                 arguments={"tag": kwargs["title"]},
             ),
             Action(
-                name="Show games with status    | favorite",
+                name="Show games with status ┌──> favorite",
                 function=ShowGamesWithTag,
                 arguments={"tag": kwargs["title"], FAVORITE: True},
             ),
             Action(
-                name="                          | hidden  ",
+                name="                       └──> hidden  ",
                 function=ShowGamesWithTag,
                 arguments={"tag": kwargs["title"], HIDDEN: True},
             ),
             Action(
-                name="Make this tag             | favorite",
+                name="Make this tag ┌───────────> favorite",
                 function=change_status,
                 arguments={
                     "x_column": TAG,
@@ -36,7 +36,7 @@ class PerformActionsWithATag(Screen):
                 },
             ),
             Action(
-                name="                          | hidden  ",
+                name="              └───────────> hidden  ",
                 function=change_status,
                 arguments={
                     "x_column": TAG,
