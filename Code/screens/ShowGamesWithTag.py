@@ -47,6 +47,7 @@ class ShowGamesWithTag(Screen):
 
         favorite_title = "favorite | " if favorite else ""
         hidden_title = "hidden | " if hidden else ""
+        # TODO !!!! Если нет игр, что показывать?!
         self.table = Table(
             title=f"{tag} | {favorite_title}{hidden_title}{len(games)} game(s)",
             rows=[[action.name for action in actions] for actions in self.actions],
@@ -66,9 +67,15 @@ class ShowGamesWithTag(Screen):
     def change_game_status(self, appid, new_status, favorite, hidden):
         # TODO !! Unmake favorite
         # TODO !!! Unmake hidden
-        # TODO !!!!
-        change_status(ID, appid, new_status, GAMES, "game")
+        change_status(
+            x_column=ID,
+            x_value=appid,
+            y_column=new_status,
+            table_name=GAMES,
+            entity_type="game",
+        )
 
+        # TODO !!!! Если удаляешь последнюю игру в списке
         actions = enumerate(self.actions)
         index = [i for i, action in actions if action[0].arguments["appid"] == appid]
         index = index[0] if len(index) == 1 else raise_an_error("Too many indices!")

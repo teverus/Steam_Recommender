@@ -12,6 +12,8 @@ from Code.constants import (
     HIGHLIGHT,
     END_HIGHLIGHT,
     GAMES,
+    FAVORITE,
+    HIDDEN,
 )
 from Code.functions.db import read_a_table, append_to_table, update_a_table
 
@@ -115,9 +117,11 @@ def show_message(message, border=" ", centered=True, upper=True):
     print(f"{border * SCREEN_WIDTH}{END_HIGHLIGHT}")
 
 
-def change_status(x_column, x_value, status, table_name, entity_type):
-    update_a_table(x_column, x_value, status, 1, table_name, FILES)
+def change_status(x_column, x_value, y_column, table_name, entity_type):
+    for status in [FAVORITE, HIDDEN]:
+        y_value = 1 if status == y_column else 0
+        update_a_table(x_column, x_value, status, y_value, table_name, FILES)
 
-    show_message(f'The {entity_type} is now {status}. Press "Enter" to continue...')
+    show_message(f'The {entity_type} is now {y_column}. Press "Enter" to continue...')
 
     wait_for_key(Key.ENTER)

@@ -30,7 +30,7 @@ class PerformActionsWithATag(Screen):
                 arguments={
                     "x_column": TAG,
                     "x_value": kwargs["title"],
-                    "status": FAVORITE,
+                    "y_column": FAVORITE,
                     "table_name": TAGS,
                     "entity_type": "tag",
                 },
@@ -41,7 +41,7 @@ class PerformActionsWithATag(Screen):
                 arguments={
                     "x_column": TAG,
                     "x_value": kwargs["title"],
-                    "status": HIDDEN,
+                    "y_column": HIDDEN,
                     "table_name": TAGS,
                     "entity_type": "tag",
                 },
