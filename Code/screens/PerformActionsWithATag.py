@@ -32,7 +32,7 @@ class PerformActionsWithATag(Screen):
                     "x_value": kwargs["title"],
                     "y_column": FAVORITE,
                     "table_name": TAGS,
-                    "entity_type": "tag",
+                    "entity": "tag",
                 },
             ),
             Action(
@@ -43,7 +43,7 @@ class PerformActionsWithATag(Screen):
                     "x_value": kwargs["title"],
                     "y_column": HIDDEN,
                     "table_name": TAGS,
-                    "entity_type": "tag",
+                    "entity": "tag",
                 },
             ),
         ]

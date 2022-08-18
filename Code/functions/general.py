@@ -117,11 +117,12 @@ def show_message(message, border=" ", centered=True, upper=True):
     print(f"{border * SCREEN_WIDTH}{END_HIGHLIGHT}")
 
 
-def change_status(x_column, x_value, y_column, table_name, entity_type):
+def change_status(x_column, x_value, y_column, table_name, entity, y_value=1):
     for status in [FAVORITE, HIDDEN]:
-        y_value = 1 if status == y_column else 0
-        update_a_table(x_column, x_value, status, y_value, table_name, FILES)
+        new_value = y_value if status == y_column else 0
+        update_a_table(x_column, x_value, status, new_value, table_name, FILES)
 
-    show_message(f'The {entity_type} is now {y_column}. Press "Enter" to continue...')
+    un = "not " if y_value == 0 else ""
+    show_message(f'The {entity} is now {un}{y_column}. Press "Enter" to continue...')
 
     wait_for_key(Key.ENTER)

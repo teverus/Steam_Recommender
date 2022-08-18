@@ -65,14 +65,17 @@ class ShowGamesWithTag(Screen):
         webbrowser.open(f"{APP_URL}{appid}/")
 
     def change_game_status(self, appid, new_status, favorite, hidden):
-        # TODO !! Unmake favorite
-        # TODO !!! Unmake hidden
+        current_status = {FAVORITE: favorite, HIDDEN: hidden}
+
+        value = 0 if current_status[new_status] else 1
+
         change_status(
             x_column=ID,
             x_value=appid,
             y_column=new_status,
+            y_value=value,
             table_name=GAMES,
-            entity_type="game",
+            entity="game",
         )
 
         # TODO !!!! Если удаляешь последнюю игру в списке
