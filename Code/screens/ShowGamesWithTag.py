@@ -45,9 +45,18 @@ class ShowGamesWithTag(Screen):
             for title, appid in games.items()
         ]
 
+        self.stub = [
+            [
+                Action(name="Nothing to show", function=do_nothing),
+                Action(name="---", function=do_nothing),
+                Action(name="---", function=do_nothing),
+            ]
+        ]
+
+        self.actions = self.stub if not games else self.actions
+
         favorite_title = "favorite | " if favorite else ""
         hidden_title = "hidden | " if hidden else ""
-        # TODO !!!! Если нет игр, что показывать?!
         self.table = Table(
             title=f"{tag} | {favorite_title}{hidden_title}{len(games)} game(s)",
             rows=[[action.name for action in actions] for actions in self.actions],
@@ -78,7 +87,7 @@ class ShowGamesWithTag(Screen):
             entity="game",
         )
 
-        # TODO !!!! Если удаляешь последнюю игру в списке
+        # TODO !!! Если удаляешь последнюю игру в списке
         actions = enumerate(self.actions)
         index = [i for i, action in actions if action[0].arguments["appid"] == appid]
         index = index[0] if len(index) == 1 else raise_an_error("Too many indices!")
