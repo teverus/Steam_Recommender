@@ -4,7 +4,13 @@ from Code.Action import Action
 from Code.Screen import Screen
 from Code.Table import Table
 from Code.constants import ColumnWidth, APP_URL, HIDDEN, ID, GAMES, FAVORITE
-from Code.functions.general import get_games, do_nothing, change_status, raise_an_error
+from Code.functions.general import (
+    get_games,
+    do_nothing,
+    change_status,
+    raise_an_error,
+    get_new_table_title,
+)
 
 
 class ShowGamesWithTag(Screen):
@@ -87,10 +93,20 @@ class ShowGamesWithTag(Screen):
             entity="game",
         )
 
-        # TODO !!! Если удаляешь последнюю игру в списке
         actions = enumerate(self.actions)
         index = [i for i, action in actions if action[0].arguments["appid"] == appid]
         index = index[0] if len(index) == 1 else raise_an_error("Too many indices!")
 
         del self.actions[index]
         del self.table.rows_raw[index]
+
+        target_number = len(self.actions)
+
+        if not self.actions:
+            self.actions = self.stub
+            self.table.rows_raw = [[sa.name for sa in a] for a in self.actions]
+            target_number = 0
+            self.table.highlight = None
+            self.table.highlight_footer = [1, 0]
+
+        self.table.table_title = get_new_table_title(self, target_number)

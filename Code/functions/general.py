@@ -126,3 +126,11 @@ def change_status(x_column, x_value, y_column, table_name, entity, y_value=1):
     show_message(f'The {entity} is now {un}{y_column}. Press "Enter" to continue...')
 
     wait_for_key(Key.ENTER)
+
+
+def get_new_table_title(main, target_number):
+    table_title = main.table.table_title
+
+    current_number = table_title.split(" GAME(S)")[0].split(" ")[-1]
+
+    return table_title.replace(f" {current_number} ", f" {target_number} ")
