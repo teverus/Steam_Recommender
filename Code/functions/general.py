@@ -61,7 +61,7 @@ def replace_invalid_chars(title):
         title = title.replace(strange_char, proper_char)
 
     name = str(title.encode("utf-8"))
-    # TODO ! Не убирать кириллицу 1990's -> 18 ????
+    # TODO Не убирать кириллицу 1990's -> 18 ????
     chars = re.findall(r"\\x\w{2}", name)
     if chars:
         for char in chars:

@@ -18,8 +18,7 @@ class BrowseGamesByTags(Screen):
 
         name = f"{status_name} " if status_name else status_name
         self.table = Table(
-            # TODO Обновлять значение после того, как поменял статус тегу
-            title=f"Steam games by {name}tags / {len(tags)}",
+            title=f"Steam games by {name}tags | {len(tags)}",
             rows=tags,
             max_rows=30,
             max_columns=3,
@@ -27,3 +26,8 @@ class BrowseGamesByTags(Screen):
         )
 
         super(BrowseGamesByTags, self).__init__()
+
+        # TODO ! Обновлять заголовок после того, как тег поменял статус
+        # TODO !! Ставить заглушку, если удалился последний тег
+        # TODO !!! Изменять количество тегов
+        # TODO !!!! Поменять подход: добавить столбцы
