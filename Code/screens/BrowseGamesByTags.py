@@ -1,6 +1,7 @@
 from Code.Action import Action
 from Code.Screen import Screen
 from Code.Table import Table
+from Code.constants import ColumnWidth
 from Code.functions.general import get_tags, do_nothing
 from Code.screens.PerformActionsWithATag import PerformActionsWithATag
 
@@ -12,16 +13,33 @@ class BrowseGamesByTags(Screen):
         tags = get_tags(favorite, hidden, russian_audio)
 
         self.actions = [
-            Action(name=tag, function=PerformActionsWithATag, arguments={"title": tag})
+            [
+                Action(name="Make favorite", function=do_nothing),
+                Action(name="Make hidden", function=do_nothing),
+                Action(
+                    name=tag, function=PerformActionsWithATag, arguments={"title": tag}
+                ),
+                Action(name="No status", function=do_nothing),
+                Action(name="Favorite", function=do_nothing),
+                Action(name="Hidden", function=do_nothing),
+            ]
             for tag in tags
         ]
 
         name = f"{status_name} " if status_name else status_name
         self.table = Table(
-            title=f"Steam games by {name}tags | {len(tags)}",
-            rows=tags,
+            title=f"        Actions with tag     |           Steam games by {name}tags [{len(tags)}]         |   SHOW GAMES WITH THIS TAG",
+            title_centered=False,
+            rows=[[action.name for action in actions] for actions in self.actions],
             max_rows=30,
-            max_columns=3,
+            column_widths={
+                0: ColumnWidth.FIT,
+                1: ColumnWidth.FIT,
+                2: ColumnWidth.FULL,
+                3: ColumnWidth.FIT,
+                4: ColumnWidth.FIT,
+                5: ColumnWidth.FIT,
+            },
             footer_actions=[Action(name="Go back", function=do_nothing, go_back=True)],
         )
 

@@ -8,6 +8,7 @@ class Table(BaseTable):
         self,
         title,
         rows,
+        title_centered=True,
         rows_top_border="=",
         rows_bottom_border="=",
         rows_centered=True,
@@ -21,6 +22,7 @@ class Table(BaseTable):
             # Table title
             table_title=title,
             table_title_top_border="=",
+            table_title_centered=title_centered,
             # Rows
             rows=rows,
             rows_top_border=rows_top_border,
