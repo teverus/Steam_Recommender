@@ -2,7 +2,7 @@ from Code.Action import Action
 from Code.Screen import Screen
 from Code.Table import Table
 from Code.constants import ColumnWidth
-from Code.functions.general import get_tags, do_nothing
+from Code.functions.general import get_tags, do_nothing, get_central_part
 from Code.screens.PerformActionsWithATag import PerformActionsWithATag
 
 
@@ -25,10 +25,9 @@ class BrowseGamesByTags(Screen):
             ]
             for tag in tags
         ]
-
-        name = f"{status_name} " if status_name else status_name
+        title = get_central_part(status_name, tags)
         self.table = Table(
-            title=f"        Actions with tag     |           Steam games by {name}tags [{len(tags)}]         |   SHOW GAMES WITH THIS TAG",
+            title=f"    Actions with this tag    |{title}|    SHOW GAMES WITH THIS TAG",
             title_centered=False,
             rows=[[action.name for action in actions] for actions in self.actions],
             max_rows=30,
@@ -40,6 +39,7 @@ class BrowseGamesByTags(Screen):
                 4: ColumnWidth.FIT,
                 5: ColumnWidth.FIT,
             },
+            highlight=[0, 2],
             footer_actions=[Action(name="Go back", function=do_nothing, go_back=True)],
         )
 
@@ -48,4 +48,4 @@ class BrowseGamesByTags(Screen):
         # TODO ! Обновлять заголовок после того, как тег поменял статус
         # TODO !! Ставить заглушку, если удалился последний тег
         # TODO !!! Изменять количество тегов
-        # TODO !!!! Поменять подход: добавить столбцы
+        # TODO !!! Подставить правильную функцию

@@ -134,3 +134,16 @@ def get_new_table_title(main, target_number):
     current_number = table_title.split(" GAME(S)")[0].split(" ")[-1]
 
     return table_title.replace(f" {current_number} ", f" {target_number} ")
+
+
+def get_central_part(status_name, tags):
+    name = f"{status_name} " if status_name else status_name
+    central = f"Steam games by {name}tags [{len(tags)}]"
+    expected_central_length = 45
+    diff = expected_central_length - len(central)
+    left_pad = f"{' ' * int((diff / 2))}"
+    right_pad = left_pad
+    if diff % 2 != 0:
+        left_pad = f"{left_pad} "
+
+    return f"{left_pad}{central}{right_pad}"
