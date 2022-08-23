@@ -24,28 +24,28 @@ class PerformActionsWithATag(Screen):
                 function=ShowGamesWithTag,
                 arguments={"tag": kwargs["title"], HIDDEN: True},
             ),
-            Action(
-                name="Make this tag ┌─> favorite   ",
-                function=change_status,
-                arguments={
-                    "x_column": TAG,
-                    "x_value": kwargs["title"],
-                    "y_column": FAVORITE,
-                    "table_name": TAGS,
-                    "entity": "tag",
-                },
-            ),
-            Action(
-                name="              └─> hidden     ",
-                function=change_status,
-                arguments={
-                    "x_column": TAG,
-                    "x_value": kwargs["title"],
-                    "y_column": HIDDEN,
-                    "table_name": TAGS,
-                    "entity": "tag",
-                },
-            ),
+            # Action(
+            #     name="Make this tag ┌─> favorite   ",
+            #     function=change_status,
+            #     arguments={
+            #         "x_column": TAG,
+            #         "x_value": kwargs["title"],
+            #         "y_column": FAVORITE,
+            #         "table_name": TAGS,
+            #         "entity": "tag",
+            #     },
+            # ),
+            # Action(
+            #     name="              └─> hidden     ",
+            #     function=change_status,
+            #     arguments={
+            #         "x_column": TAG,
+            #         "x_value": kwargs["title"],
+            #         "y_column": HIDDEN,
+            #         "table_name": TAGS,
+            #         "entity": "tag",
+            #     },
+            # ),
         ]
 
         self.table = Table(

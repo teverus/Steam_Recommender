@@ -11,6 +11,7 @@ from Code.functions.general import (
     get_new_tags_table_title,
 )
 from Code.screens.PerformActionsWithATag import PerformActionsWithATag
+from Code.screens.ShowGamesWithTag import ShowGamesWithTag
 
 
 class BrowseGamesByTags(Screen):
@@ -36,12 +37,16 @@ class BrowseGamesByTags(Screen):
                     function=PerformActionsWithATag,
                     arguments={"title": tag},
                 ),
-                Action(name="No status", function=do_nothing),
+                Action(
+                    name="No status",
+                    function=self.show_games,
+                ),
                 Action(name="Favorite", function=do_nothing),
                 Action(name="Hidden", function=do_nothing),
             ]
             for tag in tags
         ]
+
         title = get_central_part(status_name, tags)
         self.table = Table(
             title=f"    Actions with this tag    |{title}|    SHOW GAMES WITH THIS TAG",
@@ -77,7 +82,10 @@ class BrowseGamesByTags(Screen):
 
         self.table.table_title = get_new_tags_table_title(self, target_number)
 
+    def show_games(self):
+        tag_title = list(self.table.df[2])[self.table.highlight[0]]
+        ShowGamesWithTag(tag=tag_title)
+
         # TODO !! Ставить заглушку, если удалился последний тег
-        # TODO !!! No status
         # TODO !!! Favorite
         # TODO !!! Hidden
