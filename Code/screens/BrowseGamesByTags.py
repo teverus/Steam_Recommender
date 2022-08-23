@@ -34,15 +34,22 @@ class BrowseGamesByTags(Screen):
                 ),
                 Action(
                     name=tag,
-                    function=PerformActionsWithATag,
-                    arguments={"title": tag},
+                    function=do_nothing,
                 ),
                 Action(
                     name="No status",
                     function=self.show_games,
                 ),
-                Action(name="Favorite", function=do_nothing),
-                Action(name="Hidden", function=do_nothing),
+                Action(
+                    name="Favorite",
+                    function=self.show_games,
+                    arguments={"favorite": True},
+                ),
+                Action(
+                    name="Hidden",
+                    function=self.show_games,
+                    arguments={"hidden": True},
+                ),
             ]
             for tag in tags
         ]
@@ -82,10 +89,8 @@ class BrowseGamesByTags(Screen):
 
         self.table.table_title = get_new_tags_table_title(self, target_number)
 
-    def show_games(self):
+    def show_games(self, favorite=False, hidden=False):
         tag_title = list(self.table.df[2])[self.table.highlight[0]]
-        ShowGamesWithTag(tag=tag_title)
+        ShowGamesWithTag(tag=tag_title, Favorite=favorite, Hidden=hidden)
 
         # TODO !! Ставить заглушку, если удалился последний тег
-        # TODO !!! Favorite
-        # TODO !!! Hidden
