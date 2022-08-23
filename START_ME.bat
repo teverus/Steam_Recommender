@@ -1,6 +1,6 @@
 @echo off
 mode con: cols=107 lines=38
-title=Welcome to Finnish Learner
+title=Finnish Learner
 
 : ==================================
 : Installing virtual environment

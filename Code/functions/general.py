@@ -136,6 +136,14 @@ def get_new_table_title(main, target_number):
     return table_title.replace(f" {current_number} ", f" {target_number} ")
 
 
+def get_new_tags_table_title(main, target_number):
+    table_title = main.table.table_title
+
+    current_number = table_title.split("[")[-1].split("]")[0]
+
+    return table_title.replace(f"[{current_number}]", f"[{target_number}]")
+
+
 def get_central_part(status_name, tags):
     name = f"{status_name} " if status_name else status_name
     central = f"Steam games by {name}tags [{len(tags)}]"

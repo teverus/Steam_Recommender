@@ -2,7 +2,14 @@ from Code.Action import Action
 from Code.Screen import Screen
 from Code.Table import Table
 from Code.constants import ColumnWidth, TAG, TAGS, FAVORITE, HIDDEN
-from Code.functions.general import get_tags, do_nothing, get_central_part, change_status
+from Code.functions.general import (
+    get_tags,
+    do_nothing,
+    get_central_part,
+    change_status,
+    raise_an_error,
+    get_new_tags_table_title,
+)
 from Code.screens.PerformActionsWithATag import PerformActionsWithATag
 
 
@@ -58,11 +65,19 @@ class BrowseGamesByTags(Screen):
     def change_tag_status(self, new_status):
         tag_title = list(self.table.df[2])[self.table.highlight[0]]
         change_status(TAG, tag_title, new_status, TAGS, "tag")
-        a = 1
+
+        actions = enumerate(self.actions)
+        index = [i for i, action in actions if action[2].name == tag_title]
+        index = index[0] if len(index) == 1 else raise_an_error("Too many indices!")
+
+        del self.actions[index]
+        del self.table.rows_raw[index]
+
+        target_number = len(self.actions)
+
+        self.table.table_title = get_new_tags_table_title(self, target_number)
 
         # TODO !! Ставить заглушку, если удалился последний тег
-        # TODO !!!! Изменять количество тегов в списке
-        # TODO !!!! Изменять количество тегов в заголовке
         # TODO !!! No status
         # TODO !!! Favorite
         # TODO !!! Hidden
