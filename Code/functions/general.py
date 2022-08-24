@@ -117,7 +117,7 @@ def show_message(message, border=" ", centered=True, upper=True):
     print(f"{border * SCREEN_WIDTH}{END_HIGHLIGHT}")
 
 
-def change_status(x_column, x_value, y_column, table_name, entity, y_value=1):
+def change_status(x_column, x_value, y_column, y_value, table_name, entity):
     for status in [FAVORITE, HIDDEN]:
         new_value = y_value if status == y_column else 0
         update_a_table(x_column, x_value, status, new_value, table_name, FILES)

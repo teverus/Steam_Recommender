@@ -25,12 +25,20 @@ class BrowseGamesByTags(Screen):
                 Action(
                     name="Unmake favorite" if favorite else "Make favorite",
                     function=self.change_tag_status,
-                    arguments={"new_status": FAVORITE},
+                    arguments={
+                        "new_status": FAVORITE,
+                        "favorite": favorite,
+                        "hidden": hidden,
+                    },
                 ),
                 Action(
                     name="Unmake hidden" if hidden else "Make hidden",
                     function=self.change_tag_status,
-                    arguments={"new_status": HIDDEN},
+                    arguments={
+                        "new_status": HIDDEN,
+                        "favorite": favorite,
+                        "hidden": hidden,
+                    },
                 ),
                 Action(
                     name=tag,
@@ -55,8 +63,8 @@ class BrowseGamesByTags(Screen):
         ]
 
         title = get_central_part(status_name, tags)
-        p = "     " if any([favorite, hidden]) else "    "
         title = title[1:-1] if any([favorite, hidden]) else title
+        p = "     " if any([favorite, hidden]) else "    "
         self.table = Table(
             title=f"{p}Actions with this tag{p}|{title}|    SHOW GAMES WITH THIS TAG",
             title_centered=False,
@@ -76,9 +84,21 @@ class BrowseGamesByTags(Screen):
 
         super(BrowseGamesByTags, self).__init__()
 
-    def change_tag_status(self, new_status):
+    def change_tag_status(self, new_status, favorite, hidden):
+        # TODO ! Вынести этот в отдельный метод
+        current_status = {FAVORITE: favorite, HIDDEN: hidden}
+        value = 0 if current_status[new_status] else 1
+
         tag_title = list(self.table.df[2])[self.table.highlight[0]]
-        change_status(TAG, tag_title, new_status, TAGS, "tag")
+
+        change_status(
+            x_column=TAG,
+            x_value=tag_title,
+            y_column=new_status,
+            y_value=value,
+            table_name=TAGS,
+            entity="tag",
+        )
 
         actions = enumerate(self.actions)
         index = [i for i, action in actions if action[2].name == tag_title]
@@ -89,12 +109,12 @@ class BrowseGamesByTags(Screen):
 
         target_number = len(self.actions)
 
+        if not self.actions:
+            # TODO !! Ставить заглушку, если удалился последний тег
+            pass
+
         self.table.table_title = get_new_tags_table_title(self, target_number)
 
     def show_games(self, favorite=False, hidden=False):
         tag_title = list(self.table.df[2])[self.table.highlight[0]]
         ShowGamesWithTag(tag=tag_title, Favorite=favorite, Hidden=hidden)
-
-        # TODO ! Ставить заглушку, если удалился последний тег
-        # TODO !! Unmake favorite
-        # TODO !! Unmake hidden

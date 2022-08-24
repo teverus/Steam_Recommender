@@ -81,7 +81,6 @@ class ShowGamesWithTag(Screen):
 
     def change_game_status(self, appid, new_status, favorite, hidden):
         current_status = {FAVORITE: favorite, HIDDEN: hidden}
-
         value = 0 if current_status[new_status] else 1
 
         change_status(
