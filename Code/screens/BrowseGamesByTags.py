@@ -23,12 +23,12 @@ class BrowseGamesByTags(Screen):
         self.actions = [
             [
                 Action(
-                    name="Make favorite",
+                    name="Unmake favorite" if favorite else "Make favorite",
                     function=self.change_tag_status,
                     arguments={"new_status": FAVORITE},
                 ),
                 Action(
-                    name="Make hidden",
+                    name="Unmake hidden" if hidden else "Make hidden",
                     function=self.change_tag_status,
                     arguments={"new_status": HIDDEN},
                 ),
@@ -55,8 +55,10 @@ class BrowseGamesByTags(Screen):
         ]
 
         title = get_central_part(status_name, tags)
+        p = "     " if any([favorite, hidden]) else "    "
+        title = title[1:-1] if any([favorite, hidden]) else title
         self.table = Table(
-            title=f"    Actions with this tag    |{title}|    SHOW GAMES WITH THIS TAG",
+            title=f"{p}Actions with this tag{p}|{title}|    SHOW GAMES WITH THIS TAG",
             title_centered=False,
             rows=[[action.name for action in actions] for actions in self.actions],
             max_rows=30,
@@ -93,4 +95,6 @@ class BrowseGamesByTags(Screen):
         tag_title = list(self.table.df[2])[self.table.highlight[0]]
         ShowGamesWithTag(tag=tag_title, Favorite=favorite, Hidden=hidden)
 
-        # TODO !! Ставить заглушку, если удалился последний тег
+        # TODO ! Ставить заглушку, если удалился последний тег
+        # TODO !! Unmake favorite
+        # TODO !! Unmake hidden
