@@ -6,11 +6,8 @@ from Code.functions.general import (
     get_tags,
     do_nothing,
     get_central_part,
-    change_status,
-    raise_an_error,
-    get_new_tags_table_title,
+    change_entity_status,
 )
-from Code.screens.PerformActionsWithATag import PerformActionsWithATag
 from Code.screens.ShowGamesWithTag import ShowGamesWithTag
 
 
@@ -98,38 +95,20 @@ class BrowseGamesByTags(Screen):
         super(BrowseGamesByTags, self).__init__()
 
     def change_tag_status(self, new_status, favorite, hidden):
-        # TODO ! Вынести этот в отдельный метод
-        current_status = {FAVORITE: favorite, HIDDEN: hidden}
-        value = 0 if current_status[new_status] else 1
-
         tag_title = list(self.table.df[2])[self.table.highlight[0]]
 
-        change_status(
+        change_entity_status(
+            self,
+            new_status,
+            favorite,
+            hidden,
             x_column=TAG,
             x_value=tag_title,
-            y_column=new_status,
-            y_value=value,
             table_name=TAGS,
             entity="tag",
+            main_index=2,
+            attribute="name",
         )
-
-        actions = enumerate(self.actions)
-        index = [i for i, action in actions if action[2].name == tag_title]
-        index = index[0] if len(index) == 1 else raise_an_error("Too many indices!")
-
-        del self.actions[index]
-        del self.table.rows_raw[index]
-
-        target_number = len(self.actions)
-
-        if not self.actions:
-            self.actions = self.stub
-            self.table.rows_raw = [[sub_a.name for sub_a in a] for a in self.actions]
-            target_number = 0
-            self.table.highlight = None
-            self.table.highlight_footer = [1, 0]
-
-        self.table.table_title = get_new_tags_table_title(self, target_number)
 
     def show_games(self, favorite=False, hidden=False):
         tag_title = list(self.table.df[2])[self.table.highlight[0]]

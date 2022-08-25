@@ -10,6 +10,7 @@ from Code.functions.general import (
     change_status,
     raise_an_error,
     get_new_table_title,
+    change_entity_status,
 )
 
 
@@ -80,32 +81,17 @@ class ShowGamesWithTag(Screen):
         webbrowser.open(f"{APP_URL}{appid}/")
 
     def change_game_status(self, appid, new_status, favorite, hidden):
-        current_status = {FAVORITE: favorite, HIDDEN: hidden}
-        value = 0 if current_status[new_status] else 1
 
-        change_status(
+        change_entity_status(
+            self,
+            new_status,
+            favorite,
+            hidden,
             x_column=ID,
             x_value=appid,
-            y_column=new_status,
-            y_value=value,
             table_name=GAMES,
             entity="game",
+            main_index=0,
+            attribute="arguments",
+            sub_attribute="appid",
         )
-
-        actions = enumerate(self.actions)
-        index = [i for i, action in actions if action[0].arguments["appid"] == appid]
-        index = index[0] if len(index) == 1 else raise_an_error("Too many indices!")
-
-        del self.actions[index]
-        del self.table.rows_raw[index]
-
-        target_number = len(self.actions)
-
-        if not self.actions:
-            self.actions = self.stub
-            self.table.rows_raw = [[sa.name for sa in a] for a in self.actions]
-            target_number = 0
-            self.table.highlight = None
-            self.table.highlight_footer = [1, 0]
-
-        self.table.table_title = get_new_table_title(self, target_number)

@@ -155,3 +155,61 @@ def get_central_part(status_name, tags):
         left_pad = f"{left_pad} "
 
     return f"{left_pad}{central}{right_pad}"
+
+
+def change_entity_status(
+    main,
+    new_status,
+    favorite,
+    hidden,
+    x_column,
+    x_value,
+    table_name,
+    entity,
+    main_index,
+    attribute,
+    sub_attribute=None,
+):
+    current_status = {FAVORITE: favorite, HIDDEN: hidden}
+    value = 0 if current_status[new_status] else 1
+
+    change_status(
+        x_column=x_column,
+        x_value=x_value,
+        y_column=new_status,
+        y_value=value,
+        table_name=table_name,
+        entity=entity,
+    )
+
+    index = get_index(main, main_index, x_value, attribute, sub_attribute)
+
+    del main.actions[index]
+    del main.table.rows_raw[index]
+
+    target_number = len(main.actions)
+
+    if not main.actions:
+        main.actions = main.stub
+        main.table.rows_raw = [[sub_a.name for sub_a in a] for a in main.actions]
+        target_number = 0
+        main.table.highlight = None
+        main.table.highlight_footer = [1, 0]
+
+    main.table.table_title = get_new_tags_table_title(main, target_number)
+
+
+def get_index(main, main_index, x_value, attribute, sub_attribute):
+    index = [
+        i
+        for i, action in enumerate(main.actions)
+        if action[main_index].__getattribute__(attribute) == x_value
+    ]
+    if sub_attribute:
+        index = [
+            i
+            for i, action in enumerate(main.actions)
+            if action[main_index].__getattribute__(attribute)[sub_attribute] == x_value
+        ]
+
+    return index[0] if len(index) == 1 else raise_an_error("Too many indices!")
