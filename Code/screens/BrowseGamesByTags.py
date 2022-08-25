@@ -62,6 +62,19 @@ class BrowseGamesByTags(Screen):
             for tag in tags
         ]
 
+        self.stub = [
+            [
+                Action(name="     ---     ", function=do_nothing),
+                Action(name="     ---     ", function=do_nothing),
+                Action(name="Nothing to show", function=do_nothing),
+                Action(name="   ---   ", function=do_nothing),
+                Action(name="  ---  ", function=do_nothing),
+                Action(name="  ---  ", function=do_nothing),
+            ]
+        ]
+
+        self.actions = self.stub if not tags else self.actions
+
         title = get_central_part(status_name, tags)
         title = title[1:-1] if any([favorite, hidden]) else title
         p = "     " if any([favorite, hidden]) else "    "
@@ -110,8 +123,11 @@ class BrowseGamesByTags(Screen):
         target_number = len(self.actions)
 
         if not self.actions:
-            # TODO !! Ставить заглушку, если удалился последний тег
-            pass
+            self.actions = self.stub
+            self.table.rows_raw = [[sub_a.name for sub_a in a] for a in self.actions]
+            target_number = 0
+            self.table.highlight = None
+            self.table.highlight_footer = [1, 0]
 
         self.table.table_title = get_new_tags_table_title(self, target_number)
 
