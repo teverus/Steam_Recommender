@@ -62,10 +62,10 @@ class ShowGamesWithTag(Screen):
 
         self.actions = self.stub if not games else self.actions
 
-        favorite_title = "favorite | " if favorite else ""
-        hidden_title = "hidden | " if hidden else ""
+        favorite_title = "favorite " if favorite else ""
+        hidden_title = "hidden " if hidden else ""
         self.table = Table(
-            title=f"{tag} | {favorite_title}{hidden_title}{len(games)} game(s)",
+            title=f"{favorite_title}{hidden_title}{tag} GAMES [{len(games)}]",
             rows=[[action.name for action in actions] for actions in self.actions],
             max_rows=30,
             column_widths={0: ColumnWidth.FULL, 1: ColumnWidth.FIT, 2: ColumnWidth.FIT},
