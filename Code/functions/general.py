@@ -166,7 +166,7 @@ def change_entity_status(
     x_value,
     table_name,
     entity,
-    main_index,
+    main_column,
     attribute,
     sub_attribute=None,
 ):
@@ -182,10 +182,13 @@ def change_entity_status(
         entity=entity,
     )
 
-    index = get_index(main, main_index, x_value, attribute, sub_attribute)
+    index = get_index(main, main_column, x_value, attribute, sub_attribute)
 
     del main.actions[index]
     del main.table.rows_raw[index]
+
+    # TODO Вот тут нужно преобразовыват index в тот индекс, который на текущей странице
+    main.table.highlight = [index, main_column]
 
     target_number = len(main.actions)
 

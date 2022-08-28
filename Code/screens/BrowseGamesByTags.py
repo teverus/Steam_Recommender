@@ -106,7 +106,7 @@ class BrowseGamesByTags(Screen):
             x_value=tag_title,
             table_name=TAGS,
             entity="tag",
-            main_index=2,
+            main_column=2,
             attribute="name",
         )
 

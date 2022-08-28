@@ -92,7 +92,7 @@ class ShowGamesWithTag(Screen):
             x_value=appid,
             table_name=GAMES,
             entity="game",
-            main_index=1,
+            main_column=1,
             attribute="arguments",
             sub_attribute="appid",
         )
