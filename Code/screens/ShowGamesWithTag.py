@@ -24,11 +24,6 @@ class ShowGamesWithTag(Screen):
         self.actions = [
             [
                 Action(
-                    name=title,
-                    function=self.open_game_in_steam,
-                    arguments={"appid": appid},
-                ),
-                Action(
                     name="Unmake favorite" if favorite else "Make favorite",
                     function=self.change_game_status,
                     arguments={
@@ -37,6 +32,11 @@ class ShowGamesWithTag(Screen):
                         "favorite": favorite,
                         "hidden": hidden,
                     },
+                ),
+                Action(
+                    name=title,
+                    function=self.open_game_in_steam,
+                    arguments={"appid": appid},
                 ),
                 Action(
                     name="Unmake hidden" if hidden else "Make hidden",
@@ -68,8 +68,9 @@ class ShowGamesWithTag(Screen):
             title=f"{favorite_title}{hidden_title}{tag} GAMES [{len(games)}]",
             rows=[[action.name for action in actions] for actions in self.actions],
             max_rows=30,
-            column_widths={0: ColumnWidth.FULL, 1: ColumnWidth.FIT, 2: ColumnWidth.FIT},
+            column_widths={0: ColumnWidth.FIT, 1: ColumnWidth.FULL, 2: ColumnWidth.FIT},
             footer_actions=[Action(name="Go back", function=do_nothing, go_back=True)],
+            highlight=[0, 1],
         )
 
         self.kwargs = kwargs
@@ -91,7 +92,7 @@ class ShowGamesWithTag(Screen):
             x_value=appid,
             table_name=GAMES,
             entity="game",
-            main_index=0,
+            main_index=1,
             attribute="arguments",
             sub_attribute="appid",
         )
