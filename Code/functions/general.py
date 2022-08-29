@@ -187,8 +187,7 @@ def change_entity_status(
     del main.actions[index]
     del main.table.rows_raw[index]
 
-    # TODO Вот тут нужно преобразовыват index в тот индекс, который на текущей странице
-    main.table.highlight = [index, main_column]
+    main.table.highlight = [main.table.highlight[0], main_column]
 
     target_number = len(main.actions)
 
@@ -200,6 +199,8 @@ def change_entity_status(
         main.table.highlight_footer = [1, 0]
 
     main.table.table_title = get_new_tags_table_title(main, target_number)
+
+    # TODO ! Если удаляется последняя сущность на странице, то изменять количество страниц
 
 
 def get_index(main, main_index, x_value, attribute, sub_attribute):
