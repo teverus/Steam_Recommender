@@ -16,7 +16,7 @@ PROBLEMS = "Problems"
 PROBLEMS_COLUMNS = [ID, "Problem"]
 
 TAG = "Tag"
-TAGS_COLUMNS = [TAG, "Number", FAVORITE, HIDDEN]
+TAGS_COLUMNS = [TAG, "Number", FAVORITE, HIDDEN, "RussianAudio"]
 
 FILES = "Files"
 
