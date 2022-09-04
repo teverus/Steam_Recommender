@@ -1,5 +1,6 @@
 import msvcrt
 import re
+from math import ceil
 
 from pandas import DataFrame
 
@@ -200,7 +201,9 @@ def change_entity_status(
 
     main.table.table_title = get_new_tags_table_title(main, target_number)
 
-    # TODO ! Если удаляется последняя сущность на странице, то изменять количество страниц
+    if ceil(len(main.actions) / main.table.max_rows) != main.table.max_page:
+        main.table.current_page -= 1
+        main.table.max_page -= 1
 
 
 def get_index(main, main_index, x_value, attribute, sub_attribute):
