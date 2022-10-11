@@ -3,7 +3,16 @@ import webbrowser
 from Code.Action import Action
 from Code.Screen import Screen
 from Code.Table import Table
-from Code.constants import ColumnWidth, APP_URL, HIDDEN, ID, GAMES, FAVORITE
+from Code.constants import (
+    ColumnWidth,
+    APP_URL,
+    HIDDEN,
+    ID,
+    GAMES,
+    FAVORITE,
+    TAG,
+    RUSSIAN_AUDIO,
+)
 from Code.functions.general import (
     get_games,
     do_nothing,
@@ -16,10 +25,14 @@ from Code.functions.general import (
 
 class ShowGamesWithTag(Screen):
     def __init__(self, **kwargs):
+        # Arguments
+        tag = kwargs["tag"]
         favorite = False if FAVORITE not in kwargs.keys() else kwargs[FAVORITE]
         hidden = False if HIDDEN not in kwargs.keys() else kwargs[HIDDEN]
-        tag = kwargs["tag"]
-        games = get_games(tag, favorite, hidden)
+        russian = False if RUSSIAN_AUDIO not in kwargs.keys() else kwargs[RUSSIAN_AUDIO]
+
+        # Games used
+        games = get_games(tag, favorite, hidden, russian)
 
         self.actions = [
             [

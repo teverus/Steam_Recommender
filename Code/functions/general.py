@@ -33,16 +33,18 @@ def get_tags(favorite, hidden, russian_audio):
     return sorted(tags.Tag)
 
 
-def get_games(tag, favorite, hidden):
+def get_games(tag, favorite, hidden, russian):
     games = read_a_table(GAMES)
 
     fav_filter = "1" if favorite else "0"
     hid_filter = "1" if hidden else "0"
+    rus_filter = "1" if russian else "0"
 
     games_with_tag = games.loc[
         (games.Tags.str.contains(tag))
         & (games.Favorite == fav_filter)
         & (games.Hidden == hid_filter)
+        & (games.RussianAudio == rus_filter)
     ]
     games_with_tag = games_with_tag.sort_values(by="Title")
     titles = list(games_with_tag.Title)
@@ -145,9 +147,10 @@ def get_new_tags_table_title(main, target_number):
     return table_title.replace(f"[{current_number}]", f"[{target_number}]")
 
 
-def get_central_part(status_name, tags):
+def get_central_part(status_name, tags, russian_audio):
     name = f"{status_name} " if status_name else status_name
-    central = f"Steam games by {name}tags [{len(tags)}]"
+    rus_sound = "with Russian audio " if russian_audio else ""
+    central = f"Steam games {rus_sound}by {name}tags [{len(tags)}]"
     expected_central_length = 45
     diff = expected_central_length - len(central)
     left_pad = f"{' ' * int((diff / 2))}"

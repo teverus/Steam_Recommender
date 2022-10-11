@@ -44,16 +44,17 @@ class BrowseGamesByTags(Screen):
                 Action(
                     name="No status",
                     function=self.show_games,
+                    arguments={"rus_audio": russian_audio},
                 ),
                 Action(
                     name="Favorite",
                     function=self.show_games,
-                    arguments={"favorite": True},
+                    arguments={"favorite": True, "rus_audio": russian_audio},
                 ),
                 Action(
                     name="Hidden",
                     function=self.show_games,
-                    arguments={"hidden": True},
+                    arguments={"hidden": True, "rus_audio": russian_audio},
                 ),
             ]
             for tag in tags
@@ -72,7 +73,7 @@ class BrowseGamesByTags(Screen):
 
         self.actions = self.stub if not tags else self.actions
 
-        title = get_central_part(status_name, tags)
+        title = get_central_part(status_name, tags, russian_audio)
         title = title[1:-1] if any([favorite, hidden]) else title
         p = "     " if any([favorite, hidden]) else "    "
         self.table = Table(
@@ -110,6 +111,8 @@ class BrowseGamesByTags(Screen):
             attribute="name",
         )
 
-    def show_games(self, favorite=False, hidden=False):
+    def show_games(self, favorite=False, hidden=False, rus_audio=False):
         tag_title = list(self.table.df[2])[self.table.highlight[0]]
-        ShowGamesWithTag(tag=tag_title, Favorite=favorite, Hidden=hidden)
+        ShowGamesWithTag(
+            tag=tag_title, Favorite=favorite, Hidden=hidden, Russian_audio=rus_audio
+        )

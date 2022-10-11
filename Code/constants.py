@@ -8,6 +8,7 @@ FAVORITE = "Favorite"
 HIDDEN = "Hidden"
 TAGS = "Tags"
 ID = "ID"
+RUSSIAN_AUDIO = "Russian_audio"
 
 GAMES = "Games"
 GAMES_COLUMNS = [ID, "Title", TAGS, "RussianAudio", FAVORITE, HIDDEN]
