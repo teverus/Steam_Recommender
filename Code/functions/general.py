@@ -15,6 +15,7 @@ from Code.constants import (
     GAMES,
     FAVORITE,
     HIDDEN,
+    CENTRAL_COLUMN_WIDTH,
 )
 from Code.functions.db import read_a_table, append_to_table, update_a_table
 
@@ -151,8 +152,7 @@ def get_central_part(status_name, tags, russian_audio):
     name = f"{status_name} " if status_name else status_name
     rus_sound = "with Russian audio " if russian_audio else ""
     central = f"Steam games {rus_sound}by {name}tags [{len(tags)}]"
-    expected_central_length = 45
-    diff = expected_central_length - len(central)
+    diff = CENTRAL_COLUMN_WIDTH - len(central)
     left_pad = f"{' ' * int((diff / 2))}"
     right_pad = left_pad
     if diff % 2 != 0:

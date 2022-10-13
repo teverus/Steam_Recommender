@@ -1,6 +1,7 @@
 from colorama import Back, Fore
 
-SCREEN_WIDTH = 107
+SCREEN_WIDTH = 117
+CENTRAL_COLUMN_WIDTH = 55
 
 ALL_GAMES = "https://api.steampowered.com/ISteamApps/GetAppList/v2/?format=json"
 
@@ -27,6 +28,8 @@ APP_URL = "https://store.steampowered.com/app/"
 HIGHLIGHT = Back.WHITE + Fore.BLACK
 END_HIGHLIGHT = Back.BLACK + Fore.WHITE
 
+GO_BACK = "[Q] Go back"
+
 
 class TagStatus:
     FAVORITE = "favorite"
@@ -39,6 +42,8 @@ class Key:
     RIGHT = b"M"
     LEFT = b"K"
     ENTER = b"\r"
+    Q = b"q"
+    Q_RU = b"\xa9"
 
 
 class ColumnWidth:

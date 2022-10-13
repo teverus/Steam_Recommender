@@ -12,6 +12,7 @@ from Code.constants import (
     FAVORITE,
     TAG,
     RUSSIAN_AUDIO,
+    GO_BACK,
 )
 from Code.functions.general import (
     get_games,
@@ -77,12 +78,13 @@ class ShowGamesWithTag(Screen):
 
         favorite_title = "favorite " if favorite else ""
         hidden_title = "hidden " if hidden else ""
+        in_rus = "in Russian " if russian else ""
         self.table = Table(
-            title=f"{favorite_title}{hidden_title}{tag} GAMES [{len(games)}]",
+            title=f"{favorite_title}{hidden_title}{tag} GAMES {in_rus}[{len(games)}]",
             rows=[[action.name for action in actions] for actions in self.actions],
             max_rows=30,
             column_widths={0: ColumnWidth.FIT, 1: ColumnWidth.FULL, 2: ColumnWidth.FIT},
-            footer_actions=[Action(name="Go back", function=do_nothing, go_back=True)],
+            footer_actions=[Action(name=GO_BACK, function=do_nothing, go_back=True)],
             highlight=[0, 1],
         )
 

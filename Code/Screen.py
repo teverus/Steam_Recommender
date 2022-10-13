@@ -34,6 +34,9 @@ class Screen:
             # [3] If an action is required, perform the action
             if action:
 
+                if isinstance(action, Action) and not action.name and action.go_back:
+                    break
+
                 # [3-1-1] Choose an action from the table if there is one
                 if not immediate_action and self.table.highlight:
                     action = self.get_table_action()
@@ -64,12 +67,14 @@ class Screen:
         # A set of coordinates
         mv = {Key.DOWN: (1, 0), Key.UP: (-1, 0), Key.RIGHT: (0, 1), Key.LEFT: (0, -1)}
 
+        # Shortcut keys
+        shortcut = [Key.Q, Key.Q_RU]
+
         # Get user input
         user_input = msvcrt.getch()
 
         # If the user pressed "Enter"
         if user_input == Key.ENTER:
-
             action = True
 
         # If the user pressed one of the arrow keys
@@ -101,6 +106,10 @@ class Screen:
             elif new_pos in self.table.cage:
                 highlight = new_pos
                 highlight_footer = None if highlight_footer else highlight_footer
+
+        # If the user pressed one of the shortcut keys
+        elif user_input in shortcut:
+            action = Action(go_back=True)
 
         return highlight, highlight_footer, action
 

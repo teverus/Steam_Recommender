@@ -1,7 +1,7 @@
 from Code.Action import Action
 from Code.Screen import Screen
 from Code.Table import Table
-from Code.constants import ColumnWidth, TAG, TAGS, FAVORITE, HIDDEN
+from Code.constants import ColumnWidth, TAG, TAGS, FAVORITE, HIDDEN, GO_BACK
 from Code.functions.general import (
     get_tags,
     do_nothing,
@@ -90,7 +90,7 @@ class BrowseGamesByTags(Screen):
                 5: ColumnWidth.FIT,
             },
             highlight=[0, 2],
-            footer_actions=[Action(name="Go back", function=do_nothing, go_back=True)],
+            footer_actions=[Action(name=GO_BACK, function=do_nothing, go_back=True)],
         )
 
         super(BrowseGamesByTags, self).__init__()
