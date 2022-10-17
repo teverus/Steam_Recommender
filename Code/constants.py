@@ -28,7 +28,7 @@ APP_URL = "https://store.steampowered.com/app/"
 HIGHLIGHT = Back.WHITE + Fore.BLACK
 END_HIGHLIGHT = Back.BLACK + Fore.WHITE
 
-GO_BACK = "[Q] Go back"
+GO_BACK = "[Q] Go back    "
 
 
 class TagStatus:
@@ -44,6 +44,10 @@ class Key:
     ENTER = b"\r"
     Q = b"q"
     Q_RU = b"\xa9"
+    Z = b"z"
+    Z_RU = b"\xef"
+    X = b"x"
+    X_RU = b"\xe7"
 
 
 class ColumnWidth:

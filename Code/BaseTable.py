@@ -223,9 +223,14 @@ class BaseTable:
     def get_footer_pages(self):
         if self.max_page:
             arrow_l = "    " if self.current_page == 1 else "<<< "
-            arrow_r = "    " if self.current_page == self.max_page else " >>>"
+            short_l = "    " if self.current_page == 1 else "[Z] "
 
-            return f"{arrow_l}[{self.current_page:02}/{self.max_page:02}]{arrow_r}"
+            arrow_r = "    " if self.current_page == self.max_page else " >>>"
+            short_r = "    " if self.current_page == self.max_page else " [X]"
+
+            current_page = f"{self.current_page:02}"
+            max_page = f"{self.max_page:02}"
+            return f"{short_l}{arrow_l}[{current_page}/{max_page}]{arrow_r}{short_r}"
 
         return None
 

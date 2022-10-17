@@ -17,6 +17,7 @@ class Table(BaseTable):
         max_columns=None,
         column_widths=None,
         footer_actions=None,
+        footer_bottom_border="=",
     ):
         super(Table, self).__init__(
             # Table title
@@ -35,4 +36,5 @@ class Table(BaseTable):
             max_columns=max_columns,
             column_widths=column_widths,
             footer_actions=footer_actions,
+            footer_bottom_border=footer_bottom_border,
         )

@@ -2,11 +2,9 @@ from Code.Action import Action
 from Code.Screen import Screen
 from Code.Table import Table
 from Code.constants import TagStatus
+from Code.functions.general import do_nothing
 from Code.screens.BrowseGamesByTags import BrowseGamesByTags
 from Code.screens.CheckNewGames import CheckNewGames
-
-
-# TODO [Z] <<< [1/1] >>> [X]
 
 
 class ApplicationV5(Screen):
@@ -58,6 +56,8 @@ class ApplicationV5(Screen):
         self.table = Table(
             title="Steam Recommender",
             rows=[action.name for action in self.actions],
+            footer_actions=[Action(name="[Q] Exit", function=do_nothing, go_back=True)],
+            footer_bottom_border="",
         )
 
         super(ApplicationV5, self).__init__()

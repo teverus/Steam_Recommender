@@ -68,7 +68,17 @@ class Screen:
         mv = {Key.DOWN: (1, 0), Key.UP: (-1, 0), Key.RIGHT: (0, 1), Key.LEFT: (0, -1)}
 
         # Shortcut keys
-        shortcut = [Key.Q, Key.Q_RU]
+        shortcut = [
+            # Go back
+            Key.Q,
+            Key.Q_RU,
+            # Previous page
+            Key.Z,
+            Key.Z_RU,
+            # Next page
+            Key.X,
+            Key.X_RU,
+        ]
 
         # Get user input
         user_input = msvcrt.getch()
@@ -109,7 +119,16 @@ class Screen:
 
         # If the user pressed one of the shortcut keys
         elif user_input in shortcut:
-            action = Action(go_back=True)
+            if user_input in [Key.Q, Key.Q_RU]:
+                action = Action(go_back=True)
+            elif user_input in [Key.Z, Key.Z_RU]:
+                if self.table.current_page != 1:
+                    self.table.current_page -= 1
+            elif user_input in [Key.X, Key.X_RU]:
+                if self.table.current_page != self.table.max_page:
+                    self.table.current_page += 1
+            else:
+                raise NotImplemented(f"{user_input = }")
 
         return highlight, highlight_footer, action
 
